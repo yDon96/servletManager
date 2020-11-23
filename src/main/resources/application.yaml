@@ -1,0 +1,13 @@
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      format_sql: true
+      ddl-auto: none
+      jdbc:
+        time_zone: Europe/Rome
+  datasource:
+      driverClassName: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/myDb?useLegacyDatetimeCode=false&serverTimezone=UTC
+      username: myUsername
+      password: myPass
