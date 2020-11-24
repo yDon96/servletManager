@@ -1,5 +1,8 @@
 package com.daayCyclic.servletManager.dao;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -14,8 +17,8 @@ public class UserDao implements ObjectDao {
     private String surname;
     private LocalDate dateOfBirth;
     private RoleDao role;
-    private LocalDateTime lastMod;
-    private LocalDateTime timestamp;
+    @UpdateTimestamp private LocalDateTime lastMod;
+    @CreationTimestamp private LocalDateTime timestamp;
 
     public Integer getUser_id() {
         return user_id;
