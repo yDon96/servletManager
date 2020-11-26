@@ -24,10 +24,6 @@ public class UserDao implements ObjectDao {
         return user_id;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
-    }
-
     public String getName() {
         return name;
     }
@@ -64,16 +60,8 @@ public class UserDao implements ObjectDao {
         return lastMod;
     }
 
-    public void setLastMod(LocalDateTime lastMod) {
-        this.lastMod = lastMod;
-    }
-
     public LocalDateTime getTimestamp() {
         return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
     }
 
 }
