@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 
 @RestController
 public class ProcedureController {
@@ -31,4 +32,18 @@ public class ProcedureController {
         val procedureDao = (ProcedureDao) iDtoToDaoMapper.convertToDao(procedureDto);
         iProcedureService.generateProcedure(procedureDao);
     }
+
+    @GetMapping(path = "/procedure")
+    public ProcedureDto getProcedure(@RequestParam Integer procedureId) throws NotValidTypeException {
+        val procedureDao = iProcedureService.getProcedure(procedureId);
+        return (ProcedureDto) iDaoToDtoMapper.convertToDto(procedureDao);
+    }
+
+    @GetMapping(path = "/procedures")
+    @SuppressWarnings( "unchecked" )
+    public List<ProcedureDto> getProcedures() throws NotValidTypeException {
+        val procedureDao = iProcedureService.getProcedures();
+        return  (List<ProcedureDto>) iDaoToDtoMapper.convertDaoListToDtoList(procedureDao);
+    }
+
 }
