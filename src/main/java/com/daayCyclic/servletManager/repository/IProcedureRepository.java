@@ -1,6 +1,5 @@
 package com.daayCyclic.servletManager.repository;
 
-import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import org.springframework.data.jpa.repository.JpaRepository;
 
