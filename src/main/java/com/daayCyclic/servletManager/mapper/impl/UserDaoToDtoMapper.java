@@ -10,12 +10,13 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
 
     @Override
     public ObjectDto convertToDto(ObjectDao objectDao) {
-        if (objectDao instanceof UserDao) {
-            UserDao user = (UserDao) objectDao;
-            return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole());
-        } else {
+        if (!(objectDao instanceof UserDao)) {
+            System.out.println("Errore, oggetto di una classe sbagliata per il mapping.");
             //throw new Exception();
             //LANCIA ERORRE: "Non è l'oggetto giusto per questa classe"
+        } else {
+            UserDao user = (UserDao) objectDao;
+            return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole());
         }
     }
 

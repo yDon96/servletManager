@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
+import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.UserDto;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
@@ -22,14 +23,31 @@ public class UserController {
     private IDtoToDaoMapper userDtoToDaoMapper;
 
     @PostMapping(path = "/post")
-    public void postUser(UserDto user) {}
+    public void postUser(UserDto user) {
+        UserDao userDao = userDtoToDaoMapper.convertToDao(user);
+        userService.generateUser(userDao);
+    }
 
     @GetMapping(path = "/get")
-    public UserDto getUser(UserDto user) { return null; }
+    public UserDto getUser(int userId) {
+        UserDao searchUser = userService.getUser(userId);
+        if (searchUser == null) {
+            System.out.println("Utente non trovato");
+            //throw new
+            //LANCIA ERRORE: "Utente non presente nel db"
+        } else {
+            UserDto user = userDaoToDtoMapper.convertToDto(searchUser);
+            return user;
+        }
+    }
 
     @GetMapping(path = "/get-many")
-    public List<UserDto> getUsers(Optional<List<String>> roles){ return null; }
+    public List<UserDto> getUsers(Optional<List<String>> roles){
+        return null;
+    }
 
-    public void assignRoleToUser(String role) {}
+    public void assignRoleToUser(String role) {
+
+    }
 
 }
