@@ -32,6 +32,8 @@ public class ActivityDao implements ObjectDao{
     @MapsId
     private ProcedureDao procedure;
 
+    @OneToOne
+    @MapsId
     private UserDao maintainer;
 
     @UpdateTimestamp

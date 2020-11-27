@@ -10,21 +10,21 @@ import lombok.Setter;
 public class ActivityDto implements ObjectDto {
 
     @NonNull
-    private java.lang.Integer id;
+    private Integer id;
 
     private Integer maintainerId;
 
     private Integer procedureId;
 
-    private java.lang.Integer week;
+    private Integer week;
 
     private boolean isInterruptable;
 
-    private java.lang.Integer estimatedTime;
+    private Integer estimatedTime;
 
     private String description;
 
-    public ActivityDto(@NonNull java.lang.Integer id, Integer maintainerId, Integer procedureId, java.lang.Integer week, boolean isInterruptable, java.lang.Integer estimatedTime, String description) {
+    public ActivityDto(@NonNull Integer id, Integer maintainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
         this.id = id;
         this.maintainerId = maintainerId;
         this.procedureId = procedureId;

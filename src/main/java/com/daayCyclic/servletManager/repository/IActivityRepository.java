@@ -7,10 +7,4 @@ import java.util.*;
 
 
 public interface IActivityRepository extends JpaRepository<ActivityDao,Integer> {
-
-    Integer save(ActivityDao activityDao);
-
-    Optional<ActivityDao> findById(Integer activityId);
-
-    List<ActivityDao> findAll();
 }

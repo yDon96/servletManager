@@ -15,7 +15,7 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     @Override
     public ActivityDao convertToDao(ObjectDto objectDto) throws NotValidTypeException {
 
-        if (!(objectDto instanceof ActivityDao)){
+        if (!(objectDto instanceof ActivityDto)){
             throw new NotValidTypeException("Not valid type. (ActivityToDaoMapper)");
         }
 
