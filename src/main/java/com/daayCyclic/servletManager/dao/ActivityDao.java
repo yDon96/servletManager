@@ -3,6 +3,9 @@ package com.daayCyclic.servletManager.dao;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.*;
 import javax.persistence.*;
 
@@ -28,8 +31,10 @@ public class ActivityDao implements ObjectDao{
 
     private UserDao maintainer;
 
+    @UpdateTimestamp
     private LocalDateTime lastMod;
 
+    @CreationTimestamp
     private  LocalDateTime timestamp;
 
 
