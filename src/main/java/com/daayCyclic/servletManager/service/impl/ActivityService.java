@@ -4,6 +4,7 @@ import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ObjectDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dao.UserDao;
+import com.daayCyclic.servletManager.repository.*;
 import com.daayCyclic.servletManager.service.IActivityService;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,11 @@ import java.util.List;
 @Service
 public class ActivityService implements IActivityService {
 
+    private IActivityRepository activityRepository;
+
     @Override
     public void generateActivity(ActivityDao activityDao) {
-        
+
     }
 
     @Override
