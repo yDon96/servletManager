@@ -9,9 +9,9 @@ public class UserDto implements ObjectDto {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    private RoleDao role;
+    private String role;
 
-    public UserDto(Integer user_id, String name, String surname, LocalDate dateOfBirth, RoleDao role) {
+    public UserDto(Integer user_id, String name, String surname, LocalDate dateOfBirth, String role) {
         this.user_id = user_id;
         this.name = name;
         this.surname = surname;
@@ -47,11 +47,11 @@ public class UserDto implements ObjectDto {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public RoleDao getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(RoleDao role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
