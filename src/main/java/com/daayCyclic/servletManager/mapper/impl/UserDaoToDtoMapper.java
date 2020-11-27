@@ -8,6 +8,7 @@ import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component(value = "UserDaoToDtoMapper")
@@ -19,13 +20,24 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
             throw new NotValidTypeException("L'oggetto passato non è un'istanza di UserDao.");
         } else {
             UserDao user = (UserDao) objectDao;
-            return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole());
+            return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole().getRole());
         }
     }
 
     @Override
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoObjects) throws NotValidTypeException {
-        return null;
+        ArrayList<UserDto> userList = null;
+        if (daoObjects != null) {
+            userList = new ArrayList<>();
+            for (ObjectDao user : daoObjects) {
+                UserDao tmpUser = (UserDao) user;
+                UserDto convertedUser = (UserDto) convertToDto(tmpUser);
+                if (convertedUser != null) {
+                    userList.add(convertedUser);
+                }
+            }
+        }
+        return userList;
     }
 
 }
