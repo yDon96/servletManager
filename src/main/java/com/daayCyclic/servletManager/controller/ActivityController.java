@@ -34,7 +34,7 @@ public class ActivityController {
         iActivityService.generateActivity(activityDao);
     }
 
-    @PutMapping
+    @PutMapping(path = "activity")
     public void putActivity(){
 
     }

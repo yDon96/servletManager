@@ -20,7 +20,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
     public ActivityDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
 
         if (!(objectDao instanceof ActivityDao)){
-            throw new NotValidTypeException("Not valid type. (Activity)");
+            throw new NotValidTypeException("Not valid type. (ActivityToDtoMapper)");
         }
 
         val activityDao = (ActivityDao) objectDao;
