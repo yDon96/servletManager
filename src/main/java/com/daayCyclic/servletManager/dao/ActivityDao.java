@@ -13,6 +13,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class ActivityDao implements ObjectDao{
 
     @Id
