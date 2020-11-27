@@ -7,7 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity(name = "Users")
+@Entity(name = "users")
 public class UserDao implements ObjectDao {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,7 +16,7 @@ public class UserDao implements ObjectDao {
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
-    private RoleDao role;
+    @ManyToOne private RoleDao role;
     @UpdateTimestamp private LocalDateTime lastMod;
     @CreationTimestamp private LocalDateTime timestamp;
 
