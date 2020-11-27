@@ -9,13 +9,15 @@ import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import org.springframework.stereotype.Component;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component("ActivityToDtoMapper")
 public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
     @Override
-    public ObjectDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
+    public ActivityDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
 
         if (!(objectDao instanceof ActivityDao)){
             throw new NotValidTypeException("Not valid type. (Activity)");
@@ -33,8 +35,19 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
     }
 
     @Override
-    public List<ActivityDto> convertDaoListToDtoList(List<ActivityDao> daoObjects) throws NotValidTypeException {
-        return null;
+    public List<ActivityDto> convertDaoListToDtoList(List<ActivityDao> daoActivities) throws NotValidTypeException {
+
+        if(!(!daoActivities.isEmpty() && daoActivities.get(0) instanceof ActivityDao)){
+            throw new NotValidTypeException("Not valid type. (convertToDtoList)");
+        }
+
+        var activityDtoList = new ArrayList<ActivityDto>();
+
+        for (ActivityDao activityDao : daoActivities){
+            activityDtoList.add(this.convertToDto(activityDao));
+        }
+
+        return activityDtoList;
     }
 
 
