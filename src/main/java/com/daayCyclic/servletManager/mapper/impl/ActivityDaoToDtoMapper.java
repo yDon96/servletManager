@@ -1,21 +1,39 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
+import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ObjectDao;
+import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ObjectDto;
+import lombok.*;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component("ActivityToDtoMapper")
 public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
     @Override
     public ObjectDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
-        return null;
+
+        if (!(objectDao instanceof ActivityDao)){
+            throw new NotValidTypeException("Not valid type. (Activity)");
+        }
+
+        val activityDao = (ActivityDao) objectDao;
+
+        return new ActivityDto(activityDao.getId(),
+                activityDao.getMaintainer().getId(),
+                activityDao.getProcedure().getId(),
+                activityDao.getWeek(),
+                activityDao.isInterruptable(),
+                activityDao.getEstimatedTime(),
+                activityDao.getDescription());
     }
 
     @Override
-    public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoObjects) throws NotValidTypeException {
+    public List<ActivityDto> convertDaoListToDtoList(List<ActivityDao> daoObjects) throws NotValidTypeException {
         return null;
     }
 

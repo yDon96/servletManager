@@ -1,6 +1,8 @@
 package com.daayCyclic.servletManager.mapper;
 
+import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ObjectDao;
+import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 
@@ -10,5 +12,5 @@ public interface IDaoToDtoMapper {
 
     ObjectDto convertToDto(ObjectDao objectDao) throws NotValidTypeException;
 
-    List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoObjects) throws NotValidTypeException;
+    List<ActivityDto> convertDaoListToDtoList(List<ActivityDao> daoObjects) throws NotValidTypeException;
 }

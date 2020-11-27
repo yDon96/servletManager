@@ -10,7 +10,7 @@ public interface IActivityService {
 
     void updateActivity(ActivityDao activityDao);
 
-    List<? extends ObjectDao> getActivities();
+    List<ActivityDao> getActivities();
 
     void assignMaintainer(UserDao userDao, ActivityDao activityDao);
 

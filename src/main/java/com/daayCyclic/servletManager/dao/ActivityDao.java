@@ -28,6 +28,8 @@ public class ActivityDao implements ObjectDao{
 
     private Integer week;
 
+    @OneToOne
+    @MapsId
     private ProcedureDao procedure;
 
     private UserDao maintainer;
