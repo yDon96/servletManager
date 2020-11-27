@@ -6,7 +6,7 @@ public interface IActivityService {
 
     void generateActivity(ActivityDao activityDao);
 
-    ActivityDao ingetActivity(Integer activityId);
+    ActivityDao getActivity(Integer activityId);
 
     void updateActivity(ActivityDao activityDao);
 
