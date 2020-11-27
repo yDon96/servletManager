@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/user")
@@ -42,7 +41,7 @@ public class UserController {
     }
 
     @GetMapping(path = "/get-many")
-    public List<UserDto> getUsers(Optional<List<String>> roles){
+    public List<UserDto> getUsers(List<String> roles){
         return null;
     }
 

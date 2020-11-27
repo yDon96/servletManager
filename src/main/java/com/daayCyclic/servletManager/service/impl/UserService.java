@@ -2,14 +2,12 @@ package com.daayCyclic.servletManager.service.impl;
 
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
-import com.daayCyclic.servletManager.repository.IUserRepository;
 import com.daayCyclic.servletManager.service.IUserService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
-@Service
+@Service(value = "UserService")
 public class UserService implements IUserService{
 
     @Override
@@ -22,7 +20,7 @@ public class UserService implements IUserService{
     }
 
     @Override
-    public List<UserDao> getUsers(Optional<List<String>> rolesList) {
+    public List<UserDao> getUsers(List<String> rolesList) {
         return null;
     }
 
