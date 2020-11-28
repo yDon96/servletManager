@@ -6,7 +6,10 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.time.LocalDateTime;
 
 @Entity(name = "activity_procedure")
@@ -28,5 +31,11 @@ public class ProcedureDao implements ObjectDao {
 
     @UpdateTimestamp
     private LocalDateTime lastMod;
+
+    public ProcedureDao(Integer productId, String title, String description) {
+        this.id = productId;
+        this.title = title;
+        this.description = description;
+    }
 
 }
