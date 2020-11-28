@@ -11,4 +11,5 @@ public interface IDaoToDtoMapper {
     ObjectDto convertToDto(ObjectDao objectDao) throws NotValidTypeException;
 
     List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoObjects) throws NotValidTypeException;
+
 }
