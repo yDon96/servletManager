@@ -24,6 +24,10 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
 
         val procedureDao = (ProcedureDao) objectDao;
 
+        if (procedureDao.getId() == null) {
+            throw new NullPointerException();
+        }
+
         return new ProcedureDto(procedureDao.getId(),procedureDao.getTitle(),procedureDao.getDescription());
     }
 
