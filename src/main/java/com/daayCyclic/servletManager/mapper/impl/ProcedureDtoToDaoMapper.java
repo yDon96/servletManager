@@ -19,8 +19,8 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
         log.debug("[ProcedureToDtaMapper] Convert procedureDto to dao object");
 
         if (!(objectDto instanceof ProcedureDto)){
-            throw new NotValidTypeException("Not Valid Type.");
             log.error("[ProcedureToDtoMapper] Object to convert is not a ProcedureDto.");
+            throw new NotValidTypeException();
         }
 
         val procedureDto = (ProcedureDto) objectDto;

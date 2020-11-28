@@ -22,8 +22,8 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
         log.debug("[ProcedureToDtoMapper] Convert procedureDao to dto object");
 
         if (!(objectDao instanceof ProcedureDao)){
-            throw new NotValidTypeException("Not Valid Type.");
             log.error("[ProcedureToDtoMapper] Object to convert is not a ProcedureDao.");
+            throw new NotValidTypeException();
         }
 
         val procedureDao = (ProcedureDao) objectDao;
@@ -41,8 +41,8 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
     public List<ProcedureDto> convertDaoListToDtoList(List<? extends ObjectDao> daoProcedures) throws NotValidTypeException {
         log.debug("[ProcedureToDtoMapper] Convert list of procedureDao to list of dto object");
         if (!(!daoProcedures.isEmpty() && daoProcedures.get(0) instanceof ProcedureDao)){
-            throw new NotValidTypeException("Not Valid Type.");
             log.error("[ProcedureToDtoMapper] List type is not a ProcedureDao.");
+            throw new NotValidTypeException();
         }
 
         var procedureDtoList = new ArrayList<ProcedureDto>();
