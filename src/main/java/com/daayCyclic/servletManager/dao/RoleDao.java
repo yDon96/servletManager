@@ -16,4 +16,8 @@ public class RoleDao implements ObjectDao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @Column(unique=true, nullable=false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private String name;
+
 }
