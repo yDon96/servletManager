@@ -28,22 +28,24 @@ public class ProcedureController {
     private IDtoToDaoMapper iDtoToDaoMapper;
 
     @PostMapping(path = "/procedure")
-    public void postProcedure(@RequestBody ProcedureDto procedureDto) throws NotValidTypeException {
+    public void postProcedure(@RequestBody ProcedureDto procedureDto) throws NotValidTypeException, DuplicateGenerationException {
         val procedureDao = (ProcedureDao) iDtoToDaoMapper.convertToDao(procedureDto);
         iProcedureService.generateProcedure(procedureDao);
     }
 
     @GetMapping(path = "/procedure")
-    public ProcedureDto getProcedure(@RequestParam Integer procedureId) throws NotValidTypeException {
-        val procedureDao = iProcedureService.getProcedure(procedureId);
-        return (ProcedureDto) iDaoToDtoMapper.convertToDto(procedureDao);
+    public ProcedureDto getProcedure(@RequestParam Integer id) throws NotValidTypeException {
+        val procedureDao = iProcedureService.getProcedure(id);
+        val procedure =(ProcedureDto) iDaoToDtoMapper.convertToDto(procedureDao);
+        return procedure;
     }
 
     @GetMapping(path = "/procedures")
     @SuppressWarnings( "unchecked" )
     public List<ProcedureDto> getProcedures() throws NotValidTypeException {
         val procedureDao = iProcedureService.getProcedures();
-        return  (List<ProcedureDto>) iDaoToDtoMapper.convertDaoListToDtoList(procedureDao);
+        val procedures =(List<ProcedureDto>) iDaoToDtoMapper.convertDaoListToDtoList(procedureDao);
+        return procedures;
     }
 
 }
