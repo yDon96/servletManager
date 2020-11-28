@@ -4,13 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.BAD_REQUEST)
-public class NotValidTypeException extends RuntimeException {
+public class DuplicateGenerationException extends RuntimeException {
 
-    public NotValidTypeException() {
-        super("Not a valid type.");
+    public DuplicateGenerationException() {
+        super("Trying to generate an object that already exist.");
     }
 
-    public NotValidTypeException(String message) {
+    public DuplicateGenerationException(String message) {
         super(message);
     }
 }
