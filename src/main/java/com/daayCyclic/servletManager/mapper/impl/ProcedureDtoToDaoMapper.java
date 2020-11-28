@@ -1,6 +1,6 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
-import com.daayCyclic.servletManager.dao.ObjectDao;
+import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.dto.ProcedureDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
@@ -13,7 +13,7 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
 
 
     @Override
-    public ObjectDao convertToDao(ObjectDto objectDto) throws NotValidTypeException {
+    public ProcedureDao convertToDao(ObjectDto objectDto) throws NotValidTypeException {
 
         if (!(objectDto instanceof ProcedureDto)){
             throw new NotValidTypeException("Not Valid Type.");
@@ -21,7 +21,11 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
 
         val procedureDto = (ProcedureDto) objectDto;
 
-        return null;
+        if (procedureDto.isAllNull()){
+            throw new NotValidTypeException("Object to convert has all empty field.");
+        }
+
+        return new ProcedureDao(procedureDto.id,procedureDto.title,procedureDto.description);
 
     }
 }
