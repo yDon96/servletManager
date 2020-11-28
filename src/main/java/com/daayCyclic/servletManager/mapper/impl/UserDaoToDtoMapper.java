@@ -17,7 +17,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
     @Override
     public ObjectDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
         if (!(objectDao instanceof UserDao)) {
-            throw new NotValidTypeException("L'oggetto passato non è un'istanza di UserDao.");
+            throw new NotValidTypeException("The given object is not an UserDao instance.");
         } else {
             UserDao user = (UserDao) objectDao;
             return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole().getRole());
@@ -30,8 +30,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
         if (daoObjects != null) {
             userList = new ArrayList<>();
             for (ObjectDao user : daoObjects) {
-                UserDao tmpUser = (UserDao) user;
-                UserDto convertedUser = (UserDto) convertToDto(tmpUser);
+                UserDto convertedUser = (UserDto) convertToDto(user);
                 if (convertedUser != null) {
                     userList.add(convertedUser);
                 }
