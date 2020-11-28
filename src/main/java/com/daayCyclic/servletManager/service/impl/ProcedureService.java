@@ -2,6 +2,7 @@ package com.daayCyclic.servletManager.service.impl;
 
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
+import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.IProcedureService;
 import lombok.val;
@@ -28,7 +29,7 @@ public class ProcedureService implements IProcedureService {
     @Override
     public ProcedureDao getProcedure(Integer procedureId) {
         val procedureDao = iProcedureRepository.findById(procedureId);
-        return procedureDao.orElseThrow(() -> new RuntimeException("Not Found."));
+        return procedureDao.orElseThrow(NotFoundException::new);
     }
 
     @Override
