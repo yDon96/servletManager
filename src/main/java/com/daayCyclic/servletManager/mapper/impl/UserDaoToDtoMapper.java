@@ -20,7 +20,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
             throw new NotValidTypeException("L'oggetto passato non è un'istanza di UserDao.");
         } else {
             UserDao user = (UserDao) objectDao;
-            return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole().getRole());
+            return new UserDto(user.getUser_id(), user.getName(), user.getSurname(), user.getDateOfBirth(), user.getRole().getName());
         }
     }
 

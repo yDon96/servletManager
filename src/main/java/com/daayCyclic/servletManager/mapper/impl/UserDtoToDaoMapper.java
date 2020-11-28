@@ -26,15 +26,12 @@ public class UserDtoToDaoMapper implements IDtoToDaoMapper {
         newDao.setName(userDto.getName());
         newDao.setSurname(userDto.getSurname());
         newDao.setDateOfBirth(userDto.getDateOfBirth());
-        RoleDao tmpRole = roleService.getRole(userDto.getRole());
-        // Start testing
-        if (tmpRole == null) {
-            // !!TESTING da eliminare (nella realtà, deve lanciare un errore se non c'è il ruolo)
-            tmpRole = new RoleDao();
-            tmpRole.setId(0);
-            tmpRole.setRole("STUB");
+        RoleDao tmpRole = null;
+
+        if(userDto.getRole() != null) {
+            tmpRole = roleService.getRole(userDto.getRole());
         }
-        // End testing
+
         newDao.setRole(tmpRole);
         return newDao;
     }
