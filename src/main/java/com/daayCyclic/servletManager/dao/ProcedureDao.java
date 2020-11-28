@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity(name = "activity_procedure")
 @Getter
@@ -38,4 +39,11 @@ public class ProcedureDao implements ObjectDao {
         this.description = description;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof ProcedureDao)
+                && id.equals(((ProcedureDao) obj).id)
+                && (Objects.equals(title, ((ProcedureDao) obj).title))
+                && (Objects.equals(description, ((ProcedureDao) obj).description));
+    }
 }
