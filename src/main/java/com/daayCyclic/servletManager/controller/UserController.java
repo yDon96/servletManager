@@ -8,8 +8,12 @@ import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
 import com.daayCyclic.servletManager.service.IRoleService;
 import com.daayCyclic.servletManager.service.IUserService;
+import com.daayCyclic.servletManager.service.impl.ProcedureService;
+import com.daayCyclic.servletManager.service.impl.UserService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -65,12 +69,18 @@ public class UserController {
         return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(userService.getUsers(rolesDao));
     }
 
-    public void assignRoleToUser(UserDto user, String role) {
-        if (role != null && user != null) {
+
+
+    @PutMapping()
+    public void assignRoleToUser(@RequestParam Integer id, @RequestParam String role) {
+        log.info("Ruoli " + id + " " + role);
+        if (role != null && id != null) {
             RoleDao roleDao = roleService.getRole(role);
-            UserDao userDao = userService.getUser(user.getUser_id());
+            UserDao userDao = userService.getUser(id);
             userService.assignRoleToUser(userDao, roleDao);
         }
     }
+
+
 
 }
