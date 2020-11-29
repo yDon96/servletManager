@@ -1,3 +1,5 @@
+spring.profiles.active: dev
+
 spring:
   jpa:
     show-sql: false
@@ -15,3 +17,17 @@ spring:
 
 ---
 
+spring.profiles.active: test
+
+spring:
+  jpa:
+    database: h2
+  datasource:
+    url: jdbc:h2:mem:AZ
+    driver-class-name: org.h2.Driver
+  h2:
+    ddl-auto: create-drop
+    console:
+      enabled: true
+
+---
