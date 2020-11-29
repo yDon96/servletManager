@@ -16,4 +16,5 @@ public class RoleDao implements ObjectDao {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    String role;
 }

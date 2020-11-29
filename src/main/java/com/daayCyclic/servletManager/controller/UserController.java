@@ -22,10 +22,10 @@ import java.util.List;
 @RequestMapping(path = "/user")
 public class UserController {
 
-    @Autowired @Qualifier(value = "UserService")
+    @Autowired
     private IUserService userService;
 
-    @Autowired @Qualifier(value = "RoleService")
+    @Autowired
     private IRoleService roleService;
 
     @Autowired @Qualifier(value = "UserDaoToDtoMapper")
