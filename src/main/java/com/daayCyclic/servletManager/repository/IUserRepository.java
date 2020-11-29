@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface IUserRepository extends JpaRepository<UserDao,Integer> {
 
-    UserDao findById(int id);
     List<UserDao> findByRole(RoleDao role);
 
 }
