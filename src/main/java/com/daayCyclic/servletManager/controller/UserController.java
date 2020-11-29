@@ -75,6 +75,11 @@ public class UserController {
     public void assignRoleToUser(@RequestParam Integer id, @RequestParam String role) {
         log.info("Ruoli " + id + " " + role);
         if (role != null && id != null) {
+
+            if(id<0){
+                throw new NotValidTypeException("Invalid parameter.");
+            }
+
             RoleDao roleDao = roleService.getRole(role);
             UserDao userDao = userService.getUser(id);
             userService.assignRoleToUser(userDao, roleDao);
