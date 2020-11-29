@@ -70,6 +70,17 @@ public class UserDao implements ObjectDao {
     }
 
     @Override
+    public String toString() {
+        return "UserDao{" +
+                "user_id=" + user_id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", role=" + role +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserDao)) return false;
