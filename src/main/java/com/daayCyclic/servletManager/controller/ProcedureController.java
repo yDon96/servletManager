@@ -41,6 +41,12 @@ public class ProcedureController {
     @GetMapping(path = "/procedure")
     public ProcedureDto getProcedure(@RequestParam Integer id) throws NotValidTypeException {
         log.info("[REST] Get procedure with id" + id.toString());
+
+        if(id < 0){
+            log.error("[REST] Required a product with negative id." );
+            throw new NotValidTypeException("Invalid parameter.");
+        }
+
         val procedureDao = iProcedureService.getProcedure(id);
         val procedure =(ProcedureDto) iDaoToDtoMapper.convertToDto(procedureDao);
         log.debug("[REST] End get procedure");

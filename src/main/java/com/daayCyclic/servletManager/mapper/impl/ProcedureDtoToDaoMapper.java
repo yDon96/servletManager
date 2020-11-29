@@ -42,5 +42,9 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
             throw new NotValidTypeException("Object to convert has all empty required field.");
         }
 
+        if (!procedureDto.isIdValid()){
+            log.error("[ProcedureToDtoMapper] Object to convert has invalid id field: " + procedureDto.id );
+            throw new NotValidTypeException("Object to convert has an invalid field.");
+        }
     }
 }

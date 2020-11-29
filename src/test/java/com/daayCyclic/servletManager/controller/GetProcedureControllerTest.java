@@ -89,6 +89,11 @@ class GetProcedureControllerTest {
         this.mockMvc.perform(get("/procedure").param("id","aaa")).andDo(print()).andExpect(status().isBadRequest());
     }
 
+    @Test
+    void shouldRespondBadRequestIfGetProcedureWithNegativeId() throws Exception {
+        this.mockMvc.perform(get("/procedure").param("id","-222")).andDo(print()).andExpect(status().isBadRequest());
+    }
+
 
     @Test
     void shouldRespondNotFoundIfGetProcedureThatNotExist() throws Exception {

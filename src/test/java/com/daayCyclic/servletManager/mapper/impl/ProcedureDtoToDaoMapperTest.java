@@ -70,6 +70,14 @@ class ProcedureDtoToDaoMapperTest {
         });
     }
 
+    @Test()
+    void shouldThrowExceptionConvertToDaoADtoIfIdIsNegative() {
+        setProcedureDto(-222,null,null);
+        assertThrows(NotValidTypeException.class, () -> {
+            iDtoToDaoMapper.convertToDao(procedureDto);
+        });
+    }
+
     private void setProcedureDto(Integer id,String title,String description) {
         procedureDto.setId(id);
         procedureDto.setTitle(title);

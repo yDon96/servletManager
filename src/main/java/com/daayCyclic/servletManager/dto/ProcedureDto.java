@@ -40,4 +40,8 @@ public class ProcedureDto implements ObjectDto {
     public boolean containsAllRequiredValue() {
         return title != null;
     }
+
+    public boolean isIdValid() {
+        return id == null || id >= 0;
+    }
 }
