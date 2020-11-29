@@ -44,6 +44,16 @@ public class ActivityDao implements ObjectDao{
     @CreationTimestamp
     private  LocalDateTime timestamp;
 
+    public ActivityDao(Integer id, String description, Integer estimatedTime, boolean isInterruptable, Integer week, ProcedureDao procedure, UserDao maintainer) {
+        this.id = id;
+        this.description = description;
+        this.estimatedTime = estimatedTime;
+        this.isInterruptable = isInterruptable;
+        this.week = week;
+        this.procedure = procedure;
+        this.maintainer = maintainer;
+    }
+
     //TODO : equals maintainerId and procedureId
     @Override
     public boolean equals(Object obj) {
