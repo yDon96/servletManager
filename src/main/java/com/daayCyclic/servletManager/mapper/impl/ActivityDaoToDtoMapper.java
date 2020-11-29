@@ -7,12 +7,14 @@ import com.daayCyclic.servletManager.dto.ObjectDto;
 import lombok.*;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Component("ActivityToDtoMapper")
 public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
@@ -24,6 +26,11 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
         }
 
         val activityDao = (ActivityDao) objectDao;
+
+        if (activityDao.getId() == null || activityDao.getId() <= 0) {
+            log.error("[ActivityToDtoMapper] invalid id.");
+            throw new NullPointerException();
+        }
 
         return new ActivityDto(activityDao.getId(),
                 activityDao.getMaintainer().getId(),
