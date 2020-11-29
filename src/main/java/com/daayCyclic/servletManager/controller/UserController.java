@@ -34,27 +34,49 @@ public class UserController {
     @Autowired @Qualifier(value = "UserDtoToDaoMapper")
     private IDtoToDaoMapper userDtoToDaoMapper;
 
+    /**
+     * Insert (or Update if already present) into the server the {@literal UserDto} passed.
+     *
+     * @param user the {@literal UserDto} to insert
+     * @throws NotValidTypeException if {@literal UserDto} does not pass the integrity check
+     */
     @PostMapping(path = "/post")
     public void postUser(@RequestBody UserDto user) throws NotValidTypeException {
-        log.info("Start insert/update of a new user into the database: " + user);
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
+        log.info("[REST] Start insert/update of a new user into the database: " + user);
         userService.generateUser(userDao);
-        log.info("Insert/update completed successful");
+        log.info("[REST] Insert/update completed successfully");
     }
 
+    /**
+     * Get from the server the user correspondent to {@literal userId}
+     *
+     * @param userId the id into the server of the user
+     * @return a {@literal UserDto} represents the desired user
+     * @throws NotFoundException if the desired user is not presente into the server
+     */
     @GetMapping(path = "/get")
     public UserDto getUser(@RequestParam int userId) throws NotValidTypeException, NotFoundException {
+        log.info("[REST] Start search for user with id: " + userId);
         UserDao searchUser = userService.getUser(userId);
         if (searchUser == null) {
-            throw new NotFoundException("Utente non trovato");
+            log.info("[REST] There is no such user");
+            throw new NotFoundException("User not found");
         } else {
+            log.info("[REST] User found: " + searchUser);
             return (UserDto) userDaoToDtoMapper.convertToDto(searchUser);
         }
     }
 
+    /**
+     * Get users from the server according to their roles (if no role is given, get all users)
+     *
+     * @param roles a {@literal List<String>} of the desired roles
+     * @return a {@literal List<UserDto>} containing the desired users
+     * @throws NotValidTypeException
+     */
     @GetMapping(path = "/get-many")
     public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) throws NotValidTypeException {
-        log.info("Get Users with roles: " + roles);
         ArrayList<RoleDao> rolesDao = null;
         if (roles != null) {
             rolesDao = new ArrayList<>();
@@ -62,10 +84,14 @@ public class UserController {
                 rolesDao.add(roleService.getRole(role));
             }
         }
-        return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(userService.getUsers(rolesDao));
+        log.info("[REST] Start a research with the given roles as filter: " + roles);
+        List<UserDao> foundUsers = userService.getUsers(rolesDao);
+        log.info("[REST] Found a total of " + foundUsers.size() + " users");
+        return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(foundUsers);
     }
 
     public void assignRoleToUser(UserDto user, String role) {
+        // TODO: Controllare se esiste il ruolo prima. (Lo fa Amos)
         if (role != null && user != null) {
             RoleDao roleDao = roleService.getRole(role);
             UserDao userDao = userService.getUser(user.getUser_id());
