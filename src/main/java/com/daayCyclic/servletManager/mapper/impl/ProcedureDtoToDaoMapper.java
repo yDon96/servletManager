@@ -25,12 +25,22 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
 
         val procedureDto = (ProcedureDto) objectDto;
 
+        checkDtoConsistency(procedureDto);
+
+        return new ProcedureDao(procedureDto.id,procedureDto.title,procedureDto.description);
+
+    }
+
+    private void checkDtoConsistency(ProcedureDto procedureDto){
         if (procedureDto.isAllNull()){
             log.error("[ProcedureToDtoMapper] Object to convert has all empty field.");
             throw new NotValidTypeException("Object to convert has all empty field.");
         }
 
-        return new ProcedureDao(procedureDto.id,procedureDto.title,procedureDto.description);
+        if (!procedureDto.containsAllRequiredValue()){
+            log.error("[ProcedureToDtoMapper] Object to convert has all empty required field.");
+            throw new NotValidTypeException("Object to convert has all empty required field.");
+        }
 
     }
 }

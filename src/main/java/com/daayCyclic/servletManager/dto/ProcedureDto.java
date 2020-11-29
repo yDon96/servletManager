@@ -36,4 +36,8 @@ public class ProcedureDto implements ObjectDto {
     public boolean isAllNull() {
         return id == null && title == null && description == null;
     }
+
+    public boolean containsAllRequiredValue() {
+        return title != null;
+    }
 }

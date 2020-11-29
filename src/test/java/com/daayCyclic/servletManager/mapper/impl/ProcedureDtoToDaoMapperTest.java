@@ -39,11 +39,6 @@ class ProcedureDtoToDaoMapperTest {
         assertDoesNotThrow(() -> iDtoToDaoMapper.convertToDao(procedureDto));
     }
 
-    @Test
-    void shouldConvertToDaoIfIdTitleNull() {
-        setProcedureDto(2,null,"myDescription");
-        assertDoesNotThrow(() -> iDtoToDaoMapper.convertToDao(procedureDto));
-    }
 
     @Test
     void shouldConvertToDaoIfDescriptionIsNull() {
@@ -56,6 +51,14 @@ class ProcedureDtoToDaoMapperTest {
         ActivityDto activityDto = new ActivityDto();
         assertThrows(NotValidTypeException.class, () -> {
             iDtoToDaoMapper.convertToDao(activityDto);
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionConvertToDaoIfIdTitleNull() {
+        setProcedureDto(2,null,"myDescription");
+        assertThrows(NotValidTypeException.class, () -> {
+            iDtoToDaoMapper.convertToDao(procedureDto);
         });
     }
 

@@ -43,21 +43,28 @@ class PostProcedureControllerTest {
     }
 
     @Test
-    void shouldPostProcedureWithoutATitle() throws Exception {
-        this.mockMvc.perform(post("/procedure")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,null,"description")))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
-
-    @Test
     void shouldPostProcedureWithoutADescription() throws Exception {
         this.mockMvc.perform(post("/procedure")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(1,"title",null)))
                 .andDo(print())
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldRespondBadRequestIfPostProcedureWithoutBody() throws Exception {
+        this.mockMvc.perform(post("/procedure"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostProcedureWithoutATitle() throws Exception {
+        this.mockMvc.perform(post("/procedure")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,null,"description")))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -77,7 +84,29 @@ class PostProcedureControllerTest {
     }
 
     private String getContentFormatted(Integer id, String title, String description){
-        return "{\"id\":\"" + id +"\",\"title\":\"" + title +"\",\"description\":\"" + description +"\"}";
+        String json = "{";
+        int numberOfContent = 0;
+        if (id != null){
+            json += "\"id\":\"" + id + "\"";
+            numberOfContent += 1;
+        }
+
+        if (title != null){
+            if (numberOfContent > 0){
+                json += ",";
+            }
+            json += "\"title\":\"" + title + "\"";
+            numberOfContent += 1;
+        }
+
+        if (description != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"description\":\"" + description + "\"";
+        }
+        json += "}";
+        return json;
     }
 
 
