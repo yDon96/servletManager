@@ -21,6 +21,25 @@ public class UserDao implements ObjectDao {
     @UpdateTimestamp private LocalDateTime lastMod;
     @CreationTimestamp private LocalDateTime timestamp;
 
+    // Constructors
+    public UserDao() {}
+
+    public UserDao(String name, String surname, LocalDate dateOfBirth, RoleDao role) {
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+    }
+
+    public UserDao(Integer user_id, String name, String surname, LocalDate dateOfBirth, RoleDao role) {
+        this.user_id = user_id;
+        this.name = name;
+        this.surname = surname;
+        this.dateOfBirth = dateOfBirth;
+        this.role = role;
+    }
+    // End constructors
+
     public Integer getUser_id() {
         return user_id;
     }

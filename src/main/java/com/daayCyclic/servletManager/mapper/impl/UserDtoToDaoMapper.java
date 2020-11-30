@@ -5,6 +5,7 @@ import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.dto.UserDto;
+import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
 import com.daayCyclic.servletManager.service.IRoleService;
@@ -33,22 +34,25 @@ public class UserDtoToDaoMapper implements IDtoToDaoMapper {
         if (!(user instanceof UserDto)) {
             log.info("[MAPPER: UserDtoToDao] The given object is not an instance of UserDto");
             throw new NotValidTypeException("The given object is not an UserDto instance.");
-        } else {
-            UserDto userDto = (UserDto) user;
-            if (!(checkDataIntegrityDto(userDto))) {
-                log.info("[MAPPER: UserDtoToDao] The given object did not pass data integrity violation check");
-                throw new NotValidTypeException("The given object has one or more 'null' attributes who would violate data integrity.");
-            }
-            UserDao newDao = new UserDao();
-            newDao.setUser_id(userDto.getUser_id());
-            newDao.setName(userDto.getName());
-            newDao.setSurname(userDto.getSurname());
-            newDao.setDateOfBirth(userDto.getDateOfBirth());
-            RoleDao tmpRole = roleService.getRole(userDto.getRole());
-            newDao.setRole(tmpRole);
-            log.info("[MAPPER: UserDtoToDao] " + userDto + " successfully converted to UserDao");
-            return newDao;
         }
+        UserDto userDto = (UserDto) user;
+        if (!(checkDataIntegrityDto(userDto))) {
+            log.info("[MAPPER: UserDtoToDao] The given object did not pass data integrity violation check");
+            throw new NotValidTypeException("The given object has one or more 'null' attributes who would violate data integrity.");
+        }
+        UserDao newDaoUser = new UserDao(userDto.getUser_id(), userDto.getName(), userDto.getSurname(), userDto.getDateOfBirth(), null);
+        String dtoRole = userDto.getRole();
+        if (dtoRole != null && !dtoRole.equals("")) {
+            try {
+                RoleDao tmpRole = roleService.getRole(userDto.getRole());
+                newDaoUser.setRole(tmpRole);
+            } catch (NotFoundException e) {
+                log.info("[MAPPER: UserDtoToDao] The given object contains a role that is not present into the server, conversion impossible");
+                throw new NotValidTypeException("The given object contains a role that is not present into the server");
+            }
+        }
+        log.info("[MAPPER: UserDtoToDao] " + userDto + " successfully converted to UserDao");
+        return newDaoUser;
     }
 
     /**
