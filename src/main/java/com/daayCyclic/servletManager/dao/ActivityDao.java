@@ -1,21 +1,19 @@
 package com.daayCyclic.servletManager.dao;
 
-import com.daayCyclic.servletManager.dto.ActivityDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import java.time.*;
-import java.util.*;
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity(name = "activity")
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class ActivityDao implements ObjectDao{
 
     @Id

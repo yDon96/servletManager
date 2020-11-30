@@ -1,13 +1,11 @@
 package com.daayCyclic.servletManager.dto;
 
-import com.daayCyclic.servletManager.dao.ActivityDao;
-import com.daayCyclic.servletManager.dao.UserDao;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
 
-import java.util.*;
+import java.util.Objects;
 
 @Getter
 @Setter
