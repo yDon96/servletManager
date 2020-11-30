@@ -57,6 +57,8 @@ public class ActivityDao implements ObjectDao{
     public boolean equals(Object obj) {
         return (obj instanceof ActivityDao)
                 && id.equals(((ActivityDao) obj).id)
+                && id.equals(((ActivityDao) obj).procedure)
+                && id.equals(((ActivityDao) obj).maintainer)
                 && (Objects.equals(estimatedTime, ((ActivityDao) obj).estimatedTime))
                 && (Objects.equals(week, ((ActivityDao) obj).week))
                 && (Objects.equals(description, ((ActivityDao) obj).description));
