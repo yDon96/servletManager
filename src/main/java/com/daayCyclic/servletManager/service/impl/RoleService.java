@@ -2,7 +2,7 @@ package com.daayCyclic.servletManager.service.impl;
 
 
 import com.daayCyclic.servletManager.dao.RoleDao;
-import com.daayCyclic.servletManager.dao.UserDao;
+import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
 import com.daayCyclic.servletManager.service.IRoleService;
@@ -17,13 +17,17 @@ public class RoleService implements IRoleService {
     private IRoleRepository repository;
 
     @Override
-    public RoleDao getRole(String role) {
-        val roleDao = repository.findByName(role);
+    public RoleDao getRole(String roleName) {
+        val roleDao = repository.findByName(roleName);
         return roleDao.orElseThrow(() -> new NotFoundException("Not Found."));
     }
 
     @Override
     public void generateRole(RoleDao role) {
+        val roleDao = repository.findByName(role.getName());
+        if(roleDao.isPresent()){
+            throw new DuplicateGenerationException();
+        }
         repository.save(role);
     }
 
