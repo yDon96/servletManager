@@ -1,5 +1,7 @@
 package com.daayCyclic.servletManager.dto;
 
+import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.UserDao;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NonNull;
@@ -40,13 +42,12 @@ public class ActivityDto implements ObjectDto {
         this.description = description;
     }
 
-
-
-    //TODO : equals maintainerId and procedureId
     @Override
     public boolean equals(Object obj) {
         return (obj instanceof ActivityDto)
                 && id.equals(((ActivityDto) obj).id)
+                && maintainerId.equals(((ActivityDto) obj).maintainerId)
+                && procedureId.equals(((ActivityDto) obj).procedureId)
                 && (Objects.equals(estimatedTime, ((ActivityDto) obj).estimatedTime))
                 && (Objects.equals(week, ((ActivityDto) obj).week))
                 && (Objects.equals(description, ((ActivityDto) obj).description));
