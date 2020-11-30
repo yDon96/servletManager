@@ -122,14 +122,13 @@ public class UserControllerGetTest {
         assertDoesNotThrow(() -> {
             mockMvc.perform(get("/user/get-many").param("roles", "Pippo"))
                     .andDo(print())
-                    .andExpect(status().isNotFound()
+                    .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(5))
                     );
         });
     }
 
     @Test
     void getUsersGoodRolesList() {
-        //TODO: Non funziona finché non si implementano i ruoli (lo fa Amos)
         assertDoesNotThrow(() -> {
             mockMvc.perform(get("/user/get-many").param("roles", "Planner,STUB"))
                     .andDo(print())
