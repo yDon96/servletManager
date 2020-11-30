@@ -29,14 +29,14 @@ public class UserDtoToDaoMapper implements IDtoToDaoMapper {
      */
     @Override
     public ObjectDao convertToDao(ObjectDto user) throws NotValidTypeException {
-        log.info("[MAPPER] Start conversion from UserDto to UserDao");
+        log.info("[MAPPER: UserDtoToDao] Start conversion from UserDto to UserDao");
         if (!(user instanceof UserDto)) {
-            log.info("[MAPPER] The given object is not an instance of UserDto");
+            log.info("[MAPPER: UserDtoToDao] The given object is not an instance of UserDto");
             throw new NotValidTypeException("The given object is not an UserDto instance.");
         } else {
             UserDto userDto = (UserDto) user;
             if (!(checkDataIntegrityDto(userDto))) {
-                log.info("[MAPPER] The given object did not pass data integrity violation check");
+                log.info("[MAPPER: UserDtoToDao] The given object did not pass data integrity violation check");
                 throw new NotValidTypeException("The given object has one or more 'null' attributes who would violate data integrity.");
             }
             UserDao newDao = new UserDao();
@@ -55,7 +55,7 @@ public class UserDtoToDaoMapper implements IDtoToDaoMapper {
             }
             // End testing
             newDao.setRole(tmpRole);
-            log.info("[MAPPER] " + userDto + " successfully converted to UserDao");
+            log.info("[MAPPER: UserDtoToDao] " + userDto + " successfully converted to UserDao");
             return newDao;
         }
     }
