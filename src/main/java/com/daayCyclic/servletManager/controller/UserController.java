@@ -73,10 +73,11 @@ public class UserController {
 
     @PutMapping()
     public void assignRoleToUser(@RequestParam Integer id, @RequestParam String role) {
-        log.info("Ruoli " + id + " " + role);
+        log.info("[REST] Get role " + role + "to user with id: " + id);
         if (role != null && id != null) {
 
             if(id<0){
+                log.error("[REST] User with id " + id + "is not valid.");
                 throw new NotValidTypeException("Invalid parameter.");
             }
 
