@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.Optional;
 
 @Service(value = "UserService")
@@ -18,6 +19,7 @@ public class UserService implements IUserService{
 
     @Autowired
     private IUserRepository repository;
+
 
     /**
      * Save the given user into the database. If a user with the same ID of the one passed is already present, updates it.
@@ -30,6 +32,7 @@ public class UserService implements IUserService{
     public void generateUser(UserDao user) {
         repository.save(user);
     }
+
 
     /**
      * Find and return the user correspondent to {@literal id} if it present.
@@ -68,7 +71,6 @@ public class UserService implements IUserService{
 
     @Override
     public void assignRoleToUser(UserDao user, RoleDao role) {
-        // TODO migliore implementazione (La fa Amos)
         user.setRole(role);
         repository.save(user);
     }

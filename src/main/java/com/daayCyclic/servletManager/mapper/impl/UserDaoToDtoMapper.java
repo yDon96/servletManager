@@ -8,7 +8,6 @@ import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +52,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
             userList = new ArrayList<>();
             for (ObjectDao user : daoObjects) {
                 UserDto convertedUser = (UserDto) convertToDto(user);
+              
                 if (convertedUser != null) {
                     userList.add(convertedUser);
                 }

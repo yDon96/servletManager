@@ -22,6 +22,7 @@ import java.util.List;
 @RequestMapping(path = "/user")
 public class UserController {
 
+
     @Autowired
     private IUserService userService;
 
@@ -68,6 +69,7 @@ public class UserController {
         }
     }
 
+
     /**
      * Get users from the server according to their roles (if no role is given, get all users)
      *
@@ -90,11 +92,20 @@ public class UserController {
         return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(foundUsers);
     }
 
-    public void assignRoleToUser(UserDto user, String role) {
-        // TODO: Controllare se esiste il ruolo prima. (Lo fa Amos)
-        if (role != null && user != null) {
+
+
+    @PutMapping()
+    public void assignRoleToUser(@RequestParam Integer id, @RequestParam String role) {
+        log.info("[REST] Get role " + role + "to user with id: " + id);
+        if (role != null && id != null) {
+
+            if(id<0){
+                log.error("[REST] User with id " + id + "is not valid.");
+                throw new NotValidTypeException("Invalid parameter.");
+            }
+
             RoleDao roleDao = roleService.getRole(role);
-            UserDao userDao = userService.getUser(user.getUser_id());
+            UserDao userDao = userService.getUser(id);
             userService.assignRoleToUser(userDao, roleDao);
         }
     }

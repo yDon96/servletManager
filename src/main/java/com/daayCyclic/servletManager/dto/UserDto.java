@@ -2,6 +2,7 @@ package com.daayCyclic.servletManager.dto;
 
 import com.daayCyclic.servletManager.dao.RoleDao;
 import java.time.LocalDate;
+
 import java.util.Objects;
 
 public class UserDto implements ObjectDto {
