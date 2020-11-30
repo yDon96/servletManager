@@ -32,8 +32,10 @@ public class ActivityController {
 
     @PostMapping(path = "/activity")
     public void postActivity(@RequestBody ActivityDto activityDto) throws NotValidTypeException {
+        log.info("[REST] Post Activity");
         val activityDao = (ActivityDao) iDtoToDaoMapper.convertToDao(activityDto);
         iActivityService.generateActivity(activityDao);
+        log.debug("[REST] End Post activity");
     }
 
     @PutMapping(path = "/activity")
@@ -42,15 +44,23 @@ public class ActivityController {
 
     @GetMapping(path = "/activity")
     public ActivityDto getActivity(@RequestParam Integer activityId) throws NotValidTypeException {
-        log.info("");
-        val activityDao = iActivityService.getActivity(activityId);
-        return (ActivityDto) iDaoToDtoMapper.convertToDto(activityDao);
+        log.info("[REST] Get Activity");
 
+        if(activityId < 0){
+            log.error("[REST] Id activity is negative" );
+            throw new NotValidTypeException("Negative Id.");
+        }
+
+        val activityDao = iActivityService.getActivity(activityId);
+        log.debug("[REST] End Get activity");
+        return (ActivityDto) iDaoToDtoMapper.convertToDto(activityDao);
     }
 
     @GetMapping(path = "/activities")
     public List<ActivityDto> getActivities() throws NotValidTypeException {
+        log.info("[REST] Get Activities");
         val activityDao = iActivityService.getActivities();
+        log.debug("[REST] End Get activities");
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
 
     }
