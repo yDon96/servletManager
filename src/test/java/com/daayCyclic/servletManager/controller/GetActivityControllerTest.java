@@ -1,4 +1,4 @@
-package com.daayCyclic.servletManager.controller.impl;
+package com.daayCyclic.servletManager.controller;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
@@ -46,7 +46,7 @@ public class GetActivityControllerTest {
             UserDao mantainer = new UserDao();
             ProcedureDao procedure = new ProcedureDao();
             activityDao.setId(i);
-            mantainer.setId(22 + i);
+            mantainer.setUser_id(22 + i);
             activityDao.setMaintainer(mantainer);
             procedure.setId(56 + i);
             activityDao.setProcedure(procedure);
