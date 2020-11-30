@@ -35,7 +35,7 @@ public class GenerationActivityServiceTest {
     void shouldGenerateActivityWithoutSetId() {
         UserDao mantainer = new UserDao();
         ProcedureDao procedure = new ProcedureDao();
-        mantainer.setId(23);
+        mantainer.setUser_id(23);
         procedure.setId(43);
         setActivityDao(null,mantainer,procedure,5,true,50,"definition");
         activityService.generateActivity(activityDao);
