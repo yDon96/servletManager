@@ -5,6 +5,7 @@ import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.repository.IUserRepository;
 import com.daayCyclic.servletManager.service.IUserService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Service(value = "UserService")
 public class UserService implements IUserService{
 
@@ -29,7 +31,9 @@ public class UserService implements IUserService{
      */
     @Override
     public void generateUser(UserDao user) {
+        log.info("[SERVICE: User] Saving into the database the given UserDao: " + user);
         repository.save(user);
+        log.info("[SERVICE: User] Saving completed successfully");
     }
 
 
@@ -42,10 +46,13 @@ public class UserService implements IUserService{
      */
     @Override
     public UserDao getUser(int id) {
+        log.info("[SERVICE: User] Starting a getUser for a user with ID: " + id + " into the database");
         Optional<UserDao> foundUser = repository.findById(id);
         if (foundUser.isEmpty()) {
+            log.info("[SERVICE: User] There is no user with that ID");
             throw new NotFoundException("The given user ID is not present into the database.");
         }
+        log.info("[SERVICE: User] The user is present, getUser completed successfully");
         return foundUser.get();
     }
 
@@ -57,14 +64,18 @@ public class UserService implements IUserService{
      */
     @Override
     public List<UserDao> getUsers(List<RoleDao> rolesList) {
+        log.info("[SERVICE: User] Starting a getUsers with the given roles");
         ArrayList<UserDao> list = new ArrayList<>();
         if (rolesList == null || rolesList.isEmpty()) {
+            log.info("[SERVICE: User] No role specified, retrieve all users");
             list.addAll(repository.findAll());
         } else {
+            log.info("[SERVICE: User] Roles to find: " + rolesList);
             for (RoleDao role : rolesList) {
                 list.addAll(repository.findByRole(role));
             }
         }
+        log.info("[SERVICE: User] getUsers completed successfully");
         return list;
     }
 
