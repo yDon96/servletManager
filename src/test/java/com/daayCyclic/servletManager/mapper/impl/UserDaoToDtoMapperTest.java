@@ -18,7 +18,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-class UserDaoToDtoMapperTest extends UserMapperTest{
+class UserDaoToDtoMapperTest {
 
     private UserDaoToDtoMapper mapper;
 
@@ -95,7 +95,7 @@ class UserDaoToDtoMapperTest extends UserMapperTest{
     RoleDao createDaoRole(int id, String role) {
         RoleDao roleDao = new RoleDao();
         roleDao.setId(id);
-        roleDao.setRole(role);
+        roleDao.setName(role);
         return roleDao;
     }
 
@@ -115,6 +115,15 @@ class UserDaoToDtoMapperTest extends UserMapperTest{
         list.add(createDaoUser(1, "Mario", "Ratto"));
         list.add(createDaoUser(1, "Giacomo", "Vanvitelli"));
         return list;
+    }
+
+
+    void checkDtoDaoEquality(UserDto userDto, UserDao userDao) {
+        assertEquals(userDto.getUser_id(), userDao.getUser_id());
+        assertEquals(userDto.getName(), userDao.getName());
+        assertEquals(userDto.getSurname(), userDao.getSurname());
+        assertEquals(userDto.getDateOfBirth(), userDao.getDateOfBirth());
+        assertEquals(userDto.getRole(), userDao.getRole().getName());
     }
     // END Utilities Methods
 }

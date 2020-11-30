@@ -43,6 +43,7 @@ public class UserController {
      */
     @PostMapping(path = "/post")
     public void postUser(@RequestBody UserDto user) throws NotValidTypeException {
+        log.info("[REST] Starting a postUser request");
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
         log.info("[REST] Start insert/update of a new user into the database: " + user);
         userService.generateUser(userDao);
@@ -79,6 +80,7 @@ public class UserController {
      */
     @GetMapping(path = "/get-many")
     public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) throws NotValidTypeException {
+        log.info("[REST] Starting a getUsers with the given roles");
         ArrayList<RoleDao> rolesDao = null;
         if (roles != null) {
             rolesDao = new ArrayList<>();
