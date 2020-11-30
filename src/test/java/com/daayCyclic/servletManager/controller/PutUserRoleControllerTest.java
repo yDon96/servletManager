@@ -23,8 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-
-
 class PutUserRoleControllerTest {
 
     @Autowired
@@ -70,7 +68,7 @@ class PutUserRoleControllerTest {
     }
 
     @Test
-    void shouldPutRoleWithCharAsId() throws Exception {
+    void shouldRespondBadRequestPutRoleWithCharAsId() throws Exception {
 
 
         this.mockMvc.perform(put("/user").param("id", "k")
@@ -86,7 +84,7 @@ class PutUserRoleControllerTest {
     }
 
     @Test
-    void shouldPutRoleWithNegativeId() throws Exception {
+    void shouldRespondBadRequestPutRoleWithNegativeId() throws Exception {
 
         this.mockMvc.perform(put("/user").param("id", "-20")
                     .param("role", "manutentore"))
@@ -96,7 +94,7 @@ class PutUserRoleControllerTest {
     }
 
     @Test
-    void shouldPutRoleWithAnAbsentId() throws Exception {
+    void shouldRespondNotFoundPutRoleWithAnNotExistingUserId() throws Exception {
 
         this.mockMvc.perform(put("/user").param("id", "100")
                 .param("role", "manutentore"))
@@ -119,7 +117,7 @@ class PutUserRoleControllerTest {
     }
 
     @Test
-    void shouldPutRoleWithAnAbsentRole() throws Exception {
+    void shouldRespondNotFoundPutRoleWithAnNotExistingRole() throws Exception {
 
         this.mockMvc.perform(put("/user").param("id", "1")
                 .param("role", "magazziniere"))
