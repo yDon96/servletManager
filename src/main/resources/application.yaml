@@ -1,0 +1,33 @@
+spring.profiles.active: dev
+
+spring:
+  jpa:
+    show-sql: false
+    hibernate:
+      format_sql: true
+      ddl-auto: update
+      jdbc:
+        time_zone: UTC
+        dialect: MySQL8InnoDBDialect
+  datasource:
+      url: jdbc:mysql://localhost:{port}/{databaseName}?useLegacyDatetimeCode=false&serverTimezone=UTC
+      username: {username}
+      password: {password}
+  database-platform: org.hibernate.dialect.MySQLDialect
+
+---
+
+spring.profiles.active: test
+
+spring:
+  jpa:
+    database: h2
+  datasource:
+    url: jdbc:h2:mem:AZ
+    driver-class-name: org.h2.Driver
+  h2:
+    ddl-auto: create-drop
+    console:
+      enabled: true
+
+---
