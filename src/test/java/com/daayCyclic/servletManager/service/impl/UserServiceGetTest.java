@@ -20,7 +20,6 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// TODO: Change DB, with the test one (in all tests)
 @ActiveProfiles("test")
 @TestPropertySource("classpath:application.yaml")
 @SpringBootTest
@@ -50,12 +49,12 @@ class UserServiceGetTest {
 
     @Test
     void getUserNotPresent() {
-        assertThrows(NotFoundException.class, () -> userService.getUser(1));
+        assertThrows(NotFoundException.class, () -> userService.getUser(2000));
     }
 
     @Test
     void getUserEmptyDB() {
-        assertThrows(NotFoundException.class, () -> userService.getUser(1));
+        assertThrows(NotFoundException.class, () -> userService.getUser(2000));
     }
 
     @Test
