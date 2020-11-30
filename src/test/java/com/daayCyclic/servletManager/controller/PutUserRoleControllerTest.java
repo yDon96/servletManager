@@ -14,6 +14,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDate;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,13 +50,14 @@ class PutUserRoleControllerTest {
     private void init() {
         UserDao userDao1 = new UserDao();
         userDao1.setUser_id(1);
+        userDao1.setName("nome");
+        userDao1.setSurname("cognome");
+        userDao1.setDateOfBirth(LocalDate.of(2000,1,1));
         userService.generateUser(userDao1);
-
         RoleDao roleDao1 = new RoleDao();
         roleDao1.setId(1);
         roleDao1.setName("manutentore");
         roleService.generateRole(roleDao1);
-
     }
 
     @Test
