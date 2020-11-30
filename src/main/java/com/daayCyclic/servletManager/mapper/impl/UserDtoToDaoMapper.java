@@ -51,7 +51,7 @@ public class UserDtoToDaoMapper implements IDtoToDaoMapper {
                 //  messo solo perché non c'è ancora un'implementazione di "getRole"). (Lo fa Amos)
                 tmpRole = new RoleDao();
                 tmpRole.setId(0);
-                tmpRole.setRole("STUB");
+                tmpRole.setName("STUB");
             }
             // End testing
             newDao.setRole(tmpRole);

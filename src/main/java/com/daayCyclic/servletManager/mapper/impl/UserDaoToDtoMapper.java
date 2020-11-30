@@ -31,7 +31,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
             throw new NotValidTypeException("The given object is not an UserDao instance.");
         } else {
             UserDao userDao = (UserDao) objectDao;
-            UserDto userDto = new UserDto(userDao.getUser_id(), userDao.getName(), userDao.getSurname(), userDao.getDateOfBirth(), userDao.getRole().getRole());
+            UserDto userDto = new UserDto(userDao.getUser_id(), userDao.getName(), userDao.getSurname(), userDao.getDateOfBirth(), userDao.getRole().getName());
             log.info("[MAPPER] " + userDao + " successfully converted to UserDto");
             return userDto;
         }
