@@ -8,12 +8,8 @@ import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
 import com.daayCyclic.servletManager.service.IRoleService;
 import com.daayCyclic.servletManager.service.IUserService;
-import com.daayCyclic.servletManager.service.impl.ProcedureService;
-import com.daayCyclic.servletManager.service.impl.UserService;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -26,10 +22,11 @@ import java.util.List;
 @RequestMapping(path = "/user")
 public class UserController {
 
-    @Autowired @Qualifier(value = "UserService")
+
+    @Autowired
     private IUserService userService;
 
-    @Autowired @Qualifier(value = "RoleService")
+    @Autowired
     private IRoleService roleService;
 
     @Autowired @Qualifier(value = "UserDaoToDtoMapper")
@@ -38,27 +35,50 @@ public class UserController {
     @Autowired @Qualifier(value = "UserDtoToDaoMapper")
     private IDtoToDaoMapper userDtoToDaoMapper;
 
+    /**
+     * Insert (or Update if already present) into the server the {@literal UserDto} passed.
+     *
+     * @param user the {@literal UserDto} to insert
+     * @throws NotValidTypeException if {@literal UserDto} does not pass the integrity check
+     */
     @PostMapping(path = "/post")
     public void postUser(@RequestBody UserDto user) throws NotValidTypeException {
-        log.info("Start insert/update of a new user into the database: " + user);
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
+        log.info("[REST] Start insert/update of a new user into the database: " + user);
         userService.generateUser(userDao);
-        log.info("Insert/update completed successful");
+        log.info("[REST] Insert/update completed successfully");
     }
 
+    /**
+     * Get from the server the user correspondent to {@literal userId}
+     *
+     * @param userId the id into the server of the user
+     * @return a {@literal UserDto} represents the desired user
+     * @throws NotFoundException if the desired user is not presente into the server
+     */
     @GetMapping(path = "/get")
     public UserDto getUser(@RequestParam int userId) throws NotValidTypeException, NotFoundException {
+        log.info("[REST] Start search for user with id: " + userId);
         UserDao searchUser = userService.getUser(userId);
         if (searchUser == null) {
-            throw new NotFoundException("Utente non trovato");
+            log.info("[REST] There is no such user");
+            throw new NotFoundException("User not found");
         } else {
+            log.info("[REST] User found: " + searchUser);
             return (UserDto) userDaoToDtoMapper.convertToDto(searchUser);
         }
     }
 
+
+    /**
+     * Get users from the server according to their roles (if no role is given, get all users)
+     *
+     * @param roles a {@literal List<String>} of the desired roles
+     * @return a {@literal List<UserDto>} containing the desired users
+     * @throws NotValidTypeException
+     */
     @GetMapping(path = "/get-many")
     public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) throws NotValidTypeException {
-        log.info("Get Users with roles: " + roles);
         ArrayList<RoleDao> rolesDao = null;
         if (roles != null) {
             rolesDao = new ArrayList<>();
@@ -66,7 +86,10 @@ public class UserController {
                 rolesDao.add(roleService.getRole(role));
             }
         }
-        return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(userService.getUsers(rolesDao));
+        log.info("[REST] Start a research with the given roles as filter: " + roles);
+        List<UserDao> foundUsers = userService.getUsers(rolesDao);
+        log.info("[REST] Found a total of " + foundUsers.size() + " users");
+        return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(foundUsers);
     }
 
 
@@ -86,7 +109,5 @@ public class UserController {
             userService.assignRoleToUser(userDao, roleDao);
         }
     }
-
-
 
 }

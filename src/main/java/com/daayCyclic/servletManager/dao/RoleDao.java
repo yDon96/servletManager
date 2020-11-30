@@ -18,5 +18,4 @@ public class RoleDao implements ObjectDao {
 
     @Column(unique=true, nullable=false)
     private String name;
-
 }

@@ -7,15 +7,17 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import java.util.Objects;
+
 @Entity(name = "users")
 public class UserDao implements ObjectDao {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer user_id;
 
-    private String name;
-    private String surname;
-    private LocalDate dateOfBirth;
+    @Column(nullable = false) private String name;
+    @Column(nullable = false) private String surname;
+    @Column(nullable = false) private LocalDate dateOfBirth;
     @ManyToOne private RoleDao role;
     @UpdateTimestamp private LocalDateTime lastMod;
     @CreationTimestamp private LocalDateTime timestamp;
@@ -68,4 +70,31 @@ public class UserDao implements ObjectDao {
         return timestamp;
     }
 
+    @Override
+    public String toString() {
+        return "UserDao{" +
+                "user_id=" + user_id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", role=" + role +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDao)) return false;
+        UserDao userDao = (UserDao) o;
+        return user_id.equals(userDao.user_id) &&
+                Objects.equals(name, userDao.name) &&
+                Objects.equals(surname, userDao.surname) &&
+                Objects.equals(dateOfBirth, userDao.dateOfBirth) &&
+                Objects.equals(role, userDao.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user_id, name, surname, dateOfBirth, role);
+    }
 }

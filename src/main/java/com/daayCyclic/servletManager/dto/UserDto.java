@@ -3,6 +3,8 @@ package com.daayCyclic.servletManager.dto;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import java.time.LocalDate;
 
+import java.util.Objects;
+
 public class UserDto implements ObjectDto {
 
     private final Integer user_id;
@@ -55,4 +57,31 @@ public class UserDto implements ObjectDto {
         this.role = role;
     }
 
+    @Override
+    public String toString() {
+        return "UserDto{" +
+                "user_id=" + user_id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", role='" + role + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDto)) return false;
+        UserDto userDto = (UserDto) o;
+        return user_id.equals(userDto.user_id) &&
+                Objects.equals(name, userDto.name) &&
+                Objects.equals(surname, userDto.surname) &&
+                Objects.equals(dateOfBirth, userDto.dateOfBirth) &&
+                Objects.equals(role, userDto.role);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user_id, name, surname, dateOfBirth, role);
+    }
 }
