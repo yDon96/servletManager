@@ -42,7 +42,7 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
         }
 
         val procedure = iProcedureService.getProcedure(activityDto.getProcedureId());
-        val mantainer = iUserService.getUser(activityDto.getMaintainerId());
+        val mantainer = iUserService.getUser(activityDto.getMantainerId());
 
         return new ActivityDao(activityDto.getId(),
                 activityDto.getDescription(),

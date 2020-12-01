@@ -6,7 +6,6 @@ import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.repository.IActivityRepository;
-import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.IActivityService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -24,12 +23,13 @@ public class ActivityService implements IActivityService {
     private IActivityRepository iActivityRepository;
 
     @Override
-    public void generateActivity(ActivityDao activityDao) throws DuplicateFormatFlagsException {
+    public Integer generateActivity(ActivityDao activityDao) throws DuplicateFormatFlagsException {
         if (activityExist(activityDao.getId())){
             log.error("[ActivityService] Id Activity exist");
             throw new DuplicateGenerationException("Id Activity exist");
         }
-        iActivityRepository.save(activityDao);
+        ActivityDao savedActivity = iActivityRepository.save(activityDao);
+        return savedActivity.getId();
     }
 
     @Override

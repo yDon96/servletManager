@@ -8,7 +8,7 @@ import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import java.util.List;
 
 public interface IActivityService {
-    void generateActivity(ActivityDao activityDao) throws DuplicateGenerationException;
+    Integer generateActivity(ActivityDao activityDao) throws DuplicateGenerationException;
     ActivityDao getActivity(Integer activityId);
     void updateActivity(ActivityDao activityDao);
     List<ActivityDao> getActivities();

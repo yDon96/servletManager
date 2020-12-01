@@ -15,7 +15,7 @@ public class ActivityDto implements ObjectDto {
     @NonNull
     private Integer id;
 
-    private Integer maintainerId;
+    private Integer mantainerId;
 
     private Integer procedureId;
 
@@ -30,9 +30,9 @@ public class ActivityDto implements ObjectDto {
     public ActivityDto() {
     }
 
-    public ActivityDto(@NonNull Integer id, Integer maintainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
+    public ActivityDto(@NonNull Integer id, Integer mantainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
         this.id = id;
-        this.maintainerId = maintainerId;
+        this.mantainerId = mantainerId;
         this.procedureId = procedureId;
         this.week = week;
         this.isInterruptable = isInterruptable;
@@ -53,9 +53,9 @@ public class ActivityDto implements ObjectDto {
     }
 
     public boolean isAllNull() {
-        return id == null && maintainerId == null && procedureId == null && week == null && estimatedTime == null && description == null;
+        return id == null && mantainerId == null && procedureId == null && week == null && estimatedTime == null && description == null;
     }
     public boolean isAlLFieldsNegative() {
-        return id < 0 || maintainerId < 0 || procedureId < 0 || week < 0 || estimatedTime < 0;
+        return id < 0 || mantainerId < 0 || procedureId < 0 || week < 0 || estimatedTime < 0;
     }
 }
