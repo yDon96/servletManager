@@ -31,18 +31,10 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
 
         val activityDto = (ActivityDto) objectDto;
 
-        if (activityDto.isAllNull()){
-            log.error("[ActivityToDtoMapper] there are 'null' fields.");
-            throw new NotValidTypeException("there are 'null' fields.");
-        }
-
-        if (activityDto.isAlLFieldsNegative()){
-            log.error("[ActivityToDtoMapper] there are negative fields.");
-            throw new NotValidTypeException("there are negative fields.");
-        }
+        checkConsistentActivityDto(activityDto);
 
         val procedure = iProcedureService.getProcedure(activityDto.getProcedureId());
-        val mantainer = iUserService.getUser(activityDto.getMantainerId());
+        val maintainer = iUserService.getUser(activityDto.getMaintainerId());
 
         return new ActivityDao(activityDto.getId(),
                 activityDto.getDescription(),
@@ -50,6 +42,51 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
                 activityDto.isInterruptable(),
                 activityDto.getWeek(),
                 procedure,
-                mantainer);
+                maintainer);
+    }
+
+    private void checkConsistentActivityDto(ActivityDto activityDto){
+        if (activityDto.isAllNull()){
+            log.error("[ActivityToDtoMapper] there are 'null' fields.");
+            throw new NotValidTypeException("there are 'null' fields.");
+        }
+        if (activityDto.isFielsNull()){
+            if (activityDto.getId() != null){
+                if (activityDto.getId() < 0){
+                    log.error("[ActivityToDtoMapper] Id negative.");
+                    throw new NotValidTypeException("Id negative.");
+                }
+            }
+            if (activityDto.getEstimatedTime() != null){
+                if (activityDto.getEstimatedTime() < 0){
+                    log.error("[ActivityToDtoMapper] EstimatedTime negative.");
+                    throw new NotValidTypeException("EstimatedTime negative.");
+                }
+            }
+            if (activityDto.getWeek() != null){
+                if (activityDto.getWeek() < 0){
+                    log.error("[ActivityToDtoMapper] Week negative.");
+                    throw new NotValidTypeException("Week negative.");
+                }
+            }
+            if (activityDto.getMaintainerId() != null){
+                if (activityDto.getMaintainerId() < 0){
+                    log.error("[ActivityToDtoMapper] MaintainerId negative.");
+                    throw new NotValidTypeException("MaintainerId negative.");
+                }
+            }
+            if (activityDto.getProcedureId() != null){
+                if (activityDto.getProcedureId() < 0){
+                    log.error("[ActivityToDtoMapper] ProcedureId negative.");
+                    throw new NotValidTypeException("ProcedureId negative.");
+                }
+            }
+        }
+        if (!activityDto.isFielsNull()){
+            if (activityDto.isAlLFieldsNegative()){
+                log.error("[ActivityToDtoMapper] there are negative fields.");
+                throw new NotValidTypeException("there are negative fields.");
+            }
+        }
     }
 }

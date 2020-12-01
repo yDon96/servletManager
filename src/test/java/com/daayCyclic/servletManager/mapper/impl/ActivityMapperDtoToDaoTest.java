@@ -47,27 +47,27 @@ public class ActivityMapperDtoToDaoTest {
         activityDto = new ActivityDto();
         ProcedureDao procedure = new ProcedureDao();
         procedure.setTitle("title");
-        UserDao mantainer = new UserDao();
-        mantainer.setName("aaa");
-        mantainer.setSurname("sss");
-        mantainer.setDateOfBirth(LocalDate.of(2000,1,1));
+        UserDao maintainer = new UserDao();
+        maintainer.setName("aaa");
+        maintainer.setSurname("sss");
+        maintainer.setDateOfBirth(LocalDate.of(2000,1,1));
         procedureDao = iProcedureRepository.save(procedure);
-        userDao = iUserRepository.save(mantainer);
+        userDao = iUserRepository.save(maintainer);
 
     }
 
     @Test
     void shouldConvertToDao() {
-        setActivityDto(1, userDao.getUser_id(),procedureDao.getId(), 5, true, 50, "description");
-        ActivityDao activityDao = new ActivityDao(1, "description", 50, true, 5, procedureDao, userDao);
+        setActivityDto(1, userDao.getUser_id(),procedureDao.getId(), 5, true, 50, "ddd");
+        ActivityDao activityDao = new ActivityDao(1, "ddd", 50, true, 5, procedureDao, userDao);
         assertEquals(activityDao,iDtoToDaoMapper.convertToDao(activityDto));
     }
 
 
-    private void setActivityDto(Integer id, Integer mantainerId, Integer porcedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
+    private void setActivityDto(Integer id, Integer maintainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
         activityDto.setId(id);
-        activityDto.setMantainerId(mantainerId);
-        activityDto.setProcedureId(porcedureId);
+        activityDto.setMaintainerId(maintainerId);
+        activityDto.setProcedureId(procedureId);
         activityDto.setWeek(week);
         activityDto.setInterruptable(isInterruptable);
         activityDto.setEstimatedTime(estimatedTime);

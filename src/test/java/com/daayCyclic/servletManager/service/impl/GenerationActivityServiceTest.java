@@ -39,7 +39,7 @@ public class GenerationActivityServiceTest {
 
     private ProcedureDao procedure;
 
-    private UserDao mantanier;
+    private UserDao maintainer;
 
     @BeforeEach
     void init(){
@@ -51,18 +51,18 @@ public class GenerationActivityServiceTest {
         userDao.setSurname("s");
         userDao.setDateOfBirth(LocalDate.of(2000,1,1));
         procedure =  iProcedureRepository.save(procedureDao);
-        mantanier = iUserRepository.save(userDao);
+        maintainer = iUserRepository.save(userDao);
     }
 
     @Test
     void shouldGenerateActivityWithoutSetId() {
-        setActivityDao(null, mantanier, procedure,5,true,50,"description");
+        setActivityDao(null, maintainer, procedure,5,true,50,"description");
         activityService.generateActivity(activityDao);
     }
 
     @Test
     void shouldGenerateActivity() {
-        setActivityDao(1, mantanier, procedure,5,true,50,"description");
+        setActivityDao(1, maintainer, procedure,5,true,50,"description");
         activityService.generateActivity(activityDao);
     }
 
@@ -77,7 +77,7 @@ public class GenerationActivityServiceTest {
     }
 
     private Integer generateActivityToTestDuplicateEntry(){
-        setActivityDao(1, mantanier, procedure,6,false,60,"description1");
+        setActivityDao(1, maintainer, procedure,6,false,60,"description1");
         return activityService.generateActivity(activityDao);
     }
 

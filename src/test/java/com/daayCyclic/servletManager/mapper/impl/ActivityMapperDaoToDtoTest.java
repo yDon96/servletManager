@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -28,28 +30,32 @@ public class ActivityMapperDaoToDtoTest {
 
     private ActivityDao activityDao;
 
+    private ProcedureDao procedure;
+
+    private UserDao maintainer;
+
     @BeforeEach
     private void init(){
         activityDao = new ActivityDao();
+        ProcedureDao procedureDao = new ProcedureDao();
+        UserDao userDao = new UserDao();
+        procedureDao.setTitle("t");
+        userDao.setName("a");
+        userDao.setSurname("s");
+        userDao.setDateOfBirth(LocalDate.of(2000,1,1));
+        procedure =  procedureDao;
+        maintainer = userDao;
     }
 
     @Test
     void shouldConvertToDto() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(1, mantainer, procedure, 5, true, 50, "definition");
-        assertEquals(new ActivityDto(1, 23, 43, 5, true, 50, "definition"),iDaoToDtoMapper.convertToDto(activityDao));
+        setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, 50, "ddd"), iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldThrowExceptionConvertToDtoIfIdIsNotSet() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(null, mantainer, procedure, 5, true, 50, "definition");
+        setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
@@ -57,43 +63,27 @@ public class ActivityMapperDaoToDtoTest {
 
     @Test
     void shouldConvertToDtoMissingDescription() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(1, mantainer, procedure, 5, true, 50, null);
-        assertEquals(new ActivityDto(1, 23, 43, 5, true, 50, null),iDaoToDtoMapper.convertToDto(activityDao));
+        setActivityDao(1, maintainer, procedure, 5, true, 50, null);
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, 50, null),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndDescriptionNotSet() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(null, mantainer, procedure, 5, true, 50, null);
+        setActivityDao(null, maintainer, procedure, 5, true, 50, null);
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
 
     @Test
-    void shouldConvertToDtoMissingMantainer() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(null);
-        procedure.setId(43);
-        setActivityDao(1, mantainer, procedure, 5, true, 50, "definition");
-        assertEquals(new ActivityDto(1, null, 43, 5, true, 50, "definition"),iDaoToDtoMapper.convertToDto(activityDao));
+    void shouldConvertToDtoMissingMaintainer() throws NotValidTypeException {
+        setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
+        assertEquals(new ActivityDto(1, null, procedure.getId(), 5, true, 50, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
-    void shouldThrowExceptionConvertToDtoIfIdAndMantainerNotSet() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(null);
-        procedure.setId(43);
-        setActivityDao(null, mantainer, procedure, 5, true, 50, "definition");
+    void shouldThrowExceptionConvertToDtoIfIdAndMaintainerNotSet() {
+        setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
@@ -101,43 +91,27 @@ public class ActivityMapperDaoToDtoTest {
 
     @Test
     void shouldConvertToDtoMissingProcedure() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(null);
-        setActivityDao(1, mantainer, procedure, 5, true, 50, "definition");
-        assertEquals(new ActivityDto(1, 23, null, 5, true, 50, "definition"),iDaoToDtoMapper.convertToDto(activityDao));
+        setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), null, 5, true, 50, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndProcedureNotSet() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(null);
-        setActivityDao(null, mantainer, procedure, 5, true, 50, "definition");
+        setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
 
     @Test
-    void shouldConvertToDtoWithOnlyIdAndInterruptable() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(null);
-        procedure.setId(null);
-        setActivityDao(1, mantainer, procedure, null, true, null, null);
+    void shouldConvertToDtoWithOnlyIdAndInter() throws NotValidTypeException {
+        setActivityDao(1, maintainer, procedure, null, true, null, null);
         assertEquals(new ActivityDto(1, null, null, null, true, null, null),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
-    void shouldThrowExceptionConvertToDtoIfIdAndAllFieldsAreNotSetExcludingInterr() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(null);
-        procedure.setId(null);
-        setActivityDao(null, mantainer, procedure, null, true, null, null);
+    void shouldThrowExceptionConvertToDtoIfIdAndAllFieldsAreNotSetExcludingInter() {
+        setActivityDao(null, maintainer, procedure, null, true, null, null);
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
@@ -145,21 +119,13 @@ public class ActivityMapperDaoToDtoTest {
 
     @Test
     void shouldConvertToDtoMissingWeek() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(1, mantainer, procedure, null, true, 50, "definition");
-        assertEquals(new ActivityDto(1, 23, 43, null, true, 50, "definition"),iDaoToDtoMapper.convertToDto(activityDao));
+        setActivityDao(1, maintainer, procedure, null, true, 50, "ddd");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), null, true, 50, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndWeekNotSet() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(null, mantainer, procedure, null, true, 50, "definition");
+        setActivityDao(null, maintainer, procedure, null, true, 50, "ddd");
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
@@ -167,21 +133,13 @@ public class ActivityMapperDaoToDtoTest {
 
     @Test
     void shouldConvertToDtoMissingEstimateTime() throws NotValidTypeException {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(1, mantainer, procedure, 5, true, null, "definition");
-        assertEquals(new ActivityDto(1, 23, 43, 5, true, null, "definition"),iDaoToDtoMapper.convertToDto(activityDao));
+        setActivityDao(1, maintainer, procedure, 5, true, null, "ddd");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, null, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndEstimateTimeNotSet() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(null, mantainer, procedure, 5, true, null, "definition");
+        setActivityDao(null, maintainer, procedure, 5, true, null, "ddd");
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
@@ -189,11 +147,7 @@ public class ActivityMapperDaoToDtoTest {
 
     @Test
     void shouldThrowExceptionConvertToDtoWithIdNegative() {
-        UserDao mantainer = new UserDao();
-        ProcedureDao procedure = new ProcedureDao();
-        mantainer.setUser_id(23);
-        procedure.setId(43);
-        setActivityDao(-7, mantainer, procedure, 5, true, 50, "definition");
+        setActivityDao(-7, maintainer, procedure, 5, true, 50, "ddd");
         assertThrows(NullPointerException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
