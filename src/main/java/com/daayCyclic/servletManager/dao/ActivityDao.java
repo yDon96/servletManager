@@ -28,12 +28,12 @@ public class ActivityDao implements ObjectDao{
 
     private Integer week;
 
-    @OneToOne
-    @MapsId
+    @ManyToOne
+    @JoinColumn(columnDefinition = "id")
     private ProcedureDao procedure;
 
-    @OneToOne
-    @MapsId
+    @ManyToOne
+    @JoinColumn(columnDefinition = "user_id")
     private UserDao maintainer;
 
     @UpdateTimestamp
