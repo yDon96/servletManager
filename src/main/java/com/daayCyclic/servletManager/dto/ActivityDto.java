@@ -46,7 +46,7 @@ public class ActivityDto implements ObjectDto {
     public boolean equals(Object obj) {
         return (obj instanceof ActivityDto)
                 && id.equals(((ActivityDto) obj).id)
-                && maintainerId.equals(((ActivityDto) obj).maintainerId)
+                && mantainerId.equals(((ActivityDto) obj).mantainerId)
                 && procedureId.equals(((ActivityDto) obj).procedureId)
                 && (Objects.equals(estimatedTime, ((ActivityDto) obj).estimatedTime))
                 && (Objects.equals(week, ((ActivityDto) obj).week))
