@@ -6,12 +6,10 @@ import com.daayCyclic.servletManager.dto.ProcedureDto;
 import com.daayCyclic.servletManager.dto.UserDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
-import com.daayCyclic.servletManager.service.IRoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -37,7 +35,8 @@ class UserDtoToDaoMapperTest {
         mapper = new UserDtoToDaoMapper();
     }
 
-    @Disabled("Bisogna capire perché non va prima")
+    @Disabled("Bisogna capire perché non va prima, penso che il problema sia legato in qualche modo a Spring. " +
+            "Da quanto si legge nel log, non inizializza un RoleService quando avvio i test")
     @Test
     void convertToDaoGoodObject() {
         roleRepository.save(createRole(1, "Planner"));

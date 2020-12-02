@@ -1,6 +1,6 @@
-spring.profiles.active: dev
-
 spring:
+  profiles:
+    active: dev
   jpa:
     show-sql: false
     hibernate:
@@ -17,9 +17,8 @@ spring:
 
 ---
 
-spring.profiles.active: test
-
 spring:
+  profiles: test
   jpa:
     database: h2
   datasource:

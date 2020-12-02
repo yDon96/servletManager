@@ -29,12 +29,14 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
         if (!(objectDao instanceof UserDao)) {
             log.info("[MAPPER: UserDaoToDto] The given object is not an instance of UserDao");
             throw new NotValidTypeException("The given object is not an UserDao instance.");
-        } else {
-            UserDao userDao = (UserDao) objectDao;
-            UserDto userDto = new UserDto(userDao.getUser_id(), userDao.getName(), userDao.getSurname(), userDao.getDateOfBirth(), userDao.getRole().getName());
-            log.info("[MAPPER: UserDaoToDto] " + userDao + " successfully converted to UserDto");
-            return userDto;
         }
+        UserDao userDao = (UserDao) objectDao;
+        UserDto userDto = new UserDto(userDao.getUser_id(), userDao.getName(), userDao.getSurname(), userDao.getDateOfBirth(), null);
+        if (userDao.getRole() != null) {
+            userDto.setRole(userDao.getRole().getName());
+        }
+        log.info("[MAPPER: UserDaoToDto] " + userDao + " successfully converted to UserDto");
+        return userDto;
     }
 
     /**
@@ -53,10 +55,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
             userList = new ArrayList<>();
             for (ObjectDao user : daoObjects) {
                 UserDto convertedUser = (UserDto) convertToDto(user);
-              
-                if (convertedUser != null) {
-                    userList.add(convertedUser);
-                }
+                userList.add(convertedUser);
             }
         }
         log.info("[MAPPER: UserDaoToDto] Batch conversion completed successfully");
