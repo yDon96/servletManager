@@ -30,7 +30,6 @@ public class GenerationActivityServiceTest {
 
     private ActivityDao activityDao;
 
-
     @Autowired
     private IUserRepository iUserRepository;
 
@@ -56,13 +55,43 @@ public class GenerationActivityServiceTest {
 
     @Test
     void shouldGenerateActivityWithoutSetId() {
-        setActivityDao(null, maintainer, procedure,5,true,50,"description");
+        setActivityDao(null, maintainer, procedure,5,true,50,"ddd");
+        activityService.generateActivity(activityDao);
+    }
+
+    @Test
+    void shouldGenerateActivityWithoutSetDescription() {
+        setActivityDao(1, maintainer, procedure,5,true,50,null);
+        activityService.generateActivity(activityDao);
+    }
+
+    @Test
+    void shouldGenerateActivityWithoutSetWeek() {
+        setActivityDao(1, maintainer, procedure,null,true,50,"ddd");
+        activityService.generateActivity(activityDao);
+    }
+
+    @Test
+    void shouldGenerateActivityWithoutSetEstimatedTime() {
+        setActivityDao(1, maintainer, procedure,5,true,null,"ddd");
+        activityService.generateActivity(activityDao);
+    }
+
+    @Test
+    void shouldGenerateActivityWithoutSetProcedure() {
+        setActivityDao(1, maintainer, null,5,true,50,"ddd");
+        activityService.generateActivity(activityDao);
+    }
+
+    @Test
+    void shouldGenerateActivityWithoutSetMaintainer() {
+        setActivityDao(1, null, procedure,5,true,50,"ddd");
         activityService.generateActivity(activityDao);
     }
 
     @Test
     void shouldGenerateActivity() {
-        setActivityDao(1, maintainer, procedure,5,true,50,"description");
+        setActivityDao(1, maintainer, procedure,5,true,50,"ddd");
         activityService.generateActivity(activityDao);
     }
 
@@ -71,13 +100,13 @@ public class GenerationActivityServiceTest {
         Integer id = generateActivityToTestDuplicateEntry();
         assertThrows(DuplicateGenerationException.class, () -> {
             activityDao = new ActivityDao();
-            setActivityDao(id, null, null,5,true,50,"definition");
+            setActivityDao(id, null, null,5,true,50,"ddd");
             activityService.generateActivity(activityDao);
         });
     }
 
     private Integer generateActivityToTestDuplicateEntry(){
-        setActivityDao(1, maintainer, procedure,6,false,60,"description1");
+        setActivityDao(1, maintainer, procedure,6,false,60,"ddd");
         return activityService.generateActivity(activityDao);
     }
 

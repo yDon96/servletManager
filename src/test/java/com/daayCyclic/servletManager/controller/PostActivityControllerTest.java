@@ -138,11 +138,11 @@ public class PostActivityControllerTest {
 //    void shouldPostActivityWithoutAProcedureId() throws Exception {
 //        this.mockMvc.perform(post("/activity")
 //                .contentType(MediaType.APPLICATION_JSON)
-//                .content(getContentFormatted(1, "ddd", 50, true, 5, null, maintainer.getUser_id())))
+//                .content(getContentFormatted(1, "ddd", 50, true, 5, null, null)))
 //                .andDo(print())
-//                .andExpect(status().isOk());
+//                .andExpect(status().isBadRequest());
 //    }
-//
+
 //    @Test
 //    void shouldPostActivityWithoutAMaintainerId() throws Exception {
 //        this.mockMvc.perform(post("/activity")
