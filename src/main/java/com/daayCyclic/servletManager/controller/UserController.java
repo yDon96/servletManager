@@ -3,12 +3,12 @@ package com.daayCyclic.servletManager.controller;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.UserDto;
+import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
 import com.daayCyclic.servletManager.service.IRoleService;
 import com.daayCyclic.servletManager.service.IUserService;
-import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -55,24 +55,20 @@ public class UserController {
      *
      * @param userId the id into the server of the user
      * @return a {@literal UserDto} represents the desired user
-     * @throws NotFoundException if the desired user is not presente into the server
+     * @throws NotFoundException if the desired user is not present into the server
      */
     @GetMapping(path = "/get")
     public UserDto getUser(@RequestParam int userId) throws NotValidTypeException, NotFoundException {
         log.info("[REST] Start search for user with id: " + userId);
         UserDao searchUser = userService.getUser(userId);
-        if (searchUser == null) {
-            log.info("[REST] There is no such user");
-            throw new NotFoundException("User not found");
-        } else {
-            log.info("[REST] User found: " + searchUser);
-            return (UserDto) userDaoToDtoMapper.convertToDto(searchUser);
-        }
+        log.info("[REST] User found: " + searchUser);
+        return (UserDto) userDaoToDtoMapper.convertToDto(searchUser);
     }
 
 
     /**
-     * Get users from the server according to their roles (if no role is given, get all users)
+     * Get users from the server according to their roles, if no role is given, get all users
+     * (if some of the roles in the list does not exist, will be skipped)
      *
      * @param roles a {@literal List<String>} of the desired roles
      * @return a {@literal List<UserDto>} containing the desired users
@@ -85,7 +81,12 @@ public class UserController {
         if (roles != null) {
             rolesDao = new ArrayList<>();
             for (String role : roles) {
-                rolesDao.add(roleService.getRole(role));
+                try {
+                    RoleDao foundRole = roleService.getRole(role);
+                    rolesDao.add(foundRole);
+                } catch (NotFoundException e) {
+                    log.info("[REST] The role '" + role + "' does not exist inside the server, will be skipped");
+                }
             }
         }
         log.info("[REST] Start a research with the given roles as filter: " + roles);
