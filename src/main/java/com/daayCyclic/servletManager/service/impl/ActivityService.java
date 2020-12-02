@@ -60,7 +60,7 @@ public class ActivityService implements IActivityService {
 
     }
 
-    private boolean activityExist(Integer activityId){
+    protected boolean activityExist(Integer activityId){
         if (activityId == null) {
             return false;
         }

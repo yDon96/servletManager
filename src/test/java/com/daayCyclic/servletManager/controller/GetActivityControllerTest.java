@@ -52,7 +52,7 @@ public class GetActivityControllerTest {
 
     private ProcedureDao procedure;
 
-    private UserDao mantanier;
+    private UserDao maintainer;
 
     @BeforeEach
     private void init() {
@@ -63,7 +63,7 @@ public class GetActivityControllerTest {
         userDao.setSurname("s");
         userDao.setDateOfBirth(LocalDate.of(2000,1,1));
         procedure =  iProcedureRepository.save(procedureDao);
-        mantanier = iUserRepository.save(userDao);
+        maintainer = iUserRepository.save(userDao);
         activityDaoList = new ArrayList<>();
         for(int i = 1; i < 5; i++) {
             ActivityDao activityDao = new ActivityDao();
@@ -72,7 +72,7 @@ public class GetActivityControllerTest {
             activityDao.setEstimatedTime(60 + i * 10);
             activityDao.setDescription("Work" + i);
             activityDao.setProcedure(procedure);
-            activityDao.setMaintainer(mantanier);
+            activityDao.setMaintainer(maintainer);
             activityDaoList.add(iActivityRepository.save(activityDao));
         }
     }
@@ -85,7 +85,7 @@ public class GetActivityControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(activityDaoList.get(2).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.mantainerId").value(mantanier.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interruptable").value(activityDaoList.get(2).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
@@ -93,9 +93,60 @@ public class GetActivityControllerTest {
     }
 
     @Test
+    void shouldGetActivities() throws Exception  {
+        this.mockMvc.perform(get("/activities"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(0).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(0).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(0).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(0).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value(activityDaoList.get(0).getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(activityDaoList.get(1).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].week").value(activityDaoList.get(1).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].interruptable").value(activityDaoList.get(1).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].estimatedTime").value(activityDaoList.get(1).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].description").value(activityDaoList.get(1).getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].id").value(activityDaoList.get(2).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].week").value(activityDaoList.get(2).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].interruptable").value(activityDaoList.get(2).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].description").value(activityDaoList.get(2).getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].id").value(activityDaoList.get(3).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].week").value(activityDaoList.get(3).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].interruptable").value(activityDaoList.get(3).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].estimatedTime").value(activityDaoList.get(3).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].description").value(activityDaoList.get(3).getDescription()));
+    }
+
+    @Test
+    void shouldRespondBadRequestIfGetActivityWithoutParameter() throws Exception {
+        this.mockMvc.perform(get("/activity")).andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestIfGetActivityWithWrongTypeParameterValue() throws Exception {
+        this.mockMvc.perform(get("/activity").param("activityId","i")).andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestIfGetActivityWithNegativeId() throws Exception {
+        this.mockMvc.perform(get("/activity").param("activityId","-222")).andDo(print()).andExpect(status().isBadRequest());
+    }
+
+    @Test
     void shouldRespondNotFoundIfGetActivityThatNotExist() throws Exception {
         this.mockMvc.perform(get("/activity").param("activityId","100000")).andDo(print()).andExpect(status().isNotFound());
     }
-
 
 }

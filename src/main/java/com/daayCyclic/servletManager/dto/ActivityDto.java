@@ -17,7 +17,7 @@ public class ActivityDto implements ObjectDto {
     @NonNull
     private Integer id;
 
-    private Integer mantainerId;
+    private Integer maintainerId;
 
     private Integer procedureId;
 
@@ -32,9 +32,9 @@ public class ActivityDto implements ObjectDto {
     public ActivityDto() {
     }
 
-    public ActivityDto(@NonNull Integer id, Integer mantainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
+    public ActivityDto(@NonNull Integer id, Integer maintainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
         this.id = id;
-        this.mantainerId = mantainerId;
+        this.maintainerId = maintainerId;
         this.procedureId = procedureId;
         this.week = week;
         this.isInterruptable = isInterruptable;
@@ -46,17 +46,22 @@ public class ActivityDto implements ObjectDto {
     public boolean equals(Object obj) {
         return (obj instanceof ActivityDto)
                 && id.equals(((ActivityDto) obj).id)
-                && mantainerId.equals(((ActivityDto) obj).mantainerId)
-                && procedureId.equals(((ActivityDto) obj).procedureId)
+                && (Objects.equals(procedureId, ((ActivityDto) obj).procedureId))
+                && (Objects.equals(maintainerId, ((ActivityDto) obj).maintainerId))
                 && (Objects.equals(estimatedTime, ((ActivityDto) obj).estimatedTime))
                 && (Objects.equals(week, ((ActivityDto) obj).week))
                 && (Objects.equals(description, ((ActivityDto) obj).description));
     }
 
     public boolean isAllNull() {
-        return id == null && mantainerId == null && procedureId == null && week == null && estimatedTime == null && description == null;
+        return id == null && maintainerId == null && procedureId == null && week == null && estimatedTime == null && description == null;
     }
+
     public boolean isAlLFieldsNegative() {
-        return id < 0 || mantainerId < 0 || procedureId < 0 || week < 0 || estimatedTime < 0;
+        return id < 0 || maintainerId < 0 || procedureId < 0 || week < 0 || estimatedTime < 0;
+    }
+
+    public boolean isFielsNull(){
+        return id == null || maintainerId == null || procedureId == null || week == null|| estimatedTime == null;
     }
 }
