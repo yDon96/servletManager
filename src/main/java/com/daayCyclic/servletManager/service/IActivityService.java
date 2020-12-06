@@ -13,5 +13,5 @@ public interface IActivityService {
     void updateActivity(ActivityDao activityDao);
     List<ActivityDao> getActivities();
     void assignMaintainer(UserDao userDao, ActivityDao activityDao);
-    void assignProcedures(ProcedureDao procedureDao, ActivityDao activityDao);
+    void assignProcedure(ProcedureDao procedureDao, ActivityDao activityDao);
 }

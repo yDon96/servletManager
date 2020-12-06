@@ -41,7 +41,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoActivities) throws NotValidTypeException {
         if(!(!daoActivities.isEmpty() && daoActivities.get(0) instanceof ActivityDao)){
             throw new NotValidTypeException("Not valid type. (convertToDtoList)");
