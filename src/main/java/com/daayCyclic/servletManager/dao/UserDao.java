@@ -115,4 +115,8 @@ public class UserDao implements ObjectDao {
     public int hashCode() {
         return Objects.hash(user_id, name, surname, dateOfBirth, role);
     }
+
+    public boolean isMaintainer() {
+        return this.role.getName().compareToIgnoreCase("Maintainer") == 0;
+    }
 }
