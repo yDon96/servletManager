@@ -4,6 +4,7 @@ package com.daayCyclic.servletManager.service.impl;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
+import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
 import com.daayCyclic.servletManager.service.IRoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,10 @@ public class RoleService implements IRoleService {
 
     @Override
     public List<RoleDao> getRoles() {
-        return null;
+        /**
+         * returns the list of all roles.
+         */
+        return repository.findAll();
     }
 
     @Override
