@@ -8,7 +8,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "activity_procedure")
 @Getter
@@ -24,6 +26,13 @@ public class ProcedureDao implements ObjectDao {
     private String title;
 
     private String description;
+
+    @ManyToMany
+    @JoinTable(
+            name = "procedures_competencies",
+            joinColumns = @JoinColumn(name = "procedure_id"),
+            inverseJoinColumns = @JoinColumn(name = "competency_id"))
+    private Set<CompetencyDao> competencies;
 
     @CreationTimestamp
     private LocalDateTime timestamp;

@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity(name = "users")
 public class UserDao implements ObjectDao {
@@ -17,7 +18,16 @@ public class UserDao implements ObjectDao {
     @Column(nullable = false) private String name;
     @Column(nullable = false) private String surname;
     @Column(nullable = false) private LocalDate dateOfBirth;
+
     @ManyToOne private RoleDao role;
+
+    @ManyToMany
+    @JoinTable(
+            name = "users_competencies",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "competency_id"))
+    private Set<CompetencyDao> competencies;
+
     @UpdateTimestamp private LocalDateTime lastMod;
     @CreationTimestamp private LocalDateTime timestamp;
 

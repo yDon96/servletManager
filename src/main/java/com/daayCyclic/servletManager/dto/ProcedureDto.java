@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Objects;
 
 @Getter
@@ -13,11 +14,10 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProcedureDto implements ObjectDto {
 
-    public Integer id;
-
-    public String title;
-
-    public String description;
+    private Integer id;
+    private String title;
+    private String description;
+    private List<String> competencies;
 
     public ProcedureDto(Integer id, String title, String description) {
         this.id = id;
@@ -26,11 +26,19 @@ public class ProcedureDto implements ObjectDto {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        return  (obj instanceof ProcedureDto)
-                && id.equals(((ProcedureDto) obj).id)
-                && (Objects.equals(title, ((ProcedureDto) obj).title))
-                && (Objects.equals(description, ((ProcedureDto) obj).description));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProcedureDto)) return false;
+        ProcedureDto that = (ProcedureDto) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(title, that.title) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(competencies, that.competencies);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, description, competencies);
     }
 
     public boolean isAllNull() {

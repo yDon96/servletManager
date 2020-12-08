@@ -32,7 +32,7 @@ public class ProcedureController {
 
     @PostMapping(path = "/procedure")
     public void postProcedure(@RequestBody ProcedureDto procedureDto) throws NotValidTypeException, DuplicateGenerationException {
-        log.info("[REST] Post procedure with title" + procedureDto.title);
+        log.info("[REST] Post procedure with title" + procedureDto.getTitle());
         val procedureDao = (ProcedureDao) iDtoToDaoMapper.convertToDao(procedureDto);
         iProcedureService.generateProcedure(procedureDao);
         log.debug("[REST] End post procedure");
@@ -62,5 +62,8 @@ public class ProcedureController {
         log.debug("[REST] End get procedures");
         return procedures;
     }
+
+    @PutMapping (path = "/assignCompetencyToProcedure")
+    public void assignCompetencyToProcedure(Integer procedureId, String competency) {}
 
 }

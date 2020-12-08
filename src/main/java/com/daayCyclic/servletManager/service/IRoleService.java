@@ -2,10 +2,11 @@ package com.daayCyclic.servletManager.service;
 
 import com.daayCyclic.servletManager.dao.RoleDao;
 
+import java.util.List;
+
 
 public interface IRoleService {
-
-    public RoleDao getRole(String role);
-
-    public void generateRole(RoleDao role);
+    void generateRole(RoleDao role);
+    RoleDao getRole(String role);
+    List<RoleDao> getRoles();
 }

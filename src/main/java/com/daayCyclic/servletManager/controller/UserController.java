@@ -113,4 +113,7 @@ public class UserController {
         }
     }
 
+    @PutMapping(path = "/assignCompetency")
+    public void assignCompetencyToUser(Integer userId, String competency) {}
+
 }

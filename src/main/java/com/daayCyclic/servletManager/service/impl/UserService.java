@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.service.impl;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.exception.NotFoundException;
@@ -83,6 +84,11 @@ public class UserService implements IUserService{
     public void assignRoleToUser(UserDao user, RoleDao role) {
         user.setRole(role);
         repository.save(user);
+    }
+
+    @Override
+    public void assignCompetencyToUser(CompetencyDao competency, UserDao user) {
+
     }
 
 }

@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.service.impl;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
@@ -41,6 +42,11 @@ public class ProcedureService implements IProcedureService {
     public List<ProcedureDao> getProcedures() {
         log.debug("[ProcedureService] Get all procedures");
         return iProcedureRepository.findAll();
+    }
+
+    @Override
+    public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) {
+
     }
 
     protected boolean procedureExist(Integer procedureId){

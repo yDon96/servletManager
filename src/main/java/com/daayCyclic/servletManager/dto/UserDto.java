@@ -1,6 +1,7 @@
 package com.daayCyclic.servletManager.dto;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 public class UserDto implements ObjectDto {
@@ -10,6 +11,7 @@ public class UserDto implements ObjectDto {
     private String surname;
     private LocalDate dateOfBirth;
     private String role;
+    private List<String> competencies;
 
     public UserDto(Integer user_id, String name, String surname, LocalDate dateOfBirth, String role) {
         this.user_id = user_id;
@@ -55,6 +57,32 @@ public class UserDto implements ObjectDto {
         this.role = role;
     }
 
+    public List<String> getCompetencies() {
+        return competencies;
+    }
+
+    public void setCompetencies(List<String> competencies) {
+        this.competencies = competencies;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof UserDto)) return false;
+        UserDto userDto = (UserDto) o;
+        return Objects.equals(user_id, userDto.user_id) &&
+                Objects.equals(name, userDto.name) &&
+                Objects.equals(surname, userDto.surname) &&
+                Objects.equals(dateOfBirth, userDto.dateOfBirth) &&
+                Objects.equals(role, userDto.role) &&
+                Objects.equals(competencies, userDto.competencies);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(user_id, name, surname, dateOfBirth, role, competencies);
+    }
+
     @Override
     public String toString() {
         return "UserDto{" +
@@ -66,20 +94,4 @@ public class UserDto implements ObjectDto {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof UserDto)) return false;
-        UserDto userDto = (UserDto) o;
-        return user_id.equals(userDto.user_id) &&
-                Objects.equals(name, userDto.name) &&
-                Objects.equals(surname, userDto.surname) &&
-                Objects.equals(dateOfBirth, userDto.dateOfBirth) &&
-                Objects.equals(role, userDto.role);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(user_id, name, surname, dateOfBirth, role);
-    }
 }

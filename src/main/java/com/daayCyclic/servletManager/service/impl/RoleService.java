@@ -11,6 +11,8 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service(value = "RoleService")
 public class RoleService implements IRoleService {
@@ -23,6 +25,11 @@ public class RoleService implements IRoleService {
         log.debug("[RoleService] Get role with name: " + roleName);
         val roleDao = repository.findByName(roleName);
         return roleDao.orElseThrow(() -> new NotFoundException("Not Found."));
+    }
+
+    @Override
+    public List<RoleDao> getRoles() {
+        return null;
     }
 
     @Override
