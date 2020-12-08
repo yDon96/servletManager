@@ -47,9 +47,29 @@ public class ActivityService implements IActivityService {
         return activityDao.orElseThrow(NotFoundException::new);
     }
 
-    //TODO
+    /**
+     * Update an existing activity if it exist.
+     *
+     * @param activityDao the {@literal ActivityDao} to update
+     * @throws NotValidTypeException if the given activity is null
+     * @throws NotFoundException if the given activity is not present into the database
+     */
+    //TODO: decidere se tenere questo o fare l'update con la generate
     @Override
     public void updateActivity(ActivityDao activityDao) {
+        log.info("[SERVICE: Activity] Starting update of the given activity: " + activityDao);
+        if (activityDao == null) {
+            String message = "The given activity is null";
+            log.info("[SERVICE: Activity] " + message);
+            throw new NotValidTypeException(message);
+        }
+        if (!(activityExist(activityDao.getId()))){
+            String message = "The given activity is not present into the database";
+            log.info("[SERVICE: Activity] " + message);
+            throw new NotFoundException(message);
+        }
+        iActivityRepository.save(activityDao);
+        log.info("[SERVICE: Activity] Update of the activity completed successfully");
     }
 
     @Override
