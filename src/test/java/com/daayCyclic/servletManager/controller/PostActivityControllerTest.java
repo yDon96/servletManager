@@ -169,7 +169,7 @@ public class PostActivityControllerTest {
     }
 
     @Test
-    void shouldRespondeBadRequestIfPostActivityWithWrongBody() throws Exception {
+    void shouldRespondBadRequestIfPostActivityWithWrongBody() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a_id\":\"1\"}"))

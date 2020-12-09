@@ -25,34 +25,30 @@ public class PostRoleControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-
-
     @Test
     void shouldPostRole() throws Exception {
         this.mockMvc.perform(post("/postRole")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "man")))
+                .param("role","main"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
-    private String getContentFormatted(Integer id, String name){
-        String json = "{";
-        int numberOfContent = 0;
-        if (id != null){
-            json += "\"id\":\"" + id + "\"";
-            numberOfContent += 1;
-        }
-
-        if (name != null){
-            if (numberOfContent > 0){
-                json += ",";
-            }
-            json += "\"name\":\"" + name + "\"";
-        }
-
-        json += "}";
-
-        return json;
+    @Test
+    void shouldRespondBadRequestWithoutRole() throws Exception {
+        this.mockMvc.perform(post("/postRole")
+                .param("role",""))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void shouldRespondBadRequestDuplicateRole() throws Exception {
+        this.mockMvc.perform(post("/postRole")
+                .param("role","main"));
+        this.mockMvc.perform(post("/postRole")
+                .param("role","main"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
 }

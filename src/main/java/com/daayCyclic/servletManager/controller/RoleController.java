@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -22,11 +24,9 @@ public class RoleController {
 
 
     @PostMapping(path = "/postRole")
-    public void postRole(@RequestBody String role) throws NotValidTypeException {
+    public void postRole(@RequestParam String role) throws NotValidTypeException {
         /**
          * Insert (or Update if already present) into the server the the role.
-         * @param role the to insert
-         * @throws NotValidTypeException if does not pass the integrity check
          */
         log.info("[REST] Post Role");
         RoleDao roleDao = new RoleDao();
@@ -39,14 +39,12 @@ public class RoleController {
     public List<String> getRoles() throws NotValidTypeException {
         /**
          * get all the roles that are in the database.
-         * @return a list of roles.
-         * @throws NotValidTypeException if does not pass the integrity check.
          */
         log.info("[REST] Get Roles");
         val roleDao = iRoleService.getRoles();
         List<String> roles = new ArrayList<>();
         for (int i = 0; i < roleDao.size(); i++){
-            roles.add(roleDao.get(0).getName());
+            roles.add(roleDao.get(i).getName());
         }
         log.debug("[REST] End Get roles");
         return roles;

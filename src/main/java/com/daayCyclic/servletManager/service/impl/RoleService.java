@@ -39,6 +39,10 @@ public class RoleService implements IRoleService {
     @Override
     public void generateRole(RoleDao role) {
         log.debug("[RoleService] Generating role");
+        if(role.getName() == null || role.getName() == ""){
+            log.error("[RoleService] String void");
+            throw new NotValidTypeException("String void");
+        }
         val roleDao = repository.findByName(role.getName());
         if(roleDao.isPresent()){
             log.error("[RoleService] Trying to create a role that already exist with name: " + role.getName());
