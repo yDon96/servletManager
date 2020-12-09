@@ -54,7 +54,7 @@ public class PostCompetencyControllerTest {
     }
 
     @Test
-    void postCompetencyNullAlreadyPresentLowerCase() {
+    void postCompetencyAlreadyPresentLowerCase() {
         assertDoesNotThrow(() -> {
             mockMvc.perform(post("/postCompetency").param("competency", "ecdl"))
                     .andDo(print())
@@ -63,9 +63,9 @@ public class PostCompetencyControllerTest {
     }
 
     @Test
-    void postCompetencyNullEverythingGood() {
+    void postCompetencyEverythingGood() {
         assertDoesNotThrow(() -> {
-            String newCompetency = "competency1";
+            String newCompetency = "COMPETENCY1";
             mockMvc.perform(post("/postCompetency").param("competency", newCompetency))
                     .andDo(print())
                     .andExpect(status().isOk());
