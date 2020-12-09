@@ -22,7 +22,7 @@ public class CompetencyService implements ICompetencyService {
     private ICompetencyRepository repository;
 
     /**
-     * Create a new competency into the database
+     * Create a new competency into the database.
      *
      * @param competency the {@literal String} representing the Competency to create
      * @throws NotValidTypeException if the {@literal string} is not valid (null or empty)
@@ -47,6 +47,12 @@ public class CompetencyService implements ICompetencyService {
         log.info("[SERVICE: Competency] Insert of the new competency completed successfully");
     }
 
+    /**
+     * Retrieve a {@literal CompetencyDao} from the database, correspondent to the given {@literal String}.
+     *
+     * @param competency a {@literal String} representing the competency to find
+     * @return a {@literal CompetencyDao} representing the found competency
+     */
     @Override
     public CompetencyDao getCompetency(String competency) {
         log.info("[SERVICE: Competency] Start retrieving from the database the competency: " + competency);
@@ -63,6 +69,11 @@ public class CompetencyService implements ICompetencyService {
         return retrievedCompetency.get();
     }
 
+    /**
+     * Retrieve from the database all the {@literal CompetencyDao}.
+     *
+     * @return a {@literal List} of {@literal CompetencyDao} containing all the competencies in the database
+     */
     @Override
     public List<CompetencyDao> getCompetencies() {
         log.info("[SERVICE: Competency] Start retrieving all the competencies from the database");
@@ -71,6 +82,12 @@ public class CompetencyService implements ICompetencyService {
         return retrievedCompetencies;
     }
 
+    /**
+     * If a competency is present returns {@code true}, otherwise {@code false}.
+     *
+     * @param competency a {@literal String} representing the competency to find
+     * @return a boolean indicating if the competency exist
+     */
     private boolean competencyExist(String competency) {
         if (competency == null) {
             return false;

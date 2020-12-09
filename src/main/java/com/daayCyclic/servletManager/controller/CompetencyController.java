@@ -20,7 +20,7 @@ public class CompetencyController {
     ICompetencyService competencyService;
 
     /**
-     * Put a new competency into the server
+     * Put a new competency into the server.
      *
      * @param competency the {@literal String} representing the Competency to post
      */
@@ -31,6 +31,11 @@ public class CompetencyController {
         log.info("[REST] Posting competency completed successfully");
     }
 
+    /**
+     * Retrieve from the server all the competencies.
+     *
+     * @return a {@literal List} of {@literal String} containing all the competencies in the server
+     */
     @GetMapping(path = "/getCompetencies")
     public List<String> getCompetencies() {
         ArrayList<CompetencyDao> retrievedCompetencies = (ArrayList<CompetencyDao>) this.competencyService.getCompetencies();
