@@ -50,13 +50,9 @@ public class CompetencyService implements ICompetencyService {
     @Override
     public CompetencyDao getCompetency(String competency) {
         log.info("[SERVICE: Competency] Start retrieving from the database the competency: " + competency);
-//        if (competency == null) {
-//            String message = "The given competency is null";
-//            log.info("[SERVICE: Competency] " + message);
-//            throw new NotValidTypeException(message);
-//        }
-//        competency = competency.toUpperCase();
-//        Che succede se non controllo se è null??
+        if (competency != null) {
+            competency = competency.toUpperCase();
+        }
         Optional<CompetencyDao> retrievedCompetency = this.repository.findByName(competency);
         if (retrievedCompetency.isEmpty()) {
             String message = "The given competency doesn't exist into the database";
