@@ -1,6 +1,7 @@
 package com.daayCyclic.servletManager.dao;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity(name = "competencies")
@@ -18,9 +19,13 @@ public class CompetencyDao implements ObjectDao{
     @ManyToMany(mappedBy = "competencies")
     private Set<ProcedureDao> procedures;
 
+    public CompetencyDao() {}
+
     public CompetencyDao(Integer competencyId, String name) {
         this.competencyId = competencyId;
         this.name = name;
+        this.users = null;
+        this.procedures = null;
     }
 
     public Integer getCompetencyId() {
@@ -39,4 +44,25 @@ public class CompetencyDao implements ObjectDao{
         this.name = name;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CompetencyDao)) return false;
+        CompetencyDao that = (CompetencyDao) o;
+        return Objects.equals(competencyId, that.competencyId) &&
+                Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(competencyId, name);
+    }
+
+    @Override
+    public String toString() {
+        return "CompetencyDao{" +
+                "competencyId=" + competencyId +
+                ", name='" + name + '\'' +
+                '}';
+    }
 }
