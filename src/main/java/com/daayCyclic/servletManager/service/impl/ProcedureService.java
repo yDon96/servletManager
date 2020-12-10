@@ -4,6 +4,8 @@ import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
+import com.daayCyclic.servletManager.exception.NotValidTypeException;
+import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.IProcedureService;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -19,6 +22,8 @@ public class ProcedureService implements IProcedureService {
 
     @Autowired
     private IProcedureRepository iProcedureRepository;
+    @Autowired
+    private ICompetencyRepository iCompetencyRepository;
 
 
     @Override
@@ -46,7 +51,29 @@ public class ProcedureService implements IProcedureService {
 
     @Override
     public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) {
+        /**
+         * Assign the given competency to the given procedure
+         */
+        log.info("[SERVICE procedure] start assign competency to procedure");
+        if (procedure == null) {
+            log.error("[SERVICE procedure] procedure is null");
+            throw new NotValidTypeException("procedure is null");
+        }
 
+        if (competency == null) {
+            log.error("[SERVICE procedure] competency is null");
+            throw new NotValidTypeException("competency is null");
+        }
+
+        if (!(iCompetencyRepository.existsById(competency.getCompetencyId()))){
+            log.error("[SERVICE procedure] competency is no present into Database");
+            throw new NotFoundException("competency is no present into Database");
+        }
+        Set<CompetencyDao> competencyDaoSet;
+        competencyDaoSet = procedure.getCompetencies();
+        competencyDaoSet.add(competency);
+        procedure.setCompetencies(competencyDaoSet);
+        log.info("[SERVICE procedure] assignment successfully");
     }
 
     protected boolean procedureExist(Integer procedureId){
