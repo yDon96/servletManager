@@ -13,8 +13,7 @@ import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -50,7 +49,7 @@ public class ProcedureService implements IProcedureService {
     }
 
     @Override
-    public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) {
+    public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) throws NullPointerException {
         /**
          * Assign the given competency to the given procedure
          */
@@ -69,10 +68,11 @@ public class ProcedureService implements IProcedureService {
             log.error("[SERVICE procedure] competency is no present into Database");
             throw new NotFoundException("competency is no present into Database");
         }
-        Set<CompetencyDao> competencyDaoSet;
-        competencyDaoSet = procedure.getCompetencies();
+        Set<CompetencyDao> competencyDaoSet = new LinkedHashSet<CompetencyDao>();
+        competencyDaoSet.addAll(procedure.getCompetencies());
         competencyDaoSet.add(competency);
         procedure.setCompetencies(competencyDaoSet);
+        iProcedureRepository.save(procedure);
         log.info("[SERVICE procedure] assignment successfully");
     }
 
