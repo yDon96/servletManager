@@ -24,8 +24,6 @@ public class CompetencyDao implements ObjectDao{
     public CompetencyDao(Integer competencyId, String name) {
         this.competencyId = competencyId;
         this.name = name;
-        this.users = null;
-        this.procedures = null;
     }
 
     public Integer getCompetencyId() {
