@@ -25,7 +25,7 @@ public class CompetencyService implements ICompetencyService {
      * Create a new competency into the database.
      *
      * @param competency the {@literal String} representing the Competency to create
-     * @throws NotValidTypeException if the {@literal string} is not valid (null or empty)
+     * @throws NotValidTypeException if the {@literal String} is not valid (null or empty)
      * @throws DuplicateGenerationException if the Competency is already present
      */
     @Override
@@ -48,6 +48,33 @@ public class CompetencyService implements ICompetencyService {
     }
 
     /**
+     * Update a competency into the database with a given one.
+     *
+     * @param updatedCompetency a {@literal CompetencyDao} containing the new, updated, competency
+     * @throws NotFoundException if the given competency is not present into the database
+     * @throws NotValidTypeException if the {@literal CompetencyDao} is not valid (null or empty)
+     */
+    @Override
+    public void updateCompetency(CompetencyDao updatedCompetency) {
+        log.info("[SERVICE: Competency] Starting update competency");
+        if (updatedCompetency == null || updatedCompetency.getName().equals("")) {
+            String message = "The given competency is null or empty";
+            log.info("[SERVICE: Competency] " + message);
+            throw new NotValidTypeException(message);
+        }
+        updatedCompetency.setName(updatedCompetency.getName().toUpperCase());
+        Optional<CompetencyDao> competencyDao = this.findByName(updatedCompetency.getName());
+        if (competencyDao.isEmpty()) {
+            String message = "The given competency doesn't exist";
+            log.info("[SERVICE: Competency] " + message);
+            throw new NotFoundException(message);
+        }
+        updatedCompetency.setCompetencyId(competencyDao.get().getCompetencyId());  // Set the ID to the one into the DB (if the ID is different the save would create a new record otherwise)
+        log.info("[SERVICE: Competency] Update completed successfully");
+        this.repository.save(updatedCompetency);
+    }
+
+    /**
      * Retrieve a {@literal CompetencyDao} from the database, correspondent to the given {@literal String}.
      *
      * @param competency a {@literal String} representing the competency to find
@@ -59,7 +86,7 @@ public class CompetencyService implements ICompetencyService {
         if (competency != null) {
             competency = competency.toUpperCase();
         }
-        Optional<CompetencyDao> retrievedCompetency = this.repository.findByName(competency);
+        Optional<CompetencyDao> retrievedCompetency = this.findByName(competency);
         if (retrievedCompetency.isEmpty()) {
             String message = "The given competency doesn't exist into the database";
             log.info("[SERVICE: Competency] " + message);
@@ -89,10 +116,21 @@ public class CompetencyService implements ICompetencyService {
      * @return a boolean indicating if the competency exist
      */
     private boolean competencyExist(String competency) {
+        //TODO: Possibile miglioramento, se questa torna l'id, l'update si può fare tramite la generate
         if (competency == null) {
             return false;
         }
-        return this.repository.findByName(competency).isPresent();
+        return this.findByName(competency).isPresent();
+    }
+
+    /**
+     * Find a competency with is name.
+     *
+     * @param competency a {@literal String} representing the competency
+     * @return an {@literal Optional} containing a {@literal CompetencyDao} if the competency was found, nothing otherwise
+     */
+    private Optional<CompetencyDao> findByName(String competency) {
+        return this.repository.findByName(competency);
     }
 
 }
