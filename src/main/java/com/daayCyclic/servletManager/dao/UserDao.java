@@ -34,13 +34,6 @@ public class UserDao implements ObjectDao {
     // Constructors
     public UserDao() {}
 
-    public UserDao(String name, String surname, LocalDate dateOfBirth, RoleDao role) {
-        this.name = name;
-        this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
-        this.role = role;
-    }
-
     public UserDao(Integer user_id, String name, String surname, LocalDate dateOfBirth, RoleDao role) {
         this.user_id = user_id;
         this.name = name;
@@ -96,6 +89,14 @@ public class UserDao implements ObjectDao {
 
     public LocalDateTime getTimestamp() {
         return timestamp;
+    }
+
+    public Set<CompetencyDao> getCompetencies() {
+        return competencies;
+    }
+
+    public void setCompetencies(Set<CompetencyDao> competencies) {
+        this.competencies = competencies;
     }
 
     @Override
