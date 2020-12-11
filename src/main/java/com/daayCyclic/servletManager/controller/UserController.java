@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.UserDto;
@@ -7,6 +8,7 @@ import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
+import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IRoleService;
 import com.daayCyclic.servletManager.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +24,14 @@ import java.util.List;
 @RequestMapping(path = "/user")
 public class UserController {
 
-
     @Autowired
     private IUserService userService;
 
     @Autowired
     private IRoleService roleService;
+
+    @Autowired
+    private ICompetencyService competencyService;
 
     @Autowired @Qualifier(value = "UserDaoToDtoMapper")
     private IDaoToDtoMapper userDaoToDtoMapper;
@@ -114,6 +118,12 @@ public class UserController {
     }
 
     @PutMapping(path = "/assignCompetency")
-    public void assignCompetencyToUser(Integer userId, String competency) {}
+    public void assignCompetencyToUser(@RequestParam Integer userId,@RequestParam String competency) {
+        log.info("[REST] Starting assign competency: " + competency + " to user: " + userId);
+        UserDao userDao = userService.getUser(userId);
+        CompetencyDao competencyDao = competencyService.getCompetency(competency);
+        userService.assignCompetencyToUser(competencyDao, userDao);
+        log.info("[REST] Competency assigned successfully");
+    }
 
 }
