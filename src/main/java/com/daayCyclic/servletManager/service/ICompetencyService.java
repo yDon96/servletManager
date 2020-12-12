@@ -8,4 +8,5 @@ public interface ICompetencyService {
     void generateCompetency(String competency);
     CompetencyDao getCompetency(String competency);
     List<CompetencyDao> getCompetencies();
+    void updateCompetency(CompetencyDao updatedCompetency);
 }

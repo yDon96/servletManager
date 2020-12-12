@@ -4,6 +4,7 @@ import com.daayCyclic.servletManager.dao.*;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
+import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IProcedureService;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -40,6 +42,9 @@ public class AssignCompetencyToProcedureServiceTest {
     @Autowired
     private IProcedureService iProcedureService;
 
+    @Autowired
+    private IProcedureRepository iProcedureRepository;
+
     private CompetencyDao competency;
 
     private ProcedureDao procedureDao;
@@ -48,55 +53,64 @@ public class AssignCompetencyToProcedureServiceTest {
 
     @BeforeEach
     private void init() {
-        addProcedure();
-        addCompetency();
+        createCompetencyDB();
+        createProcedureDB();
     }
 
     @Test
-    void assignCompetencyNotPresent() {
+    void assignCompetencyNotPresentCompetency() {
         assertThrows(NotFoundException.class, () -> {
             CompetencyDao competencyDao = new CompetencyDao(121,"competency");
-            iProcedureService.assignCompetencyToProcedure(competencyDao,procedureDao);
+            iProcedureService.assignCompetencyToProcedure(competencyDao,iProcedureService.getProcedure(17));
+        });
+    }
+
+    @Test
+    void assignCompetencyNotPresentProcedure() {
+        assertThrows(NotFoundException.class, () -> {
+            iProcedureService.assignCompetencyToProcedure(iCompetencyService.getCompetency("competency n°29"),
+                    iProcedureService.getProcedure(52));
         });
     }
 
     @Test
     void assignCompetencyWithNullProcedure() {
         assertThrows(NotValidTypeException.class, () -> {
-            iProcedureService.assignCompetencyToProcedure(competencyDaoList.get(2), null);
+            iProcedureService.assignCompetencyToProcedure(iCompetencyService.getCompetency("competency n°27"), null);
         });
     }
 
+    //TODO : non trova nessuna procedura
     @Test
     void assignCompetencyWithNullCompetencyField() {
         assertThrows(NotValidTypeException.class, () -> {
-            iProcedureService.assignCompetencyToProcedure(null, procedureDao);
+            iProcedureService.assignCompetencyToProcedure(null, iProcedureService.getProcedure(17));
         });
     }
 
     @Test
-    void containCompetency() {
-        CompetencyDao competencyDao = competencyDaoList.get(1);
-        iProcedureService.assignCompetencyToProcedure(competencyDao,procedureDao);
-        Set<CompetencyDao> set = new LinkedHashSet<CompetencyDao>();
-        set.addAll(procedureDao.getCompetencies());
-        assertTrue(set.contains(competencyDaoList.get(1)));
+    void assignCompetencyToProcedureOk() {
+        assertDoesNotThrow(() ->
+                iProcedureService.assignCompetencyToProcedure(iCompetencyService.getCompetency("competency n°25"),
+                        iProcedureService.getProcedure(18)));
     }
 
-    private void addProcedure(){
-        procedureDao = new ProcedureDao();
-        procedureDao.setId(1);
-        procedureDao.setTitle("t");
-        procedureDao.setDescription("d");
-    }
-
-    private void addCompetency(){
-        competencyDaoList = new ArrayList<>();
-        for(int i = 1; i < 5; i++) {
+    private void createCompetencyDB(){
+        for(int i = 25; i < 30; i++) {
             CompetencyDao competencyDao = new CompetencyDao();
             competencyDao.setCompetencyId(i);
             competencyDao.setName("competency n°" + i);
-            competencyDaoList.add(iCompetencyRepository.save(competencyDao));
+            iCompetencyRepository.save(competencyDao);
+        }
+    }
+
+    private void createProcedureDB(){
+        for(int i = 17; i < 23; i++) {
+            ProcedureDao procedureDao = new ProcedureDao();
+            procedureDao.setId(i);
+            procedureDao.setTitle("t " + i);
+            procedureDao.setDescription("d " + i);
+            iProcedureRepository.save(procedureDao);
         }
     }
 }

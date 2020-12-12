@@ -41,11 +41,18 @@ public class ProcedureDao implements ObjectDao {
     @UpdateTimestamp
     private LocalDateTime lastMod;
 
+    public ProcedureDao(Integer productId, String title, String description, Set<CompetencyDao> competencies) {
+        this.id = productId;
+        this.title = title;
+        this.description = description;
+        this.competencies = competencies;
+    }
+
     public ProcedureDao(Integer productId, String title, String description) {
         this.id = productId;
         this.title = title;
         this.description = description;
-        competencies = new LinkedHashSet<>();
+        this.competencies = new LinkedHashSet<>();
     }
 
     @Override

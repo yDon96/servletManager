@@ -53,43 +53,64 @@ public class AssignCompetencyToProcedureControllerTest {
 
     @BeforeEach
     private void init() {
-        addProcedure();
-        addCompetency();
+        createCompetencyDB();
+        createProcedureDB();
     }
 
     @Test
-    void assignCompetencyNotPresent(){
+    void assignCompetencyToProcedureNotPresentCompetency(){
         assertDoesNotThrow(() -> {
             mockMvc.perform(put("/assignCompetencyToProcedure")
-                    //.content()
-                    //.andDo(print())
-                    //.andExpect(status().isNotFound()
+                    .param("procedureId","14")
+                    .param("competency", "competency n°1212"))
+                    .andDo(print())
+                    .andExpect(status().isNotFound()
                     );
         });
     }
 
-    private void addProcedure(){
-
-        ProcedureDao procedureDao = new ProcedureDao();
-        CompetencyDao competency = new CompetencyDao();
-        competencyDaoList = new ArrayList<>();
-        competencyDaoSet = new LinkedHashSet<>();
-        procedureDao.setId(1);
-        procedureDao.setTitle("t");
-        procedureDao.setDescription("d");
-        competency.setCompetencyId(1);
-        competency.setName("competency n°1");
-        competencyDaoSet.add(competency);
-        procedureDao.setCompetencies(competencyDaoSet);
-
+    @Test
+    void assignCompetencyToProcedureNotPresentProcedure() {
+        assertDoesNotThrow(() -> {
+            mockMvc.perform(put("/assignCompetencyToProcedure")
+                    .param("procedureId", "100")
+                    .param("competency", "competency n°12"))
+                    .andDo(print())
+                    .andExpect(status().isNotFound()
+                    );
+        });
     }
 
-    private void addCompetency(){
-        for(int i = 1; i < 5; i++) {
+
+    @Test
+    void assignCompetencyToProcedureEverythingOk() {
+        assertDoesNotThrow(() -> {
+            mockMvc.perform(put("/user/assignCompetency")
+                    .param("procedureId", "11")
+                    .param("competency", "competency n°12"))
+                    .andDo(print())
+                    .andExpect(status().isOk()
+                    );
+        });
+    }
+
+
+    private void createCompetencyDB(){
+        for(int i = 10; i < 16; i++) {
             CompetencyDao competencyDao = new CompetencyDao();
             competencyDao.setCompetencyId(i);
             competencyDao.setName("competency n°" + i);
-            competencyDaoList.add(iCompetencyRepository.save(competencyDao));
+            iCompetencyRepository.save(competencyDao);
+        }
+    }
+
+    private void createProcedureDB(){
+        for(int i = 10; i < 15; i++) {
+            ProcedureDao procedureDao = new ProcedureDao();
+            procedureDao.setId(i);
+            procedureDao.setTitle("t " + i);
+            procedureDao.setDescription("d " + i);
+            iProcedureService.generateProcedure(procedureDao);
         }
     }
 

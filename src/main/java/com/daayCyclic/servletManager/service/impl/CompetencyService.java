@@ -28,4 +28,9 @@ public class CompetencyService implements ICompetencyService {
         return null;
     }
 
+    @Override
+    public void updateCompetency(CompetencyDao updatedCompetency) {
+
+    }
+
 }

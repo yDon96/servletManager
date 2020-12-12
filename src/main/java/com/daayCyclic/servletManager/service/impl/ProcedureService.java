@@ -8,6 +8,7 @@ import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.IProcedureService;
+import com.daayCyclic.servletManager.service.ICompetencyService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +22,12 @@ public class ProcedureService implements IProcedureService {
 
     @Autowired
     private IProcedureRepository iProcedureRepository;
+
     @Autowired
     private ICompetencyRepository iCompetencyRepository;
 
+    @Autowired
+    private ICompetencyService iCompetencyService;
 
     @Override
     public void generateProcedure(ProcedureDao procedureDao) throws DuplicateGenerationException {
@@ -68,11 +72,19 @@ public class ProcedureService implements IProcedureService {
             log.error("[SERVICE procedure] competency is no present into Database");
             throw new NotFoundException("competency is no present into Database");
         }
-        Set<CompetencyDao> competencyDaoSet = new LinkedHashSet<CompetencyDao>();
-        competencyDaoSet.addAll(procedure.getCompetencies());
-        competencyDaoSet.add(competency);
-        procedure.setCompetencies(competencyDaoSet);
-        iProcedureRepository.save(procedure);
+
+        if (competency.getProcedures() == null || competency.getProcedures().isEmpty()) {
+            competency.setProcedures(new LinkedHashSet<>());
+        }
+        competency.getProcedures().add(procedure);
+
+        if (procedure.getCompetencies().isEmpty() || procedure.getCompetencies() == null){
+            procedure.setCompetencies(new LinkedHashSet<>());
+        }
+        procedure.getCompetencies().add(competency);
+
+        this.generateProcedure(procedure);
+        this.iCompetencyService.updateCompetency(competency);
         log.info("[SERVICE procedure] assignment successfully");
     }
 
