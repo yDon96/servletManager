@@ -1,6 +1,7 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
+import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
@@ -46,6 +47,10 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     }
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
+        Integer idUser = activityDto.getMaintainerId();
+        UserDao user = iUserService.getUser(idUser);
+        String maintainer = "Maintainer";
+
         if (activityDto.isAllNull()){
             log.error("[ActivityToDtoMapper] there are 'null' fields.");
             throw new NotValidTypeException("there are 'null' fields.");
@@ -86,6 +91,14 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
             if (activityDto.isAlLFieldsNegative()){
                 log.error("[ActivityToDtoMapper] there are negative fields.");
                 throw new NotValidTypeException("there are negative fields.");
+            }
+        }
+        if (user.getRole() != null){
+            if (user.getRole().getName() != null){
+                if (!user.getRole().getName().equalsIgnoreCase(maintainer)){
+                    log.error("[Activity MapperToDao] the role in non correct");
+                    throw new NotValidTypeException("the role in non correct.");
+                }
             }
         }
     }

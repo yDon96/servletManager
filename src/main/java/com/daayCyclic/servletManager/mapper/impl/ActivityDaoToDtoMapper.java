@@ -19,12 +19,22 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
     @Override
     public ActivityDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
-
+        String maintainer = "Maintainer";
         if (!(objectDao instanceof ActivityDao)){
             throw new NotValidTypeException("Not valid type. (ActivityToDtoMapper)");
         }
 
         val activityDao = (ActivityDao) objectDao;
+
+        if (activityDao.getMaintainer().getRole() != null){
+            if (activityDao.getMaintainer().getRole().getName() != null){
+                if (!activityDao.getMaintainer().getRole().getName().equalsIgnoreCase(maintainer)){
+                    log.error("[Activity MapperToDto] the role in non correct.");
+                    throw new NotValidTypeException("the role in non correct.");
+                }
+            }
+        }
+
 
         if (activityDao.getId() == null || activityDao.getId() <= 0) {
             log.error("[ActivityToDtoMapper] invalid id.");
