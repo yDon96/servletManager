@@ -4,6 +4,7 @@ import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
+import com.daayCyclic.servletManager.repository.IActivityRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
 import com.daayCyclic.servletManager.service.IActivityService;
@@ -18,6 +19,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -35,7 +37,7 @@ public class PutActivityControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private IActivityService iActivityService;
+    private IActivityRepository iActivityRepository;
 
     @Autowired
     private IProcedureRepository iProcedureRepository;
@@ -47,6 +49,8 @@ public class PutActivityControllerTest {
 
     private UserDao maintainer;
 
+    private ActivityDao activityDao;
+
     @BeforeEach
     private void init() {
         createActivityDB();
@@ -56,7 +60,7 @@ public class PutActivityControllerTest {
     void shouldPutActivity() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(56,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(activityDao.getId(),maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -76,31 +80,33 @@ public class PutActivityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(null,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
+    @Transactional
     private void createActivityDB(){
-        ActivityDao activityDao = new ActivityDao();
-        activityDao.setId(56);
-        activityDao.setDescription("d 56");
-        activityDao.setEstimatedTime(45);
-        activityDao.setInterruptable(true);
-        activityDao.setWeek(25);
-        activityDao.setMaintainer(createMaintainerDB());
-        activityDao.setProcedure(createProcedureDB());
-        iActivityService.generateActivity(activityDao);
+        ActivityDao activity = new ActivityDao();
+        activity.setDescription("d 56");
+        activity.setEstimatedTime(45);
+        activity.setInterruptable(true);
+        activity.setWeek(25);
+        activity.setMaintainer(createMaintainerDB());
+        activity.setProcedure(createProcedureDB());
+        activityDao = iActivityRepository.save(activity);
     }
 
+    @Transactional
     private ProcedureDao createProcedureDB(){
         ProcedureDao procedureDao = new ProcedureDao(41, "t 41", "d 41");
         procedure =  iProcedureRepository.save(procedureDao);
-        return procedureDao;
+        return procedure;
     }
 
+    @Transactional
     private UserDao createMaintainerDB(){
         UserDao userDao = new UserDao(78,"n 78", "s 78", LocalDate.of(1999, 11, 11), null);
         maintainer = iUserRepository.save(userDao);
-        return userDao;
+        return maintainer;
     }
 
 
@@ -138,7 +144,7 @@ public class PutActivityControllerTest {
         if (numberOfContent > 0) {
             json += ",";
         }
-        json += "interruptable\":\"" + isInterruptable + "\"";
+        json += "\"interruptable\":\"" + isInterruptable + "\"";
 
         if (estimatedTime != null){
             if (numberOfContent > 0) {

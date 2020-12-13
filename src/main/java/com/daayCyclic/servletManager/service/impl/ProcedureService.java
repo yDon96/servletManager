@@ -52,6 +52,22 @@ public class ProcedureService implements IProcedureService {
         return iProcedureRepository.findAll();
     }
 
+    public void updateProcedure(ProcedureDao procedureDao){
+        log.info("[SERVICE: Procedure] Starting update of the given procedure: " + procedureDao);
+        if (procedureDao == null) {
+            String message = "The given procedure is null";
+            log.info("[SERVICE: Procedure] " + message);
+            throw new NotValidTypeException(message);
+        }
+        if (!(procedureExist(procedureDao.getId()))){
+            String message = "The given procedure is not present into the database";
+            log.info("[SERVICE: Procedure] " + message);
+            throw new NotFoundException(message);
+        }
+        iProcedureRepository.save(procedureDao);
+        log.info("[SERVICE: Procedure] Update of the procedure completed successfully");
+    }
+
     @Override
     public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) throws NullPointerException {
         /**
@@ -72,18 +88,17 @@ public class ProcedureService implements IProcedureService {
             log.error("[SERVICE procedure] competency is no present into Database");
             throw new NotFoundException("competency is no present into Database");
         }
-
-        if (competency.getProcedures() == null || competency.getProcedures().isEmpty()) {
+        if (competency.getProcedures() == null){
             competency.setProcedures(new LinkedHashSet<>());
         }
         competency.getProcedures().add(procedure);
 
-        if (procedure.getCompetencies().isEmpty() || procedure.getCompetencies() == null){
+        if (procedure.getCompetencies() == null){
             procedure.setCompetencies(new LinkedHashSet<>());
         }
         procedure.getCompetencies().add(competency);
 
-        this.generateProcedure(procedure);
+        this.updateProcedure(procedure);
         this.iCompetencyService.updateCompetency(competency);
         log.info("[SERVICE procedure] assignment successfully");
     }

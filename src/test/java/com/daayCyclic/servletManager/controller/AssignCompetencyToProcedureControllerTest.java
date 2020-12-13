@@ -5,6 +5,7 @@ import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
+import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IProcedureService;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +42,7 @@ public class AssignCompetencyToProcedureControllerTest {
     private ICompetencyRepository iCompetencyRepository;
 
     @Autowired
-    private IProcedureService iProcedureService;
+    private IProcedureRepository iProcedureRepository;
 
     private ProcedureDao procedure;
 
@@ -49,7 +50,9 @@ public class AssignCompetencyToProcedureControllerTest {
 
     private Set<CompetencyDao> competencyDaoSet;
 
-    private List<CompetencyDao> competencyDaoList;
+    private List<CompetencyDao> competencyDaos;
+
+    private List<ProcedureDao> procedureDaos;
 
     @BeforeEach
     private void init() {
@@ -57,6 +60,7 @@ public class AssignCompetencyToProcedureControllerTest {
         createProcedureDB();
     }
 
+    // TODO : testare dopo la marge
     @Test
     void assignCompetencyToProcedureNotPresentCompetency(){
         assertDoesNotThrow(() -> {
@@ -96,21 +100,23 @@ public class AssignCompetencyToProcedureControllerTest {
 
 
     private void createCompetencyDB(){
+        competencyDaos = new LinkedList<>();
         for(int i = 10; i < 16; i++) {
             CompetencyDao competencyDao = new CompetencyDao();
             competencyDao.setCompetencyId(i);
             competencyDao.setName("competency n°" + i);
-            iCompetencyRepository.save(competencyDao);
+            competencyDaos.add(iCompetencyRepository.save(competencyDao));
         }
     }
 
     private void createProcedureDB(){
+        procedureDaos = new LinkedList<>();
         for(int i = 10; i < 15; i++) {
             ProcedureDao procedureDao = new ProcedureDao();
             procedureDao.setId(i);
             procedureDao.setTitle("t " + i);
             procedureDao.setDescription("d " + i);
-            iProcedureService.generateProcedure(procedureDao);
+            procedureDaos.add(iProcedureRepository.save(procedureDao));
         }
     }
 

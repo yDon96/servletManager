@@ -1,6 +1,8 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
+import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
@@ -30,11 +32,17 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
         }
 
         val activityDto = (ActivityDto) objectDto;
-
+        ProcedureDao procedure = null;
+        UserDao maintainer = null;
         checkConsistentActivityDto(activityDto);
 
-        val procedure = iProcedureService.getProcedure(activityDto.getProcedureId());
-        val maintainer = iUserService.getUser(activityDto.getMaintainerId());
+        if (activityDto.getMaintainerId() != null){
+            maintainer = iUserService.getUser(activityDto.getMaintainerId());
+        }
+        if (activityDto.getProcedureId() != null){
+            procedure = iProcedureService.getProcedure(activityDto.getProcedureId());
+        }
+
 
         return new ActivityDao(activityDto.getId(),
                 activityDto.getDescription(),
@@ -47,8 +55,8 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
         if (activityDto.isAllNull()){
-            log.error("[ActivityToDtoMapper] there are 'null' fields.");
-            throw new NotValidTypeException("there are 'null' fields.");
+            log.error("[ActivityToDtoMapper] all fields are null.");
+            throw new NotValidTypeException("all fields are null.");
         }
         if (activityDto.isFielsNull()){
             if (activityDto.getId() != null){

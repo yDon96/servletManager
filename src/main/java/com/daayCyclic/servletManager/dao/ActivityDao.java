@@ -22,10 +22,12 @@ public class ActivityDao implements ObjectDao{
 
     private String description;
 
+    @Column(nullable = false)
     private Integer estimatedTime;
 
     private boolean isInterruptable;
 
+    @Column(nullable = false)
     private Integer week;
 
     @ManyToOne
