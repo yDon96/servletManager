@@ -14,10 +14,10 @@ public class RoleController {
     @Autowired
     IRoleService roleService;
 
-    @PostMapping(path = "/postRole")
+    @PostMapping(path = "/role")
     public void postRole(String role) {}
 
-    @GetMapping(path = "/getRoles")
+    @GetMapping(path = "/roles")
     public List<String> getRoles() {
         return null;
     }

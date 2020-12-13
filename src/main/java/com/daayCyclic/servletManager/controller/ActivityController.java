@@ -47,12 +47,12 @@ public class ActivityController {
         log.debug("[REST] End Post activity");
     }
 
-    @PutMapping(path = "/activity")
+    @PutMapping(path = "/activity") //TODO: change path
     public void putActivity(ActivityDto activityDto){
     }
 
-    @GetMapping(path = "/activity")
-    public ActivityDto getActivity(@RequestParam Integer activityId) throws NotValidTypeException {
+    @GetMapping(path = "/activity/{activityId}")
+    public ActivityDto getActivity(@PathVariable("activityId") Integer activityId) throws NotValidTypeException {
         log.info("[REST] Get Activity");
 
         if(activityId < 0){
@@ -79,8 +79,8 @@ public class ActivityController {
      * @param procedureID a {@literal int} ID which identifies a procedure
      * @param activityID a {@literal int} ID which identifies an activity
      */
-    @PutMapping(path = "/assignProcedure")
-    public void assignProcedure(@RequestParam int procedureID, @RequestParam int activityID){
+    @PutMapping(path = "/activity/{activityId}/assign-procedure")
+    public void assignProcedure(@RequestParam int procedureID, @PathVariable("activityId") int activityID){
         log.info("[REST] Start assigning procedure " + procedureID + "to " + activityID + "activity");
         ActivityDao activity = iActivityService.getActivity(activityID);
         ProcedureDao procedure = procedureService.getProcedure(procedureID);
@@ -94,8 +94,8 @@ public class ActivityController {
      * @param userID a {@literal int} ID which identifies a user
      * @param activityID a {@literal int} ID which identifies an activity
      */
-    @PutMapping(path = "/assignMaintainer")
-    public void assignMaintainer(@RequestParam int userID,@RequestParam int activityID){
+    @PutMapping(path = "/activity/{activityId}/assign-maintainer")
+    public void assignMaintainer(@RequestParam int userID,@PathVariable("activityId") int activityID){
         log.info("[REST] Start assigning maintainer: " + userID + "to " + activityID + " activity");
         ActivityDao activity = iActivityService.getActivity(activityID);
         UserDao user = userService.getUser(userID);

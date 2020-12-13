@@ -24,7 +24,7 @@ public class CompetencyController {
      *
      * @param competency the {@literal String} representing the Competency to post
      */
-    @PostMapping(path = "/postCompetency")
+    @PostMapping(path = "/competency")
     public void postCompetency(@RequestParam String competency) {
         log.info("[REST] Start posting competency: " + competency);
         this.competencyService.generateCompetency(competency);
@@ -36,7 +36,7 @@ public class CompetencyController {
      *
      * @return a {@literal List} of {@literal String} containing all the competencies in the server
      */
-    @GetMapping(path = "/getCompetencies")
+    @GetMapping(path = "/competencies")
     public List<String> getCompetencies() {
         ArrayList<CompetencyDao> retrievedCompetencies = (ArrayList<CompetencyDao>) this.competencyService.getCompetencies();
         ArrayList<String> newList = new ArrayList<>();

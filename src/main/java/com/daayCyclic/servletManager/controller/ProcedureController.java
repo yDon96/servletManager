@@ -38,8 +38,8 @@ public class ProcedureController {
         log.debug("[REST] End post procedure");
     }
 
-    @GetMapping(path = "/procedure")
-    public ProcedureDto getProcedure(@RequestParam Integer id) throws NotValidTypeException {
+    @GetMapping(path = "/procedure/{id}")
+    public ProcedureDto getProcedure(@PathVariable("id") Integer id) throws NotValidTypeException {
         log.info("[REST] Get procedure with id" + id.toString());
 
         if(id < 0){
@@ -63,7 +63,7 @@ public class ProcedureController {
         return procedures;
     }
 
-    @PutMapping (path = "/assignCompetencyToProcedure")
-    public void assignCompetencyToProcedure(Integer procedureId, String competency) {}
+    @PutMapping (path = "/procedure/{procedureId}/assign-competency")
+    public void assignCompetencyToProcedure(@PathVariable("procedureId") Integer procedureId, String competency) {}
 
 }
