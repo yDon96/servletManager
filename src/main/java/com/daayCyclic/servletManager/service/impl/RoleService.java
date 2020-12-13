@@ -30,9 +30,7 @@ public class RoleService implements IRoleService {
 
     @Override
     public List<RoleDao> getRoles() {
-        /**
-         * returns the list of all roles.
-         */
+        log.info("[RoleService] Get all roles.");
         return repository.findAll();
     }
 
