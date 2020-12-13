@@ -10,15 +10,13 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 @ActiveProfiles("test")
 @TestPropertySource("classpath:application.yaml")
@@ -36,7 +34,7 @@ public class GetCompetencyControllerTest {
     @Test
     void getCompetenciesEmptyDB() {
         assertDoesNotThrow(() -> {
-            this.mockMvc.perform(get("/getCompetencies"))
+            this.mockMvc.perform(get("/competencies"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(0)));
@@ -48,7 +46,7 @@ public class GetCompetencyControllerTest {
         int competencyNr = 5;
         this.populateCompetencies(competencyNr);
         assertDoesNotThrow(() -> {
-            ResultActions results = this.mockMvc.perform(get("/getCompetencies"))
+            ResultActions results = this.mockMvc.perform(get("/competencies"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(competencyNr)));

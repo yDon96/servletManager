@@ -49,7 +49,7 @@ class GetProcedureControllerTest {
 
     @Test
     void shouldGetProcedureFindIt() throws Exception {
-        this.mockMvc.perform(get("/procedure").param("id","2"))
+        this.mockMvc.perform(get("/procedure/2"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -81,23 +81,22 @@ class GetProcedureControllerTest {
 
     @Test
     void shouldRespondBadRequestIfGetProcedureWithoutParameter() throws Exception {
-        this.mockMvc.perform(get("/procedure")).andDo(print()).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/procedure")).andDo(print()).andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     void shouldRespondBadRequestIfGetProcedureWithWrongTypeParameterValue() throws Exception {
-        this.mockMvc.perform(get("/procedure").param("id","aaa")).andDo(print()).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/procedure/aaa")).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldRespondBadRequestIfGetProcedureWithNegativeId() throws Exception {
-        this.mockMvc.perform(get("/procedure").param("id","-222")).andDo(print()).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/procedure/-222")).andDo(print()).andExpect(status().isBadRequest());
     }
-
 
     @Test
     void shouldRespondNotFoundIfGetProcedureThatNotExist() throws Exception {
-        this.mockMvc.perform(get("/procedure").param("id","100000")).andDo(print()).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/procedure/100000")).andDo(print()).andExpect(status().isNotFound());
     }
 
 }

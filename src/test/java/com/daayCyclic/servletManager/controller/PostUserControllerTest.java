@@ -14,9 +14,10 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class UserControllerPostTest {
+public class PostUserControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -56,7 +57,7 @@ public class UserControllerPostTest {
     @Test
     void postUserNotPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/user/post")
+            mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getContentFormatted(10, "Domenico", "Barra", "1996-10-07", "System Administrator")))
                     .andDo(print())
@@ -67,7 +68,7 @@ public class UserControllerPostTest {
     @Test
     void postUserAlreadyPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/user/post")
+            mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getContentFormatted(1, "Domenico", "Barra", "1996-10-07", "System Administrator")))
                     .andDo(print())
@@ -78,7 +79,7 @@ public class UserControllerPostTest {
     @Test
     void postUserNotValid() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/user/post")
+            mockMvc.perform(post("/user")
                     .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isBadRequest());

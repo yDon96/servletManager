@@ -51,8 +51,7 @@ public class AssignCompetencyToUserControllerTest {
     @Test
     void assignCompetencyToUserCompetencyNotPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/user/assignCompetency")
-                    .param("userId", "6")
+            mockMvc.perform(put("/user/6/assign-competency")
                     .param("competency", "competency1000"))
                     .andDo(print())
                     .andExpect(status().isNotFound()
@@ -63,7 +62,7 @@ public class AssignCompetencyToUserControllerTest {
     @Test
     void assignCompetencyToUserUserNotPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/user/assignCompetency")
+            mockMvc.perform(put("/user/100/assign-competency")
                     .param("userId", "100")
                     .param("competency", "competency1"))
                     .andDo(print())
@@ -75,7 +74,7 @@ public class AssignCompetencyToUserControllerTest {
     @Test
     void assignCompetencyToUserUserNotMaintainer() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/user/assignCompetency")
+            mockMvc.perform(put("/user/1/assign-competency")
                     .param("userId", "1")
                     .param("competency", "competency1"))
                     .andDo(print())
@@ -87,7 +86,7 @@ public class AssignCompetencyToUserControllerTest {
     @Test
     void assignCompetencyToUserEverythingOk() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/user/assignCompetency")
+            mockMvc.perform(put("/user/6/assign-competency")
                     .param("userId", "6")
                     .param("competency", "competency1"))
                     .andDo(print())

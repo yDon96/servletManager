@@ -11,7 +11,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,7 +39,7 @@ public class PostCompetencyControllerTest {
     @Test
     void postCompetencyEmpty() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/postCompetency").param("competency", ""))
+            mockMvc.perform(post("/competency").param("competency", ""))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         });
@@ -47,7 +48,7 @@ public class PostCompetencyControllerTest {
     @Test
     void postCompetencyAlreadyPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/postCompetency").param("competency", "ECDL"))
+            mockMvc.perform(post("/competency").param("competency", "ECDL"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         });
@@ -56,7 +57,7 @@ public class PostCompetencyControllerTest {
     @Test
     void postCompetencyAlreadyPresentLowerCase() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(post("/postCompetency").param("competency", "ecdl"))
+            mockMvc.perform(post("/competency").param("competency", "ecdl"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
         });
@@ -66,7 +67,7 @@ public class PostCompetencyControllerTest {
     void postCompetencyEverythingGood() {
         assertDoesNotThrow(() -> {
             String newCompetency = "COMPETENCY1";
-            mockMvc.perform(post("/postCompetency").param("competency", newCompetency))
+            mockMvc.perform(post("/competency").param("competency", newCompetency))
                     .andDo(print())
                     .andExpect(status().isOk());
             assertEquals(newCompetency, service.getCompetency(newCompetency).getName());
