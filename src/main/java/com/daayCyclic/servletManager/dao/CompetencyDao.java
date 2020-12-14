@@ -10,7 +10,7 @@ public class CompetencyDao implements ObjectDao{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer competencyId;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String name;
 
     @ManyToMany(mappedBy = "competencies")
