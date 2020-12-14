@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UserDaoToDtoMapperTest {
-
+//TODO Add tests on competencies
     private UserDaoToDtoMapper mapper;
 
     @BeforeEach

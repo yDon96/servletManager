@@ -4,7 +4,9 @@ import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.exception.NotFoundException;
+import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IUserRepository;
+import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +25,8 @@ public class UserService implements IUserService{
     @Autowired
     private IUserRepository repository;
 
+    @Autowired
+    private ICompetencyService competencyService;
 
     /**
      * Save the given user into the database. If a user with the same ID of the one passed is already present, updates it.
@@ -36,7 +41,6 @@ public class UserService implements IUserService{
         repository.save(user);
         log.info("[SERVICE: User] Saving completed successfully");
     }
-
 
     /**
      * Find and return the user correspondent to {@literal id} if it present.
@@ -86,9 +90,41 @@ public class UserService implements IUserService{
         repository.save(user);
     }
 
+    /**
+     * Assign a competency to a maintainer.
+     *
+     * @param competency a {@literal CompetencyDao} to assign
+     * @param user a {@literal UserDao} to assign
+     * @throws NotValidTypeException if competency or user are null, or the user is not a maintainer
+     */
     @Override
     public void assignCompetencyToUser(CompetencyDao competency, UserDao user) {
+        log.info("[SERVICE: User] Starting to assign " + competency + " to user: " + user);
+        if (user == null || competency == null) {
+            String message = "Competency and user can't be null";
+            log.info("[SERVICE: User] " + message);
+            throw new NotValidTypeException(message);
+        }
+        if (!(user.isMaintainer())) {
+            String message = "The given user is not a maintainer";
+            log.info("[SERVICE: User] " + message);
+            throw new NotValidTypeException(message);
+        }
 
+        if (competency.getUsers() == null) {
+            competency.setUsers(new HashSet<>());
+        }
+        competency.getUsers().add(user);
+
+        if (user.getCompetencies() == null) {
+            user.setCompetencies(new HashSet<>());
+        }
+        user.getCompetencies().add(competency);
+
+        // Update user and competency into the db
+        this.generateUser(user);  //TODO: Change the update method
+        this.competencyService.updateCompetency(competency);
+        log.info("[SERVICE: User] Assign of competency to user completed successfully");
     }
 
 }

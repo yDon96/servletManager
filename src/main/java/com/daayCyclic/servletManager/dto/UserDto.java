@@ -1,8 +1,8 @@
 package com.daayCyclic.servletManager.dto;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 public class UserDto implements ObjectDto {
 
@@ -11,7 +11,7 @@ public class UserDto implements ObjectDto {
     private String surname;
     private LocalDate dateOfBirth;
     private String role;
-    private List<String> competencies;
+    private Set<String> competencies;
 
     public UserDto(Integer user_id, String name, String surname, LocalDate dateOfBirth, String role) {
         this.user_id = user_id;
@@ -57,11 +57,11 @@ public class UserDto implements ObjectDto {
         this.role = role;
     }
 
-    public List<String> getCompetencies() {
+    public Set<String> getCompetencies() {
         return competencies;
     }
 
-    public void setCompetencies(List<String> competencies) {
+    public void setCompetencies(Set<String> competencies) {
         this.competencies = competencies;
     }
 

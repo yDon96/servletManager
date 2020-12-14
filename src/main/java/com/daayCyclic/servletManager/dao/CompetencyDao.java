@@ -24,8 +24,6 @@ public class CompetencyDao implements ObjectDao{
     public CompetencyDao(Integer competencyId, String name) {
         this.competencyId = competencyId;
         this.name = name;
-        this.users = null;
-        this.procedures = null;
     }
 
     public Integer getCompetencyId() {
@@ -42,6 +40,22 @@ public class CompetencyDao implements ObjectDao{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Set<UserDao> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<UserDao> users) {
+        this.users = users;
+    }
+
+    public Set<ProcedureDao> getProcedures() {
+        return procedures;
+    }
+
+    public void setProcedures(Set<ProcedureDao> procedures) {
+        this.procedures = procedures;
     }
 
     @Override
