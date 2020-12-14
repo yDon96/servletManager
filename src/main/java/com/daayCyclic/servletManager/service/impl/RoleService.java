@@ -4,6 +4,7 @@ package com.daayCyclic.servletManager.service.impl;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
+import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
 import com.daayCyclic.servletManager.service.IRoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +30,17 @@ public class RoleService implements IRoleService {
 
     @Override
     public List<RoleDao> getRoles() {
-        return null;
+        log.info("[RoleService] Get all roles.");
+        return repository.findAll();
     }
 
     @Override
     public void generateRole(RoleDao role) {
         log.debug("[RoleService] Generating role");
+        if(role.getName() == null || role.getName() == ""){
+            log.error("[RoleService] String void");
+            throw new NotValidTypeException("String void");
+        }
         val roleDao = repository.findByName(role.getName());
         if(roleDao.isPresent()){
             log.error("[RoleService] Trying to create a role that already exist with name: " + role.getName());
