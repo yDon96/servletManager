@@ -1,7 +1,5 @@
 package com.daayCyclic.servletManager.dto;
 
-import com.daayCyclic.servletManager.dao.ProcedureDao;
-import com.daayCyclic.servletManager.dao.UserDao;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.NonNull;

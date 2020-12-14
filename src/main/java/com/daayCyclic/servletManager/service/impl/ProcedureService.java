@@ -7,14 +7,15 @@ import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
-import com.daayCyclic.servletManager.service.IProcedureService;
 import com.daayCyclic.servletManager.service.ICompetencyService;
+import com.daayCyclic.servletManager.service.IProcedureService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
 
 @Slf4j
 @Service
