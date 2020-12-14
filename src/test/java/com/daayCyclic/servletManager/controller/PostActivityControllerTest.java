@@ -133,16 +133,15 @@ public class PostActivityControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-
+//TODO : verify exception
 //    @Test
 //    void shouldPostActivityWithoutAProcedureId() throws Exception {
 //        this.mockMvc.perform(post("/activity")
 //                .contentType(MediaType.APPLICATION_JSON)
-//                .content(getContentFormatted(1, "ddd", 50, true, 5, null, null)))
+//                .content(getContentFormatted(1, "ddd", 50, true, 5, null, maintainer.getId())))
 //                .andDo(print())
 //                .andExpect(status().isBadRequest());
 //    }
-
 //    @Test
 //    void shouldPostActivityWithoutAMaintainerId() throws Exception {
 //        this.mockMvc.perform(post("/activity")
@@ -169,7 +168,7 @@ public class PostActivityControllerTest {
     }
 
     @Test
-    void shouldRespondeBadRequestIfPostActivityWithWrongBody() throws Exception {
+    void shouldRespondBadRequestIfPostActivityWithWrongBody() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"a_id\":\"1\"}"))
