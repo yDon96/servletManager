@@ -10,5 +10,5 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IActivityRepository extends JpaRepository<ActivityDao,Integer> {
-    List<ActivityDao> findAllByWeek(Integer week);
+    List<ActivityDao> findByWeek(Integer week);
 }

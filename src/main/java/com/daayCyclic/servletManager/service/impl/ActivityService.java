@@ -90,7 +90,7 @@ public class ActivityService implements IActivityService {
             log.error("[SERVICE: Activity] the week value not valid value.");
             throw new NotValidTypeException("the week value not valid value");
         }
-        return iActivityRepository.findAllByWeek(week);
+        return iActivityRepository.findByWeek(week);
     }
 
     /**
