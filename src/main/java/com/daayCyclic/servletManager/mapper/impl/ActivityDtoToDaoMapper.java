@@ -54,6 +54,10 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     }
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
+        Integer idUser = activityDto.getMaintainerId();
+        UserDao user = iUserService.getUser(idUser);
+        String maintainer = "Maintainer";
+
         if (activityDto.isAllNull()){
             log.error("[ActivityToDtoMapper] all fields are null.");
             throw new NotValidTypeException("all fields are null.");
@@ -94,6 +98,14 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
             if (activityDto.isAlLFieldsNegative()){
                 log.error("[ActivityToDtoMapper] there are negative fields.");
                 throw new NotValidTypeException("there are negative fields.");
+            }
+        }
+        if (user.getRole() != null){
+            if (user.getRole().getName() != null){
+                if (!user.getRole().getName().equalsIgnoreCase(maintainer)){
+                    log.error("[Activity MapperToDao] the role in non correct");
+                    throw new NotValidTypeException("the role in non correct.");
+                }
             }
         }
     }

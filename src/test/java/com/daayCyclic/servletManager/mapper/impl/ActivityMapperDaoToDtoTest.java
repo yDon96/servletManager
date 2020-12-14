@@ -2,6 +2,7 @@ package com.daayCyclic.servletManager.mapper.impl;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ProcedureDto;
@@ -49,6 +50,10 @@ public class ActivityMapperDaoToDtoTest {
         userDao.setName("a");
         userDao.setSurname("s");
         userDao.setDateOfBirth(LocalDate.of(2000,1,1));
+        RoleDao roleDao = new RoleDao();
+        roleDao.setId(1);
+        roleDao.setName("maintainer");
+        userDao.setRole(roleDao);
         procedure =  procedureDao;
         maintainer = userDao;
     }
@@ -166,6 +171,28 @@ public class ActivityMapperDaoToDtoTest {
         assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(procedureDao);
         });
+    }
+
+    @Test
+    void shouldThrowExceptionConvertToDtoTheRoleIsNotMaintainer() {
+        RoleDao roleDao = new RoleDao();
+        roleDao.setId(3);
+        roleDao.setName("Admin");
+        maintainer.setRole(roleDao);
+        setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
+        assertThrows(NotValidTypeException.class, () -> {
+            iDaoToDtoMapper.convertToDto(activityDao);
+        });
+    }
+
+    @Test
+    void shouldConvertToDtoMissingRoleMaintainer() throws NotValidTypeException {
+        RoleDao roleDao = new RoleDao();
+        roleDao.setId(3);
+        roleDao.setName(null);
+        maintainer.setRole(roleDao);
+        setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, 50, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     private void setActivityDao(Integer id, UserDao maintainer, ProcedureDao procedure, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
