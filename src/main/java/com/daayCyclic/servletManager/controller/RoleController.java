@@ -22,8 +22,7 @@ public class RoleController {
     @Autowired
     IRoleService iRoleService;
 
-
-    @PostMapping(path = "/postRole")
+    @PostMapping(path = "/role")
     public void postRole(@RequestParam String role) throws NotValidTypeException {
         /**
          * Insert (or Update if already present) into the server the the role.
@@ -35,7 +34,7 @@ public class RoleController {
         log.debug("[REST] End Post role");
     }
 
-    @GetMapping(path = "/getRoles")
+    @GetMapping(path = "/roles")
     public List<String> getRoles() throws NotValidTypeException {
         /**
          * get all the roles that are in the database.

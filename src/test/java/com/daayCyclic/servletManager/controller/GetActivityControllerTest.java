@@ -6,7 +6,6 @@ import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.IActivityRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
-import com.daayCyclic.servletManager.service.impl.ActivityService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-        ;
 
 @ActiveProfiles("test")
 @TestPropertySource("classpath:application.yaml")
@@ -68,7 +66,7 @@ public class GetActivityControllerTest {
         for(int i = 1; i < 5; i++) {
             ActivityDao activityDao = new ActivityDao();
             activityDao.setWeek(5 + i);
-            activityDao.setInterruptable(i % 2 == 0 ? true : false);
+            activityDao.setInterruptable(i % 2 == 0);
             activityDao.setEstimatedTime(60 + i * 10);
             activityDao.setDescription("Work" + i);
             activityDao.setProcedure(procedure);
@@ -79,7 +77,7 @@ public class GetActivityControllerTest {
 
     @Test
     void shouldGetActivityFindIt() throws Exception {
-        this.mockMvc.perform(get("/activity").param("activityId",String.valueOf(activityDaoList.get(2).getId())))
+        this.mockMvc.perform(get("/activity/" + activityDaoList.get(2).getId()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -131,22 +129,22 @@ public class GetActivityControllerTest {
 
     @Test
     void shouldRespondBadRequestIfGetActivityWithoutParameter() throws Exception {
-        this.mockMvc.perform(get("/activity")).andDo(print()).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/activity")).andDo(print()).andExpect(status().isMethodNotAllowed());
     }
 
     @Test
     void shouldRespondBadRequestIfGetActivityWithWrongTypeParameterValue() throws Exception {
-        this.mockMvc.perform(get("/activity").param("activityId","i")).andDo(print()).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/activity/i")).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldRespondBadRequestIfGetActivityWithNegativeId() throws Exception {
-        this.mockMvc.perform(get("/activity").param("activityId","-222")).andDo(print()).andExpect(status().isBadRequest());
+        this.mockMvc.perform(get("/activity/-222")).andDo(print()).andExpect(status().isBadRequest());
     }
 
     @Test
     void shouldRespondNotFoundIfGetActivityThatNotExist() throws Exception {
-        this.mockMvc.perform(get("/activity").param("activityId","100000")).andDo(print()).andExpect(status().isNotFound());
+        this.mockMvc.perform(get("/activity/100000")).andDo(print()).andExpect(status().isNotFound());
     }
 
 }

@@ -21,7 +21,6 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping(path = "/user")
 public class UserController {
 
     @Autowired
@@ -45,7 +44,7 @@ public class UserController {
      * @param user the {@literal UserDto} to insert
      * @throws NotValidTypeException if {@literal UserDto} does not pass the integrity check
      */
-    @PostMapping(path = "/post")
+    @PostMapping(path = "/user")
     public void postUser(@RequestBody UserDto user) throws NotValidTypeException {
         log.info("[REST] Starting a postUser request");
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
@@ -61,14 +60,13 @@ public class UserController {
      * @return a {@literal UserDto} represents the desired user
      * @throws NotFoundException if the desired user is not present into the server
      */
-    @GetMapping(path = "/get")
-    public UserDto getUser(@RequestParam int userId) throws NotValidTypeException, NotFoundException {
+    @GetMapping(path = "/user/{userId}")
+    public UserDto getUser(@PathVariable("userId") int userId) throws NotValidTypeException, NotFoundException {
         log.info("[REST] Start search for user with id: " + userId);
         UserDao searchUser = userService.getUser(userId);
         log.info("[REST] User found: " + searchUser);
         return (UserDto) userDaoToDtoMapper.convertToDto(searchUser);
     }
-
 
     /**
      * Get users from the server according to their roles, if no role is given, get all users
@@ -78,7 +76,7 @@ public class UserController {
      * @return a {@literal List<UserDto>} containing the desired users
      * @throws NotValidTypeException
      */
-    @GetMapping(path = "/get-many")
+    @GetMapping(path = "/users")
     public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) throws NotValidTypeException {
         log.info("[REST] Starting a getUsers with the given roles");
         ArrayList<RoleDao> rolesDao = null;
@@ -99,10 +97,8 @@ public class UserController {
         return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(foundUsers);
     }
 
-
-
-    @PutMapping()
-    public void assignRoleToUser(@RequestParam Integer id, @RequestParam String role) {
+    @PutMapping(path = "/user/{id}/assign-role")
+    public void assignRoleToUser(@PathVariable("id") Integer id, @RequestParam String role) {
         log.info("[REST] Get role " + role + "to user with id: " + id);
         if (role != null && id != null) {
 
@@ -117,8 +113,8 @@ public class UserController {
         }
     }
 
-    @PutMapping(path = "/assignCompetency")
-    public void assignCompetencyToUser(@RequestParam Integer userId,@RequestParam String competency) {
+    @PutMapping(path = "/user/{userId}/assign-competency")
+    public void assignCompetencyToUser(@PathVariable("userId") Integer userId,@RequestParam String competency) {
         log.info("[REST] Starting assign competency: " + competency + " to user: " + userId);
         UserDao userDao = userService.getUser(userId);
         CompetencyDao competencyDao = competencyService.getCompetency(competency);

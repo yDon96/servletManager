@@ -46,9 +46,8 @@ public class AssignMaintainerActivityControllerTest {
     @Test
     void assignMaintainerUserNotPresent(){
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignMaintainer")
-                    .param("userID", "100")
-                    .param("activityID", "1"))
+            mockMvc.perform(put("/activity/1/assign-maintainer")
+                    .param("userID", "100"))
                         .andDo(print())
                         .andExpect(status().isNotFound()
             );
@@ -58,9 +57,8 @@ public class AssignMaintainerActivityControllerTest {
     @Test
     void assignMaintainerActivityNotPresent(){
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignMaintainer")
-                    .param("userID", "2")
-                    .param("activityID", "100"))
+            mockMvc.perform(put("/activity/100/assign-maintainer")
+                    .param("userID", "2"))
                     .andDo(print())
                     .andExpect(status().isNotFound()
                     );
@@ -70,9 +68,8 @@ public class AssignMaintainerActivityControllerTest {
     @Test
     void assignMaintainerUserNotAMaintainer(){
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignMaintainer")
-                    .param("userID", "1")
-                    .param("activityID", "1"))
+            mockMvc.perform(put("/activity/1/assign-maintainer")
+                    .param("userID", "1"))
                     .andDo(print())
                     .andExpect(status().isBadRequest()
                     );
@@ -82,9 +79,8 @@ public class AssignMaintainerActivityControllerTest {
     @Test
     void assignMaintainerEverythingGood(){
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignMaintainer")
-                    .param("userID", "2")
-                    .param("activityID", "1"))
+            mockMvc.perform(put("/activity/1/assign-maintainer")
+                    .param("userID", "2"))
                     .andDo(print())
                     .andExpect(status().isOk()
                     );

@@ -62,9 +62,7 @@ class PutUserRoleControllerTest {
 
     @Test
     void shouldPutRole() throws Exception {
-
-
-        this.mockMvc.perform(put("/user").param("id", "1")
+        this.mockMvc.perform(put("/user/1/assign-role")
                 .param("role", "manutentore"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -72,14 +70,12 @@ class PutUserRoleControllerTest {
 
     @Test
     void shouldRespondBadRequestPutRoleWithCharAsId() throws Exception {
-
-
-        this.mockMvc.perform(put("/user").param("id", "k")
+        this.mockMvc.perform(put("/user/k/assign-role")
                     .param("role", "manutentore"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
 
-        this.mockMvc.perform(put("/user").param("id", "prova")
+        this.mockMvc.perform(put("/user/prova/assign-role")
                 .param("role", "manutentore"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -88,53 +84,41 @@ class PutUserRoleControllerTest {
 
     @Test
     void shouldRespondBadRequestPutRoleWithNegativeId() throws Exception {
-
-        this.mockMvc.perform(put("/user").param("id", "-20")
+        this.mockMvc.perform(put("/user/-20/assign-role")
                     .param("role", "manutentore"))
                     .andDo(print())
                     .andExpect(status().isBadRequest());
-
     }
 
     @Test
     void shouldRespondNotFoundPutRoleWithAnNotExistingUserId() throws Exception {
-
-        this.mockMvc.perform(put("/user").param("id", "100")
+        this.mockMvc.perform(put("/user/100/assign-role")
                 .param("role", "manutentore"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-
-        this.mockMvc.perform(put("/user").param("id", "10000")
+        this.mockMvc.perform(put("/user/10000/assign-role")
                 .param("role", "manutentore"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-        this.mockMvc.perform(put("/user").param("id", "600")
+        this.mockMvc.perform(put("/user/600/assign-role")
                 .param("role", "manutentore"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-
-
-
     }
 
     @Test
     void shouldRespondNotFoundPutRoleWithAnNotExistingRole() throws Exception {
-
-        this.mockMvc.perform(put("/user").param("id", "1")
+        this.mockMvc.perform(put("/user/1/assign-role")
                 .param("role", "magazziniere"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
-
-        this.mockMvc.perform(put("/user").param("id", "1")
+        this.mockMvc.perform(put("/user/1/assign-role")
                 .param("role", ""))
                 .andDo(print())
                 .andExpect(status().isNotFound());
-
     }
-
-
 
 }

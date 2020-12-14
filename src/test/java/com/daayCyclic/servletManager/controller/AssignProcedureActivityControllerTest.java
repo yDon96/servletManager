@@ -14,9 +14,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,9 +40,8 @@ public class AssignProcedureActivityControllerTest {
     @Test
     void assignProcedureProcedureNotPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignProcedure")
-                    .param("procedureID", "100")
-                    .param("activityID", "1"))
+            mockMvc.perform(put("/activity/1/assign-procedure")
+                    .param("procedureID", "100"))
                         .andDo(print())
                         .andExpect(status().isNotFound());
         });
@@ -51,9 +50,8 @@ public class AssignProcedureActivityControllerTest {
     @Test
     void assignProcedureActivityNotPresent() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignProcedure")
-                    .param("procedureID", "6")
-                    .param("activityID", "100"))
+            mockMvc.perform(put("/activity/100/assign-procedure")
+                    .param("procedureID", "6"))
                         .andDo(print())
                         .andExpect(status().isNotFound());
         });
@@ -62,9 +60,8 @@ public class AssignProcedureActivityControllerTest {
     @Test
     void assignProcedureEverythingGood() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignProcedure")
-                    .param("procedureID", "6")
-                    .param("activityID", "1"))
+            mockMvc.perform(put("/activity/1/assign-procedure")
+                    .param("procedureID", "6"))
                         .andDo(print())
                         .andExpect(status().isOk());
             assertEquals(procedureService.getProcedure(6), activityService.getActivity(1).getProcedure());
