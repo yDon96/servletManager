@@ -33,16 +33,19 @@ public class ActivityService implements IActivityService {
 
     @Override
     public Integer generateActivity(ActivityDao activityDao) throws DuplicateFormatFlagsException {
+        log.info("[SERVICE: Activity] Starting generate activity into the database: " + activityDao);
         if (activityExist(activityDao.getId())){
-            log.error("[ActivityService] Id Activity exist");
+            log.info("[ActivityService] Id Activity exist");
             throw new DuplicateGenerationException("Id Activity exist");
         }
         ActivityDao savedActivity = iActivityRepository.save(activityDao);
+        log.info("[SERVICE: Activity] Generate activity completed successfully");
         return savedActivity.getId();
     }
 
     @Override
     public ActivityDao getActivity(Integer activityId) {
+        log.info("[SERVICE: Activity] Starting get activity with ID: " + activityId);
         val activityDao = iActivityRepository.findById(activityId);
         return activityDao.orElseThrow(NotFoundException::new);
     }
@@ -74,6 +77,7 @@ public class ActivityService implements IActivityService {
 
     @Override
     public List<ActivityDao> getActivities() {
+        log.info("[SERVICE: Activity] Starting getting all the activities");
         return iActivityRepository.findAll();
     }
 

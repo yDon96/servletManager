@@ -45,6 +45,8 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
                 activityDao.getMaintainer().getUser_id(),
                 activityDao.getProcedure().getId(),
                 activityDao.getWeek(),
+                activityDao.getStartingDay(),
+                activityDao.getStartingHour(),
                 activityDao.isInterruptable(),
                 activityDao.getEstimatedTime(),
                 activityDao.getDescription());
