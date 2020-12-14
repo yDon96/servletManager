@@ -31,6 +31,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 public class ActivityMapperDtoToDaoTest {
 
+    //TODO: Change test according to new data integrity check! (x Antonio)
+
     @Autowired
     @Qualifier("ActivityToDaoMapper")
     private IDtoToDaoMapper iDtoToDaoMapper;

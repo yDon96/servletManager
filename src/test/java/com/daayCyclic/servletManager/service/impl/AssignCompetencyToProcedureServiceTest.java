@@ -1,11 +1,11 @@
 package com.daayCyclic.servletManager.service.impl;
 
-import com.daayCyclic.servletManager.dao.*;
+import com.daayCyclic.servletManager.dao.CompetencyDao;
+import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
-import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IProcedureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,17 +15,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.web.servlet.MockMvc;
 
 import javax.transaction.Transactional;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ActiveProfiles("test")
 @TestPropertySource("classpath:application.yaml")
@@ -35,9 +31,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AssignCompetencyToProcedureServiceTest {
 
     @Autowired
-    private ICompetencyService iCompetencyService;
-
-    @Autowired
     private ICompetencyRepository iCompetencyRepository;
 
     @Autowired
@@ -45,12 +38,6 @@ public class AssignCompetencyToProcedureServiceTest {
 
     @Autowired
     private IProcedureRepository iProcedureRepository;
-
-    private CompetencyDao competency;
-
-    private ProcedureDao procedureDao;
-
-    private List<CompetencyDao> competencyDaoList;
 
     private List<ProcedureDao> procedureDaos;
 
@@ -95,7 +82,7 @@ public class AssignCompetencyToProcedureServiceTest {
     @Test
     void assignCompetencyToProcedureOk() {
         assertDoesNotThrow(() ->
-                iProcedureService.assignCompetencyToProcedure(competencyDaos.get(0),procedureDaos.get(2)));
+                iProcedureService.assignCompetencyToProcedure(competencyDaos.get(1),procedureDaos.get(2)));
     }
 
     @Transactional
@@ -104,7 +91,7 @@ public class AssignCompetencyToProcedureServiceTest {
         for(int i = 25; i < 30; i++) {
             CompetencyDao competencyDao = new CompetencyDao();
             competencyDao.setCompetencyId(i);
-            competencyDao.setName("competency n°" + i);
+            competencyDao.setName("COMPETENCY N°" + i);
             competencyDaos.add(iCompetencyRepository.save(competencyDao));
         }
     }
@@ -118,7 +105,6 @@ public class AssignCompetencyToProcedureServiceTest {
             procedureDao.setTitle("t " + i);
             procedureDao.setDescription("d " + i);
             procedureDaos.add(iProcedureRepository.save(procedureDao));
-            ;
         }
     }
 }

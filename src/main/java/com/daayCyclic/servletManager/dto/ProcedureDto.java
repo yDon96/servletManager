@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -32,7 +31,9 @@ public class ProcedureDto implements ObjectDto {
         this.id = id;
         this.title = title;
         this.description = description;
+        this.competencies = new LinkedHashSet<>();
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -54,6 +54,7 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     }
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
+        //TODO: Move this after the if, and avoid nested if in this method (x Antonio)
         Integer idUser = activityDto.getMaintainerId();
         UserDao user = iUserService.getUser(idUser);
         String maintainer = "Maintainer";

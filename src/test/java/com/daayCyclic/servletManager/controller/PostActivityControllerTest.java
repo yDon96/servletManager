@@ -90,12 +90,12 @@ public class PostActivityControllerTest {
     }
 
     @Test
-    void shouldRespondBadRequestPostActivityWithNegativeMaintainer() throws Exception {
+    void shouldRespondNotFoundPostActivityWithNegativeMaintainer() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(1,"ddd", 50, true, 5, procedure.getId(), -maintainer.getUser_id())))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Test
@@ -118,6 +118,7 @@ public class PostActivityControllerTest {
 
     @Test
     void shouldPostActivityWithoutAWeek() throws Exception {
+        //TODO: Check for integrity violation!! (x Antonio) -> this will become "shouldNotPost"
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(1, "ddd", 50, true, null, procedure.getId(), maintainer.getUser_id())))
@@ -127,6 +128,7 @@ public class PostActivityControllerTest {
 
     @Test
     void shouldPostActivityWithoutAEstimateTime() throws Exception {
+        //TODO: Check for integrity violation!! (x Antonio) -> this will become "shouldNotPost"
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(1, "ddd", null, true, 5, procedure.getId(), maintainer.getUser_id())))

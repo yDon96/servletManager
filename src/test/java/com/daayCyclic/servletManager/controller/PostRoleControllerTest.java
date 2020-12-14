@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -27,7 +26,7 @@ public class PostRoleControllerTest {
 
     @Test
     void shouldPostRole() throws Exception {
-        this.mockMvc.perform(post("/postRole")
+        this.mockMvc.perform(post("/role")
                 .param("role","main"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -35,7 +34,7 @@ public class PostRoleControllerTest {
 
     @Test
     void shouldRespondBadRequestWithoutRole() throws Exception {
-        this.mockMvc.perform(post("/postRole")
+        this.mockMvc.perform(post("/role")
                 .param("role",""))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
@@ -43,9 +42,9 @@ public class PostRoleControllerTest {
 
     @Test
     void shouldRespondBadRequestDuplicateRole() throws Exception {
-        this.mockMvc.perform(post("/postRole")
+        this.mockMvc.perform(post("/role")
                 .param("role","main"));
-        this.mockMvc.perform(post("/postRole")
+        this.mockMvc.perform(post("/role")
                 .param("role","main"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());

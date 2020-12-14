@@ -1,13 +1,10 @@
 package com.daayCyclic.servletManager.controller;
 
-import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
-import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.ICompetencyService;
-import com.daayCyclic.servletManager.service.IProcedureService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +15,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -64,8 +63,7 @@ public class AssignCompetencyToProcedureControllerTest {
     @Test
     void assignCompetencyToProcedureNotPresentCompetency(){
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignCompetencyToProcedure")
-                    .param("procedureId","14")
+            mockMvc.perform(put("/procedure/14/assign-competency")
                     .param("competency", "competency n°1212"))
                     .andDo(print())
                     .andExpect(status().isNotFound()
@@ -76,8 +74,7 @@ public class AssignCompetencyToProcedureControllerTest {
     @Test
     void assignCompetencyToProcedureNotPresentProcedure() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/assignCompetencyToProcedure")
-                    .param("procedureId", "100")
+            mockMvc.perform(put("/procedure/100/assign-competency")
                     .param("competency", "competency n°12"))
                     .andDo(print())
                     .andExpect(status().isNotFound()
@@ -89,9 +86,8 @@ public class AssignCompetencyToProcedureControllerTest {
     @Test
     void assignCompetencyToProcedureEverythingOk() {
         assertDoesNotThrow(() -> {
-            mockMvc.perform(put("/user/assignCompetency")
-                    .param("procedureId", "11")
-                    .param("competency", "competency n°12"))
+            mockMvc.perform(put("/procedure/" + procedureDaos.get(0).getId() + "/assign-competency")
+                    .param("competency", "COMPETENCY N°12"))
                     .andDo(print())
                     .andExpect(status().isOk()
                     );
@@ -104,7 +100,7 @@ public class AssignCompetencyToProcedureControllerTest {
         for(int i = 10; i < 16; i++) {
             CompetencyDao competencyDao = new CompetencyDao();
             competencyDao.setCompetencyId(i);
-            competencyDao.setName("competency n°" + i);
+            competencyDao.setName("COMPETENCY N°" + i);
             competencyDaos.add(iCompetencyRepository.save(competencyDao));
         }
     }

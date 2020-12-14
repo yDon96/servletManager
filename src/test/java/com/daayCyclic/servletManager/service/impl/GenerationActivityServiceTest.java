@@ -14,7 +14,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
-import javax.persistence.criteria.CriteriaBuilder;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GenerationActivityServiceTest {
+
+    //TODO: You should change these tests according to new data integrity (x Antonio)
 
     @Autowired
     private ActivityService activityService;

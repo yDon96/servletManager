@@ -1,11 +1,7 @@
 package com.daayCyclic.servletManager.controller;
 
-import com.daayCyclic.servletManager.dao.ActivityDao;
-import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
-import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
-import com.daayCyclic.servletManager.repository.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +13,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +50,7 @@ public class GetRoleControllerTest {
             roleDao.setName("main" + i);
             roleDaoList.add(iRoleRepository.save(roleDao));
         }
-        this.mockMvc.perform(get("/getRoles"))
+        this.mockMvc.perform(get("/roles"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -68,7 +63,7 @@ public class GetRoleControllerTest {
 
     @Test
     void shouldGetListEmpty() throws Exception  {
-        this.mockMvc.perform(get("/getRoles"))
+        this.mockMvc.perform(get("/roles"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))

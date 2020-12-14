@@ -5,10 +5,8 @@ import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ActivityDto;
-import com.daayCyclic.servletManager.dto.ProcedureDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
-import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +65,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdIsNotSet() {
         setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -81,7 +79,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndDescriptionNotSet() {
         setActivityDao(null, maintainer, procedure, 5, true, 50, null);
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -95,7 +93,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndMaintainerNotSet() {
         setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -109,7 +107,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndProcedureNotSet() {
         setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -123,7 +121,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndAllFieldsAreNotSetExcludingInter() {
         setActivityDao(null, maintainer, procedure, null, true, null, null);
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -137,7 +135,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndWeekNotSet() {
         setActivityDao(null, maintainer, procedure, null, true, 50, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -151,7 +149,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoIfIdAndEstimateTimeNotSet() {
         setActivityDao(null, maintainer, procedure, 5, true, null, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
@@ -159,7 +157,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldThrowExceptionConvertToDtoWithIdNegative() {
         setActivityDao(-7, maintainer, procedure, 5, true, 50, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDaoToDtoMapper.convertToDto(activityDao);
         });
     }
