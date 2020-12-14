@@ -35,11 +35,14 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
             log.error("[ProcedureToDtoMapper] Missing id in ProcedureDao object.");
             throw new NullPointerException();
         }
+        if (procedureDao.getCompetencies() == null){
+            procedureDao.setCompetencies(new LinkedHashSet<>());
+        }
 
         return new ProcedureDto(procedureDao.getId(),
                 procedureDao.getTitle(),
                 procedureDao.getDescription(),
-                procedureDao.getCompetencies().isEmpty() ? new LinkedHashSet<>() : this.convertCompetencyToDto(procedureDao));
+                this.convertCompetencyToDto(procedureDao));
     }
 
     @Override

@@ -39,7 +39,7 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
         return new ProcedureDao(procedureDto.getId(),
                 procedureDto.getTitle(),
                 procedureDto.getDescription(),
-                procedureDto.getCompetencies().isEmpty() ? new LinkedHashSet<>() : this.convertCompetencyDtoToDao(procedureDto));
+                this.convertCompetencyDtoToDao(procedureDto));
 
     }
 
@@ -57,6 +57,10 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
         if (!procedureDto.isIdValid()){
             log.error("[ProcedureToDtoMapper] Object to convert has invalid id field: " + procedureDto.getId() );
             throw new NotValidTypeException("Object to convert has an invalid field.");
+        }
+        if (procedureDto.getCompetencies() == null){
+            log.info("[ProcedureToDtoMapper] initialization Set Competencies");
+            procedureDto.setCompetencies(new LinkedHashSet<>());
         }
     }
 
