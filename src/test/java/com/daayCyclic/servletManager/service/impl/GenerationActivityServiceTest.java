@@ -24,8 +24,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class GenerationActivityServiceTest {
 
-    //TODO: You should change these tests according to new data integrity (x Antonio)
-
     @Autowired
     private ActivityService activityService;
 
@@ -63,18 +61,6 @@ public class GenerationActivityServiceTest {
     @Test
     void shouldGenerateActivityWithoutSetDescription() {
         setActivityDao(1, maintainer, procedure,5,true,50,null);
-        activityService.generateActivity(activityDao);
-    }
-
-    @Test
-    void shouldGenerateActivityWithoutSetWeek() {
-        setActivityDao(1, maintainer, procedure,null,true,50,"ddd");
-        activityService.generateActivity(activityDao);
-    }
-
-    @Test
-    void shouldGenerateActivityWithoutSetEstimatedTime() {
-        setActivityDao(1, maintainer, procedure,5,true,null,"ddd");
         activityService.generateActivity(activityDao);
     }
 

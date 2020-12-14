@@ -50,16 +50,4 @@ public class ActivityDto implements ObjectDto {
                 && (Objects.equals(week, ((ActivityDto) obj).week))
                 && (Objects.equals(description, ((ActivityDto) obj).description));
     }
-
-    public boolean isAllNull() {
-        return id == null && maintainerId == null && procedureId == null && week == null && estimatedTime == null && description == null;
-    }
-
-    public boolean isAlLFieldsNegative() {
-        return id < 0 || maintainerId < 0 || procedureId < 0 || week < 0 || estimatedTime < 0;
-    }
-
-    public boolean isFielsNull(){
-        return id == null || maintainerId == null || procedureId == null || week == null|| estimatedTime == null;
-    }
 }

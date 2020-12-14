@@ -54,59 +54,52 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     }
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
-        //TODO: Move this after the if, and avoid nested if in this method (x Antonio)
-        Integer idUser = activityDto.getMaintainerId();
-        UserDao user = iUserService.getUser(idUser);
-        String maintainer = "Maintainer";
 
-        if (activityDto.isAllNull()){
-            log.error("[ActivityToDtoMapper] all fields are null.");
-            throw new NotValidTypeException("all fields are null.");
+        if (activityDto.getId() == null){
+            log.error("[ActivityToDtoMapper] id is null.");
+            throw new NullPointerException("id is null.");
         }
-        if (activityDto.isFielsNull()){
-            if (activityDto.getId() != null){
-                if (activityDto.getId() < 0){
-                    log.error("[ActivityToDtoMapper] Id negative.");
-                    throw new NotValidTypeException("Id negative.");
-                }
-            }
-            if (activityDto.getEstimatedTime() != null){
-                if (activityDto.getEstimatedTime() < 0){
-                    log.error("[ActivityToDtoMapper] EstimatedTime negative.");
-                    throw new NotValidTypeException("EstimatedTime negative.");
-                }
-            }
-            if (activityDto.getWeek() != null){
-                if (activityDto.getWeek() < 0){
-                    log.error("[ActivityToDtoMapper] Week negative.");
-                    throw new NotValidTypeException("Week negative.");
-                }
-            }
-            if (activityDto.getMaintainerId() != null){
-                if (activityDto.getMaintainerId() < 0){
-                    log.error("[ActivityToDtoMapper] MaintainerId negative.");
-                    throw new NotValidTypeException("MaintainerId negative.");
-                }
-            }
-            if (activityDto.getProcedureId() != null){
-                if (activityDto.getProcedureId() < 0){
-                    log.error("[ActivityToDtoMapper] ProcedureId negative.");
-                    throw new NotValidTypeException("ProcedureId negative.");
-                }
-            }
+
+        if (activityDto.getId() < 0){
+            log.error("[ActivityToDtoMapper] Id negative.");
+            throw new NotValidTypeException("Id negative.");
         }
-        if (!activityDto.isFielsNull()){
-            if (activityDto.isAlLFieldsNegative()){
-                log.error("[ActivityToDtoMapper] there are negative fields.");
-                throw new NotValidTypeException("there are negative fields.");
-            }
+
+        if (activityDto.getEstimatedTime() == null){
+            log.error("[ActivityToDtoMapper] estimatedTime is null.");
+            throw new NullPointerException("estimatedTime is null.");
         }
-        if (user.getRole() != null){
-            if (user.getRole().getName() != null){
-                if (!user.getRole().getName().equalsIgnoreCase(maintainer)){
-                    log.error("[Activity MapperToDao] the role in non correct");
-                    throw new NotValidTypeException("the role in non correct.");
-                }
+
+        if (activityDto.getEstimatedTime() != null && activityDto.getEstimatedTime() < 0){
+            log.error("[ActivityToDtoMapper] EstimatedTime negative.");
+            throw new NotValidTypeException("EstimatedTime negative.");
+        }
+
+        if (activityDto.getWeek() == null){
+            log.error("[ActivityToDtoMapper] week is null.");
+            throw new NullPointerException("week is null.");
+        }
+
+        if (activityDto.getWeek() < 0){
+            log.error("[ActivityToDtoMapper] Week negative.");
+            throw new NotValidTypeException("Week negative.");
+        }
+
+        if (activityDto.getMaintainerId() != null && activityDto.getMaintainerId() < 0){
+            log.error("[ActivityToDtoMapper] MaintainerId negative.");
+            throw new NotValidTypeException("MaintainerId negative.");
+        }
+
+        if (activityDto.getProcedureId() != null && activityDto.getProcedureId() < 0){
+            log.error("[ActivityToDtoMapper] ProcedureId negative.");
+            throw new NotValidTypeException("ProcedureId negative.");
+        }
+
+        if (activityDto.getMaintainerId() != null){
+            UserDao user = iUserService.getUser(activityDto.getMaintainerId());
+            if (user.getRole() != null && !user.isMaintainer()){
+                log.error("[Activity MapperToDao] the role is not correct");
+                throw new NotValidTypeException("the role is not correct.");
             }
         }
     }

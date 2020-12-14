@@ -95,7 +95,7 @@ public class PostActivityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(1,"ddd", 50, true, 5, procedure.getId(), -maintainer.getUser_id())))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -104,7 +104,7 @@ public class PostActivityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(null,"ddd",50,true,5, procedure.getId(), maintainer.getUser_id())))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -117,41 +117,40 @@ public class PostActivityControllerTest {
     }
 
     @Test
-    void shouldPostActivityWithoutAWeek() throws Exception {
-        //TODO: Check for integrity violation!! (x Antonio) -> this will become "shouldNotPost"
+    void shouldRespondBadRequestPostActivityWithoutAWeek() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(1, "ddd", 50, true, null, procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithoutAEstimateTime() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1, "ddd", null, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldPostActivityWithoutAProcedureId() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1, "ddd", 50, true, 5, null, maintainer.getUser_id())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
-    void shouldPostActivityWithoutAEstimateTime() throws Exception {
-        //TODO: Check for integrity violation!! (x Antonio) -> this will become "shouldNotPost"
+    void shouldPostActivityWithoutAMaintainerId() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "ddd", null, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1, "ddd", 50, true, 5, procedure.getId(), null)))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
-//TODO : verify exception
-//    @Test
-//    void shouldPostActivityWithoutAProcedureId() throws Exception {
-//        this.mockMvc.perform(post("/activity")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(getContentFormatted(1, "ddd", 50, true, 5, null, maintainer.getId())))
-//                .andDo(print())
-//                .andExpect(status().isBadRequest());
-//    }
-//    @Test
-//    void shouldPostActivityWithoutAMaintainerId() throws Exception {
-//        this.mockMvc.perform(post("/activity")
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .content(getContentFormatted(1, "ddd", 50, true, 5, procedure.getId(), null)))
-//                .andDo(print())
-//                .andExpect(status().isOk());
-//    }
 
     @Test
     void shouldRespondBadRequestPostActivityWithNegativeEstimateTime() throws Exception {
@@ -173,7 +172,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestIfPostActivityWithWrongBody() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"a_id\":\"1\"}"))
+                .content("{\"aaa_id\":\"1\"}"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
