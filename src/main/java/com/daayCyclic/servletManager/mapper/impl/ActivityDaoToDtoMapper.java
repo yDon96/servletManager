@@ -28,7 +28,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
         if (activityDao.getId() == null || activityDao.getId() <= 0) {
             log.error("[ActivityToDtoMapper] invalid id.");
-            throw new NullPointerException();
+            throw new NotValidTypeException();
         }
 
         return new ActivityDto(activityDao.getId(),

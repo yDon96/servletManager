@@ -48,7 +48,11 @@ public class ActivityController {
     }
 
     @PutMapping(path = "/activity")
-    public void putActivity(ActivityDto activityDto){
+    public void putActivity(@RequestBody ActivityDto activityDto){
+        log.info("[REST] Put Activity");
+        val activityDao = (ActivityDao) iDtoToDaoMapper.convertToDao(activityDto);
+        iActivityService.updateActivity(activityDao);
+        log.debug("[REST] End Put activity");
     }
 
     @GetMapping(path = "/activity")
