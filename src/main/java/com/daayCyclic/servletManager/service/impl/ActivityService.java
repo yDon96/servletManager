@@ -79,25 +79,18 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
-    public List<ActivityDao> getActivityWeek(Integer week){
+    public List<ActivityDao> getActivitiesByWeek(Integer week){
         /**
          * Returns a list of activities based on the requested week.
          *
          * @param week the {@literal week} filter the list
          * @throws NotValidTypeException if the week value is negative or null
          */
-        List<ActivityDao> listActivity = iActivityRepository.findAll();
-        List<ActivityDao> listActivityWeek = new LinkedList<>();
         if (week == null || week < 0){
             log.error("[SERVICE: Activity] the week value not valid value.");
             throw new NotValidTypeException("the week value not valid value");
         }
-        for (ActivityDao activityDao : listActivity){
-            if (activityDao.getWeek() == week){
-                listActivityWeek.add(activityDao);
-            }
-        }
-        return listActivityWeek;
+        return iActivityRepository.findAllByWeek(week);
     }
 
     /**
