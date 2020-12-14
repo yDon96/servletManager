@@ -2,12 +2,14 @@ package com.daayCyclic.servletManager.mapper.impl;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ProcedureDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
+import com.daayCyclic.servletManager.repository.IRoleRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,6 +43,9 @@ public class ActivityMapperDtoToDaoTest {
     @Autowired
     private IUserRepository iUserRepository;
 
+    @Autowired
+    private IRoleRepository iRoleRepository;
+
     private ProcedureDao procedureDao;
 
     private UserDao userDao;
@@ -48,14 +54,21 @@ public class ActivityMapperDtoToDaoTest {
     private void init() {
         activityDto = new ActivityDto();
         ProcedureDao procedure = new ProcedureDao();
+        RoleDao roleDao = new RoleDao();
+        RoleDao roleDao1 = new RoleDao();
+        roleDao1.setId(5);
+        roleDao.setId(4);
+        roleDao.setName("maintainer");
+        roleDao1.setName("Admin");
         procedure.setTitle("title");
         UserDao maintainer = new UserDao();
         maintainer.setName("aaa");
         maintainer.setSurname("sss");
         maintainer.setDateOfBirth(LocalDate.of(2000,1,1));
+        maintainer.setRole(iRoleRepository.save(roleDao));
+        iRoleRepository.save(roleDao1);
         procedureDao = iProcedureRepository.save(procedure);
         userDao = iUserRepository.save(maintainer);
-
     }
 
     @Test
@@ -146,8 +159,20 @@ public class ActivityMapperDtoToDaoTest {
     }
 
     @Test()
-    void shouldThrowExceptionConvertToDaoADtoIfWeekIsNegative() {
+    void shouldThrowExceptionConvertToDaoIfWeekIsNegative() {
         setActivityDto(1, null, null, -3, true, null, null);
+        assertThrows(NotValidTypeException.class, () -> {
+            iDtoToDaoMapper.convertToDao(activityDto);
+        });
+    }
+
+    @Test()
+    @Transactional
+    void shouldThrowExceptionConvertToDaoIfUserIsNotMaintainer() {
+        RoleDao role = iRoleRepository.getOne(userDao.getUser_id());
+        role.setName("Admin");
+        iRoleRepository.save(role);
+        setActivityDto(1, userDao.getUser_id(), procedureDao.getId(), 5, true, 50, "ddd");
         assertThrows(NotValidTypeException.class, () -> {
             iDtoToDaoMapper.convertToDao(activityDto);
         });

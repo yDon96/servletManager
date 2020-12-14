@@ -8,6 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -40,10 +41,18 @@ public class ProcedureDao implements ObjectDao {
     @UpdateTimestamp
     private LocalDateTime lastMod;
 
+    public ProcedureDao(Integer productId, String title, String description, Set<CompetencyDao> competencies) {
+        this.id = productId;
+        this.title = title;
+        this.description = description;
+        this.competencies = competencies;
+    }
+
     public ProcedureDao(Integer productId, String title, String description) {
         this.id = productId;
         this.title = title;
         this.description = description;
+        this.competencies = new LinkedHashSet<>();
     }
 
     @Override

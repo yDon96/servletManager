@@ -1,11 +1,14 @@
 package com.daayCyclic.servletManager.controller;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dto.ProcedureDto;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.mapper.IDaoToDtoMapper;
 import com.daayCyclic.servletManager.mapper.IDtoToDaoMapper;
+import com.daayCyclic.servletManager.repository.ICompetencyRepository;
+import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IProcedureService;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -21,6 +25,9 @@ public class ProcedureController {
 
     @Autowired
     private IProcedureService iProcedureService;
+
+    @Autowired
+    private ICompetencyService iCompetencyService;
 
     @Autowired
     @Qualifier("ProcedureMapper")
@@ -64,6 +71,12 @@ public class ProcedureController {
     }
 
     @PutMapping (path = "/procedure/{procedureId}/assign-competency")
-    public void assignCompetencyToProcedure(@PathVariable("procedureId") Integer procedureId, String competency) {}
+    public void assignCompetencyToProcedure(@PathVariable("procedureId") Integer procedureId, @RequestParam String competency) {
+        log.info("[REST] Start assign competency to procedure");
+        val competencyDao = iCompetencyService.getCompetency(competency);
+        val procedureDao = iProcedureService.getProcedure(procedureId);
+        iProcedureService.assignCompetencyToProcedure(competencyDao, procedureDao);
+        log.info("[REST] assign competency finish");
+    }
 
 }

@@ -26,6 +26,18 @@ public class CompetencyDao implements ObjectDao{
         this.name = name;
     }
 
+    public Set<UserDao> getUsers() {
+        return users;
+    }
+
+    public Set<ProcedureDao> getProcedures() {
+        return procedures;
+    }
+
+    public void setProcedures(Set<ProcedureDao> procedures) {
+        this.procedures = procedures;
+    }
+
     public Integer getCompetencyId() {
         return competencyId;
     }

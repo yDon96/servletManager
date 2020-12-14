@@ -47,8 +47,12 @@ public class ActivityController {
         log.debug("[REST] End Post activity");
     }
 
-    @PutMapping(path = "/activity") //TODO: change path
-    public void putActivity(ActivityDto activityDto){
+    @PutMapping(path = "/activity")  //TODO: change path
+    public void putActivity(@RequestBody ActivityDto activityDto){
+        log.info("[REST] Put Activity");
+        val activityDao = (ActivityDao) iDtoToDaoMapper.convertToDao(activityDto);
+        iActivityService.updateActivity(activityDao);
+        log.debug("[REST] End Put activity");
     }
 
     @GetMapping(path = "/activity/{activityId}")
