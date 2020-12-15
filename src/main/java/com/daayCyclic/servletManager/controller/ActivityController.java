@@ -78,11 +78,12 @@ public class ActivityController {
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
     }
 
-    @GetMapping(path = "/activitiesWeek")
-    public List<ActivityDto> getActivitiesByWeek(@RequestParam Integer week) throws NotValidTypeException {
-        log.info("[REST] get a list of activities for weeks");
+    @GetMapping(path = "/activities/week/{week}")
+    @SuppressWarnings("unchecked")
+    public List<ActivityDto> getActivitiesByWeek(@PathVariable("week") Integer week) throws NotValidTypeException {
+        log.info("[REST] Get a list of activities for given week");
         val activityDao = iActivityService.getActivitiesByWeek(week);
-        log.debug("[REST] End Get activity week");
+        log.debug("[REST] Activities retrieved successfully");
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
     }
 

@@ -49,8 +49,7 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
     @SuppressWarnings( "unchecked" )
     public List<ProcedureDto> convertDaoListToDtoList(List<? extends ObjectDao> daoProcedures) throws NotValidTypeException {
         log.debug("[ProcedureToDtoMapper] Convert list of procedureDao to list of dto object");
-        //TODO: check null list, change this check below
-        if (!(!daoProcedures.isEmpty() && daoProcedures.get(0) instanceof ProcedureDao)){
+        if (daoProcedures == null || !(daoProcedures.get(0) instanceof ProcedureDao)){
             log.error("[ProcedureToDtoMapper] List type is not a ProcedureDao.");
             throw new NotValidTypeException();
         }

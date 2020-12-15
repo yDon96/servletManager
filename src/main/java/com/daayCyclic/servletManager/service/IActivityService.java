@@ -4,7 +4,6 @@ import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
-import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 

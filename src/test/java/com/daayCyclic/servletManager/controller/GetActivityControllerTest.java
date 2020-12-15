@@ -111,7 +111,7 @@ public class GetActivityControllerTest {
 
     @Test
     void shouldGetActivitiesByWeek() throws Exception {
-        this.mockMvc.perform(get("/activitiesWeek").param("week",String.valueOf(activityDaoList.get(0).getWeek())))
+        this.mockMvc.perform(get("/activities/week/" + activityDaoList.get(0).getWeek()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
