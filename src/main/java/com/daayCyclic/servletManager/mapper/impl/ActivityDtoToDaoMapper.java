@@ -43,7 +43,6 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
             procedure = iProcedureService.getProcedure(activityDto.getProcedureId());
         }
 
-
         return new ActivityDao(activityDto.getId(),
                 activityDto.getDescription(),
                 activityDto.getEstimatedTime(),
@@ -56,12 +55,6 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     }
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
-
-        if (activityDto.getId() == null || activityDto.getId() < 0){
-            log.error("[ActivityToDtoMapper] Id is not valid value.");
-            throw new NotValidTypeException("Id is not valid value.");
-        }
-      
         if (activityDto.getEstimatedTime() == null || activityDto.getEstimatedTime() < 0){
             log.error("[ActivityToDtoMapper] EstimatedTime is not valid value.");
             throw new NotValidTypeException("EstimatedTime is not valid value.");

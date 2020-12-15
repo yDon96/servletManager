@@ -2,6 +2,8 @@ package com.daayCyclic.servletManager.mapper.impl;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ObjectDao;
+import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.dto.ActivityDto;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
@@ -19,21 +21,27 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
     @Override
     public ActivityDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
-        String maintainer = "Maintainer";
         if (!(objectDao instanceof ActivityDao)){
-            throw new NotValidTypeException("Not valid type. (ActivityToDtoMapper)");
+            throw new NotValidTypeException("[Activity MapperToDto] The given ObjectDao is not an instance of ActivityDao");
         }
 
         val activityDao = (ActivityDao) objectDao;
 
-        if (activityDao.getMaintainer() != null
-                && activityDao.getMaintainer().getRole() != null
-                && activityDao.getMaintainer().getRole().getName() != null
-                && !activityDao.getMaintainer().getRole().getName().equalsIgnoreCase(maintainer)){
-            log.error("[Activity MapperToDto] the role in non correct.");
-            throw new NotValidTypeException("the role in non correct.");
+        UserDao userDao = activityDao.getMaintainer();
+        Integer userId = null;
+        if (userDao != null) {
+            if (!userDao.isMaintainer()) {
+                log.error("[Activity MapperToDto] The user is not a maintainer");
+                throw new NotValidTypeException("The user is not a maintainer");
+            }
+            userId = userDao.getUser_id();
         }
 
+        ProcedureDao procedureDao = activityDao.getProcedure();
+        Integer procedureId = null;
+        if (procedureDao != null) {
+            procedureId = procedureDao.getId();
+        }
 
         if (activityDao.getId() == null || activityDao.getId() <= 0) {
             log.error("[ActivityToDtoMapper] invalid id.");
@@ -41,8 +49,8 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
         }
 
         return new ActivityDto(activityDao.getId(),
-                activityDao.getMaintainer().getUser_id(),
-                activityDao.getProcedure().getId(),
+                userId,
+                procedureId,
                 activityDao.getWeek(),
                 activityDao.getStartingDay(),
                 activityDao.getStartingHour(),
@@ -54,7 +62,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
     @Override
     @SuppressWarnings("unchecked")
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoActivities) throws NotValidTypeException {
-        if(daoActivities == null || !(daoActivities.get(0) instanceof ActivityDao)){
+        if(daoActivities == null){
             throw new NotValidTypeException("Not valid type. (convertToDtoList)");
         }
         var activityDtoList = new ArrayList<ActivityDto>();

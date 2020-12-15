@@ -12,9 +12,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityDto implements ObjectDto {
 
-    @NonNull
     private Integer id;
-
     private Integer maintainerId;
     private Integer procedureId;
     private Integer week;
@@ -26,7 +24,7 @@ public class ActivityDto implements ObjectDto {
 
     public ActivityDto() {}
 
-    public ActivityDto(@NonNull Integer id, Integer maintainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
+    public ActivityDto(Integer id, Integer maintainerId, Integer procedureId, Integer week, boolean isInterruptable, Integer estimatedTime, String description) {
         this.id = id;
         this.maintainerId = maintainerId;
         this.procedureId = procedureId;
@@ -36,7 +34,7 @@ public class ActivityDto implements ObjectDto {
         this.description = description;
     }
 
-    public ActivityDto(@NonNull Integer id, Integer maintainerId, Integer procedureId, Integer week, Integer startingDay, Integer startingHour, boolean isInterruptable, Integer estimatedTime, String description) {
+    public ActivityDto(Integer id, Integer maintainerId, Integer procedureId, Integer week, Integer startingDay, Integer startingHour, boolean isInterruptable, Integer estimatedTime, String description) {
         this.id = id;
         this.maintainerId = maintainerId;
         this.procedureId = procedureId;
