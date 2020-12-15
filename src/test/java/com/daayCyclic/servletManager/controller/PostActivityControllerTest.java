@@ -63,6 +63,78 @@ public class PostActivityControllerTest {
     }
 
     @Test
+    void shouldPostActivityWithDayAndHour() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 5, 7,21,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithDayNotCorrect() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 5, 9,17,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithHourNotCorrect() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 5, 2,29,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithWeekNotCorrect() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,11,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithDayNegative() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 60, -4,11,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithHourNegative() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,-11,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithHourNull() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,null,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void shouldRespondBadRequestPostActivityWithDayNull() throws Exception {
+        this.mockMvc.perform(post("/activity")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(getContentFormatted(1,"ddd", 50, true, 60, null,14,procedure.getId(), maintainer.getUser_id())))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void shouldRespondBadRequestPostActivityWithNegativeId() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -232,4 +304,73 @@ public class PostActivityControllerTest {
         return json;
     }
 
+    private String getContentFormatted(Integer id, String description, Integer estimatedTime, boolean isInterruptable, Integer week, Integer startingDay, Integer startingHour, Integer procedureId, Integer maintainerId){
+        String json = "{";
+        int numberOfContent = 0;
+        if (id != null){
+            json += "\"id\":\"" + id + "\"";
+            numberOfContent += 1;
+        }
+
+        if (description != null){
+            if (numberOfContent > 0){
+                json += ",";
+            }
+            json += "\"description\":\"" + description + "\"";
+            numberOfContent += 1;
+        }
+
+        if (estimatedTime != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"estimatedTime\":\"" + estimatedTime + "\"";
+        }
+
+        if (numberOfContent > 0) {
+            json += ",";
+        }
+        json += "\"isInterruptable\":\"" + isInterruptable + "\"";
+
+        if (week != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"week\":\"" + week + "\"";
+        }
+
+        if (startingDay != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"startingDay\":\"" + startingDay + "\"";
+        }
+
+        if (startingHour != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"startingHour\":\"" + startingHour + "\"";
+        }
+
+        if (procedureId != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"procedureId\":\"" + procedureId + "\"";
+        }
+
+        if (maintainerId != null){
+            if (numberOfContent > 0) {
+                json += ",";
+            }
+            json += "\"maintainerId\":\"" + maintainerId + "\"";
+        }
+
+        json += "}";
+
+        return json;
+    }
 }
+
+

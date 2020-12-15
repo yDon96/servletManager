@@ -71,6 +71,8 @@ public class GetActivityControllerTest {
             activityDao.setDescription("Work" + i);
             activityDao.setProcedure(procedure);
             activityDao.setMaintainer(maintainer);
+            activityDao.setStartingDay(i);
+            activityDao.setStartingHour(10+i);
             activityDaoList.add(iActivityRepository.save(activityDao));
         }
     }
@@ -85,6 +87,23 @@ public class GetActivityControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.interruptable").value(activityDaoList.get(2).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(activityDaoList.get(2).getDescription()));
+    }
+
+    @Test
+    void shouldGetActivityWithStartingDayAndHour() throws Exception {
+        this.mockMvc.perform(get("/activity/" + activityDaoList.get(2).getId()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(activityDaoList.get(2).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interruptable").value(activityDaoList.get(2).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(activityDaoList.get(2).getDescription()));
@@ -122,6 +141,51 @@ public class GetActivityControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].procedureId").value(procedure.getId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUser_id()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].week").value(activityDaoList.get(3).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].interruptable").value(activityDaoList.get(3).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].estimatedTime").value(activityDaoList.get(3).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].description").value(activityDaoList.get(3).getDescription()));
+    }
+
+    @Test
+    void shouldGetActivitiesWithStartingDayAndHour() throws Exception  {
+        this.mockMvc.perform(get("/activities"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(0).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(0).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]startingDay").value(activityDaoList.get(0).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0]startingHour").value(activityDaoList.get(0).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(0).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(0).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value(activityDaoList.get(0).getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(activityDaoList.get(1).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].week").value(activityDaoList.get(1).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1]startingDay").value(activityDaoList.get(1).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1]startingHour").value(activityDaoList.get(1).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].interruptable").value(activityDaoList.get(1).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].estimatedTime").value(activityDaoList.get(1).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].description").value(activityDaoList.get(1).getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].id").value(activityDaoList.get(2).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].week").value(activityDaoList.get(2).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2]startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2]startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].interruptable").value(activityDaoList.get(2).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].description").value(activityDaoList.get(2).getDescription()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].id").value(activityDaoList.get(3).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].week").value(activityDaoList.get(3).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3]startingDay").value(activityDaoList.get(3).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3]startingHour").value(activityDaoList.get(3).getStartingHour().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].interruptable").value(activityDaoList.get(3).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].estimatedTime").value(activityDaoList.get(3).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].description").value(activityDaoList.get(3).getDescription()));
