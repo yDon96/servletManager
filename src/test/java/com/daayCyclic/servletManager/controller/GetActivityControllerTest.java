@@ -110,6 +110,23 @@ public class GetActivityControllerTest {
     }
 
     @Test
+    void shouldGetActivitiesByWeekAndDay() throws Exception {
+        this.mockMvc.perform(get("/activities/week/" + activityDaoList.get(2).getWeek() + "/day/" + activityDaoList.get(2).getStartingDay()))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(activityDaoList.get(2).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.interruptable").value(activityDaoList.get(2).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(activityDaoList.get(2).getDescription()));
+    }
+
+    @Test
     void shouldGetActivitiesByWeek() throws Exception {
         this.mockMvc.perform(get("/activities/week/" + activityDaoList.get(0).getWeek()))
                 .andDo(print())
