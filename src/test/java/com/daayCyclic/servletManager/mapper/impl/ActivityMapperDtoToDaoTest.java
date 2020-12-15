@@ -123,7 +123,7 @@ public class ActivityMapperDtoToDaoTest {
     @Test
     void shouldThrowExceptionConvertToDaoIfWeekIsNull() {
         setActivityDto(1, userDao.getUser_id(), procedureDao.getId(), null, true, 50, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDtoToDaoMapper.convertToDao(activityDto);
         });
     }
@@ -131,7 +131,7 @@ public class ActivityMapperDtoToDaoTest {
     @Test
     void shouldThrowExceptionConvertToDaoIfEstimateTimeIsNull() {
         setActivityDto(1, userDao.getUser_id(), procedureDao.getId(), 5, true, null, "ddd");
-        assertThrows(NullPointerException.class, () -> {
+        assertThrows(NotValidTypeException.class, () -> {
             iDtoToDaoMapper.convertToDao(activityDto);
         });
     }
