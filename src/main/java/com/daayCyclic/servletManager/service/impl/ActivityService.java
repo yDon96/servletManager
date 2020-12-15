@@ -82,7 +82,7 @@ public class ActivityService implements IActivityService {
     }
 
     /**
-     * Find all activities related to a specific user in a specific week and day
+     * Find all activities related to a specific user in a specific week and day.
      *
      * @param userId a {@literal Integer} value containing a user ID
      * @param week a {@literal Integer} value containing a week

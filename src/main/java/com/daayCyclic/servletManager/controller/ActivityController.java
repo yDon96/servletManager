@@ -78,6 +78,15 @@ public class ActivityController {
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
     }
 
+    /**
+     * Find all activities related to a specific user in a specific week and day.
+     *
+     * @param userId a {@literal Integer} value containing a user ID
+     * @param week a {@literal Integer} value containing a week
+     * @param day a {@literal Integer} value containing a day of a week
+     * @return a {@literal List} of {@literal ActivityDto} containing the correspondent activities
+     * @throws NotValidTypeException if one or more of the parameters is null
+     */
     @GetMapping(path = "/activities/week/{week}/day/{day}")
     @SuppressWarnings("unchecked")
     public List<ActivityDto> getUserActivitiesByWeekAndDay(@RequestParam Integer userId, @PathVariable("week") Integer week, @PathVariable("day") Integer day) {
