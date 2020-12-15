@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.DuplicateFormatFlagsException;
+import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
@@ -75,6 +76,21 @@ public class ActivityService implements IActivityService {
     @Override
     public List<ActivityDao> getActivities() {
         return iActivityRepository.findAll();
+    }
+
+    @Override
+    public List<ActivityDao> getActivitiesByWeek(Integer week){
+        /**
+         * Returns a list of activities based on the requested week.
+         *
+         * @param week the {@literal week} filter the list
+         * @throws NotValidTypeException if the week value is negative or null
+         */
+        if (week == null || week < 0){
+            log.error("[SERVICE: Activity] the week value not valid value.");
+            throw new NotValidTypeException("the week value not valid value");
+        }
+        return iActivityRepository.findByWeek(week);
     }
 
     /**
