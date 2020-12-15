@@ -27,6 +27,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
         val activityDao = (ActivityDao) objectDao;
 
         if (activityDao.getMaintainer() != null
+                && activityDao.getMaintainer().getRole() != null
                 && activityDao.getMaintainer().getRole().getName() != null
                 && !activityDao.getMaintainer().getRole().getName().equalsIgnoreCase(maintainer)){
             log.error("[Activity MapperToDto] the role in non correct.");

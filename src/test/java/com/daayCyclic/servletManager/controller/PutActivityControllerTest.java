@@ -78,7 +78,7 @@ public class PutActivityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(null,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
     }
 
     @Transactional

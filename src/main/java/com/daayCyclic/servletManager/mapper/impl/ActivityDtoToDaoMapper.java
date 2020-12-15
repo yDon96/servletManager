@@ -55,34 +55,19 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
 
     private void checkConsistentActivityDto(ActivityDto activityDto){
 
-        if (activityDto.getId() == null){
-            log.error("[ActivityToDtoMapper] id is null.");
-            throw new NullPointerException("id is null.");
+        if (activityDto.getId() == null || activityDto.getId() < 0){
+            log.error("[ActivityToDtoMapper] Id is not valid value.");
+            throw new NotValidTypeException("Id is not valid value.");
         }
 
-        if (activityDto.getId() < 0){
-            log.error("[ActivityToDtoMapper] Id negative.");
-            throw new NotValidTypeException("Id negative.");
+        if (activityDto.getEstimatedTime() == null || activityDto.getEstimatedTime() < 0){
+            log.error("[ActivityToDtoMapper] EstimatedTime is not valid value.");
+            throw new NotValidTypeException("EstimatedTime is not valid value.");
         }
 
-        if (activityDto.getEstimatedTime() == null){
-            log.error("[ActivityToDtoMapper] estimatedTime is null.");
-            throw new NullPointerException("estimatedTime is null.");
-        }
-
-        if (activityDto.getEstimatedTime() != null && activityDto.getEstimatedTime() < 0){
-            log.error("[ActivityToDtoMapper] EstimatedTime negative.");
-            throw new NotValidTypeException("EstimatedTime negative.");
-        }
-
-        if (activityDto.getWeek() == null){
-            log.error("[ActivityToDtoMapper] week is null.");
-            throw new NullPointerException("week is null.");
-        }
-
-        if (activityDto.getWeek() < 0){
-            log.error("[ActivityToDtoMapper] Week negative.");
-            throw new NotValidTypeException("Week negative.");
+        if (activityDto.getWeek() == null || activityDto.getWeek() < 0){
+            log.error("[ActivityToDtoMapper] week is not valid value.");
+            throw new NotValidTypeException("week is not valid value.");
         }
 
         if (activityDto.getMaintainerId() != null && activityDto.getMaintainerId() < 0){
