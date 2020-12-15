@@ -63,6 +63,32 @@ public class ActivityMapperDaoToDtoTest {
     }
 
     @Test
+    void shouldConvertToDtoWithHourAndDay() throws NotValidTypeException {
+        setActivityDao(1,maintainer,procedure,5,3,20,true,25,"s");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, 3, 20, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
+    }
+
+    @Test
+    void shouldConvertToDtoWithHourIsNull() throws NotValidTypeException {
+        setActivityDao(1,maintainer,procedure,5,3,null,true,25,"s");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, 3, null, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
+    }
+
+    @Test
+    void shouldConvertToDtoWithDayIsNull() throws NotValidTypeException {
+        setActivityDao(1,maintainer,procedure,5,null,18,true,25,"s");
+        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, null, 18, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
+    }
+
+    @Test
+    void shouldThrowExceptionConvertToDtoWithDayNull() {
+        setActivityDao(1,maintainer,procedure,5,null,6,true,25,"s");
+        assertThrows(NotValidTypeException.class, () -> {
+            iDaoToDtoMapper.convertToDto(activityDao);
+        });
+    }
+
+    @Test
     void shouldThrowExceptionConvertToDtoIfIdIsNotSet() {
         setActivityDao(null, maintainer, procedure, 5, true, 50, "ddd");
         assertThrows(NotValidTypeException.class, () -> {
@@ -163,6 +189,30 @@ public class ActivityMapperDaoToDtoTest {
     }
 
     @Test
+    void shouldThrowExceptionConvertToDtoWithHourNegative() {
+        assertThrows(NotValidTypeException.class, () -> {
+            setActivityDao(1,maintainer,procedure,5,3,-20,true,25,"s");
+            iDaoToDtoMapper.convertToDto(activityDao);
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionConvertToDtoWithDayNegative() {
+        assertThrows(NotValidTypeException.class, () -> {
+            setActivityDao(1,maintainer,procedure,5,-3,20,true,25,"s");
+            iDaoToDtoMapper.convertToDto(activityDao);
+        });
+    }
+
+    @Test
+    void shouldThrowExceptionConvertToDtoWithWeekNegative() {
+        assertThrows(NotValidTypeException.class, () -> {
+            setActivityDao(1,maintainer,procedure,-5,3,20,true,25,"s");
+            iDaoToDtoMapper.convertToDto(activityDao);
+        });
+    }
+
+    @Test
     void shouldThrowExceptionConvertToDtoIfDifferentType() {
         ProcedureDao procedureDao = new ProcedureDao();
         procedureDao.setId(1);
@@ -198,6 +248,18 @@ public class ActivityMapperDaoToDtoTest {
         activityDao.setMaintainer(maintainer);
         activityDao.setProcedure(procedure);
         activityDao.setWeek(week);
+        activityDao.setInterruptable(isInterruptable);
+        activityDao.setEstimatedTime(estimatedTime);
+        activityDao.setDescription(description);
+    }
+
+    private void setActivityDao(Integer id, UserDao maintainer, ProcedureDao procedure, Integer week, Integer startingDay, Integer startingHour, boolean isInterruptable, Integer estimatedTime, String description) {
+        activityDao.setId(id);
+        activityDao.setMaintainer(maintainer);
+        activityDao.setProcedure(procedure);
+        activityDao.setWeek(week);
+        activityDao.setStartingDay(startingDay);
+        activityDao.setStartingHour(startingHour);
         activityDao.setInterruptable(isInterruptable);
         activityDao.setEstimatedTime(estimatedTime);
         activityDao.setDescription(description);

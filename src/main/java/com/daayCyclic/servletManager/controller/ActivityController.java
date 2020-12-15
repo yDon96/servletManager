@@ -70,6 +70,7 @@ public class ActivityController {
     }
 
     @GetMapping(path = "/activities")
+    @SuppressWarnings("unchecked")
     public List<ActivityDto> getActivities() throws NotValidTypeException {
         log.info("[REST] Get Activities");
         val activityDao = iActivityService.getActivities();
@@ -83,6 +84,25 @@ public class ActivityController {
         val activityDao = iActivityService.getActivitiesByWeek(week);
         log.debug("[REST] End Get activity week");
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
+    }
+
+    /**
+     * Find all activities related to a specific user in a specific week and day.
+     *
+     * @param userId a {@literal Integer} value containing a user ID
+     * @param week a {@literal Integer} value containing a week
+     * @param day a {@literal Integer} value containing a day of a week
+     * @return a {@literal List} of {@literal ActivityDto} containing the correspondent activities
+     * @throws NotValidTypeException if one or more of the parameters is null
+     */
+    @GetMapping(path = "/activities/week/{week}/day/{day}")
+    @SuppressWarnings("unchecked")
+    public List<ActivityDto> getUserActivitiesByWeekAndDay(@RequestParam Integer userId, @PathVariable("week") Integer week, @PathVariable("day") Integer day) {
+        log.info("[REST] Starting get activities of user " + userId + " during week " + week + ", day " + day);
+        List<ActivityDao> retrievedActivities = this.iActivityService.getUserActivitiesByWeekAndDay(userId, week, day);
+        List<ActivityDto> convertedList = (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(retrievedActivities);
+        log.info("[REST] Activities retrieved successfully");
+        return convertedList;
     }
 
     /**

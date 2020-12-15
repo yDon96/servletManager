@@ -49,6 +49,8 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
                 activityDto.getEstimatedTime(),
                 activityDto.isInterruptable(),
                 activityDto.getWeek(),
+                activityDto.getStartingDay(),
+                activityDto.getStartingHour(),
                 procedure,
                 maintainer);
     }
@@ -59,7 +61,6 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
             log.error("[ActivityToDtoMapper] id is null.");
             throw new NullPointerException("id is null.");
         }
-
         if (activityDto.getId() < 0){
             log.error("[ActivityToDtoMapper] Id negative.");
             throw new NotValidTypeException("Id negative.");

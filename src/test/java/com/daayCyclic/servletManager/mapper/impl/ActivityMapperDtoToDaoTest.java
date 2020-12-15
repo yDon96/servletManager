@@ -79,6 +79,32 @@ public class ActivityMapperDtoToDaoTest {
         assertEquals(activityDao,iDtoToDaoMapper.convertToDao(activityDto));
     }
 
+    @Test
+    void shouldConvertToDaoWithHourAndDay() {
+        setActivityDto(1,userDao.getUser_id(), procedureDao.getId(), 5, 4, 12, true, 50,"ddd");
+        ActivityDao activityDao = new ActivityDao(1, "ddd", 50, true, 5, 4, 12, procedureDao, userDao);
+        assertEquals(activityDao,iDtoToDaoMapper.convertToDao(activityDto));
+    }
+
+    @Test()
+    void shouldConvertToDaoWithHourNull() {
+        setActivityDto(1,userDao.getUser_id(), procedureDao.getId(), 5, 4, null, true, 50,"ddd");
+        ActivityDao activityDao = new ActivityDao(1, "ddd", 50, true, 5, 4, null, procedureDao, userDao);
+        assertEquals(activityDao,iDtoToDaoMapper.convertToDao(activityDto));
+    }
+
+    @Test()
+    void shouldConvertToDaoWithDayNull() {
+        setActivityDto(1,userDao.getUser_id(), procedureDao.getId(), 5, null, 22, true, 50,"ddd");
+        ActivityDao activityDao = new ActivityDao(1, "ddd", 50, true, 5, null, 22, procedureDao, userDao);
+        assertEquals(activityDao,iDtoToDaoMapper.convertToDao(activityDto));
+    }
+
+    @Test
+    void shouldConvertToDaoIfIdIsNull() {
+        setActivityDto(1, userDao.getUser_id(), procedureDao.getId(), 5, true, 50, "ddd");
+        assertDoesNotThrow(() -> iDtoToDaoMapper.convertToDao(activityDto));
+    }
 
     @Test
     void shouldConvertToDaoIfDescriptionIsNull() {
@@ -164,6 +190,22 @@ public class ActivityMapperDtoToDaoTest {
     }
 
     @Test()
+    void shouldThrowExceptionConvertToDaoWithHourNegative() {
+        assertThrows(NotValidTypeException.class, () -> {
+            setActivityDto(1,userDao.getUser_id(), procedureDao.getId(), 5, 4, -12, true, 50,"ddd");
+            iDtoToDaoMapper.convertToDao(activityDto);
+        });
+    }
+
+    @Test()
+    void shouldThrowExceptionConvertToDaoWithDayNegative() {
+        assertThrows(NotValidTypeException.class, () -> {
+            setActivityDto(1,userDao.getUser_id(), procedureDao.getId(), 5, -4, 12, true, 50,"ddd");
+            iDtoToDaoMapper.convertToDao(activityDto);
+        });
+    }
+
+    @Test()
     @Transactional
     void shouldThrowExceptionConvertToDaoIfUserIsNotMaintainer() {
         RoleDao role = iRoleRepository.getOne(userDao.getUser_id());
@@ -180,6 +222,18 @@ public class ActivityMapperDtoToDaoTest {
         activityDto.setMaintainerId(maintainerId);
         activityDto.setProcedureId(procedureId);
         activityDto.setWeek(week);
+        activityDto.setInterruptable(isInterruptable);
+        activityDto.setEstimatedTime(estimatedTime);
+        activityDto.setDescription(description);
+    }
+
+    private void setActivityDto(Integer id, Integer maintainerId, Integer procedureId, Integer week, Integer startingDay, Integer startingHour, boolean isInterruptable, Integer estimatedTime, String description) {
+        activityDto.setId(id);
+        activityDto.setMaintainerId(maintainerId);
+        activityDto.setProcedureId(procedureId);
+        activityDto.setWeek(week);
+        activityDto.setStartingDay(startingDay);
+        activityDto.setStartingHour(startingHour);
         activityDto.setInterruptable(isInterruptable);
         activityDto.setEstimatedTime(estimatedTime);
         activityDto.setDescription(description);
