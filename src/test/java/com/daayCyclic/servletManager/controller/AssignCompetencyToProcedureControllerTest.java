@@ -59,7 +59,6 @@ public class AssignCompetencyToProcedureControllerTest {
         createProcedureDB();
     }
 
-    // TODO : testare dopo la marge
     @Test
     void assignCompetencyToProcedureNotPresentCompetency(){
         assertDoesNotThrow(() -> {

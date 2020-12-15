@@ -16,4 +16,5 @@ public interface IActivityService {
     List<ActivityDao> getUserActivitiesByWeekAndDay(Integer userId, Integer week, Integer day);
     void assignMaintainer(UserDao userDao, ActivityDao activityDao);
     void assignProcedure(ProcedureDao procedureDao, ActivityDao activityDao);
+    List<ActivityDao> getActivitiesByWeek(Integer week);
 }

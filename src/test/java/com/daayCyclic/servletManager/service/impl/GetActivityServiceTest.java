@@ -111,6 +111,15 @@ public class GetActivityServiceTest {
     }
 
     @Test
+    void shouldGetActivitiesByWeek() {
+        List<ActivityDao> listByWeek = iActivityRepository.findByWeek(daoActivities.get(1).getWeek());
+        assertEquals(
+                listByWeek,
+                activityService.getActivitiesByWeek(daoActivities.get(1).getWeek())
+        );
+    }
+
+    @Test
     void shouldThrowExceptionIfGetActivityThatDoNotExist() {
         assertThrows(NotFoundException.class,() -> {
             activityService.getActivity(644553);
