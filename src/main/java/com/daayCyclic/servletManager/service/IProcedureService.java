@@ -11,6 +11,7 @@ public interface IProcedureService {
     void generateProcedure(ProcedureDao procedureDao) throws DuplicateGenerationException;
     ProcedureDao getProcedure(Integer procedureId);
     List<ProcedureDao> getProcedures();
+    void editProcedure(Integer procedureId, String description);
     void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure);
 
 }
