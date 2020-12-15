@@ -42,10 +42,9 @@ public class UserController {
      * Insert (or Update if already present) into the server the {@literal UserDto} passed.
      *
      * @param user the {@literal UserDto} to insert
-     * @throws NotValidTypeException if {@literal UserDto} does not pass the integrity check
      */
     @PostMapping(path = "/user")
-    public void postUser(@RequestBody UserDto user) throws NotValidTypeException {
+    public void postUser(@RequestBody UserDto user) {
         log.info("[REST] Starting a postUser request");
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
         log.info("[REST] Start insert/update of a new user into the database: " + user);
@@ -58,10 +57,9 @@ public class UserController {
      *
      * @param userId the id into the server of the user
      * @return a {@literal UserDto} represents the desired user
-     * @throws NotFoundException if the desired user is not present into the server
      */
     @GetMapping(path = "/user/{userId}")
-    public UserDto getUser(@PathVariable("userId") int userId) throws NotValidTypeException, NotFoundException {
+    public UserDto getUser(@PathVariable("userId") int userId) {
         log.info("[REST] Start search for user with id: " + userId);
         UserDao searchUser = userService.getUser(userId);
         log.info("[REST] User found: " + searchUser);
@@ -74,10 +72,10 @@ public class UserController {
      *
      * @param roles a {@literal List<String>} of the desired roles
      * @return a {@literal List<UserDto>} containing the desired users
-     * @throws NotValidTypeException
      */
     @GetMapping(path = "/users")
-    public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) throws NotValidTypeException {
+    @SuppressWarnings("unchecked")
+    public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) {
         log.info("[REST] Starting a getUsers with the given roles");
         ArrayList<RoleDao> rolesDao = null;
         if (roles != null) {
