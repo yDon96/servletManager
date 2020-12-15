@@ -73,12 +73,12 @@ public class PutActivityControllerTest {
     }
 
     @Test
-    void shouldRespondBadRequestIdActivityNull() throws Exception {
+    void shouldRespondNotFoundWithIdActivityNull() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(null,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isNotFound());
     }
 
     @Transactional

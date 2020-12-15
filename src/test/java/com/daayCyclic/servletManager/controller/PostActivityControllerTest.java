@@ -135,12 +135,12 @@ public class PostActivityControllerTest {
     }
 
     @Test
-    void shouldRespondBadRequestPostActivityWithNegativeId() throws Exception {
+    void shouldPostActivityWithNegativeId() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(-225,"ddd", 50, true, 5, procedure.getId(), maintainer.getUser_id())))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk());
     }
 
     @Test
@@ -176,7 +176,7 @@ public class PostActivityControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(getContentFormatted(null,"ddd",50,true,5, procedure.getId(), maintainer.getUser_id())))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk());
     }
 
     @Test

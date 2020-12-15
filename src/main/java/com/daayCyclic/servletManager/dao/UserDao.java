@@ -128,6 +128,6 @@ public class UserDao implements ObjectDao {
     }
 
     public boolean isMaintainer() {
-        return this.role.getName().compareToIgnoreCase("Maintainer") == 0;
+        return this.role != null && this.role.getName().compareToIgnoreCase("Maintainer") == 0;
     }
 }
