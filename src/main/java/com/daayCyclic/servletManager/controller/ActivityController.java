@@ -70,11 +70,22 @@ public class ActivityController {
     }
 
     @GetMapping(path = "/activities")
+    @SuppressWarnings("unchecked")
     public List<ActivityDto> getActivities() throws NotValidTypeException {
         log.info("[REST] Get Activities");
         val activityDao = iActivityService.getActivities();
         log.debug("[REST] End Get activities");
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
+    }
+
+    @GetMapping(path = "/activities/week/{week}/day/{day}")
+    @SuppressWarnings("unchecked")
+    public List<ActivityDto> getUserActivitiesByWeekAndDay(@RequestParam Integer userId, @PathVariable("week") Integer week, @PathVariable("day") Integer day) {
+        log.info("[REST] Starting get activities of user " + userId + " during week " + week + ", day " + day);
+        List<ActivityDao> retrievedActivities = this.iActivityService.getUserActivitiesByWeekAndDay(userId, week, day);
+        List<ActivityDto> convertedList = (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(retrievedActivities);
+        log.info("[REST] Activities retrieved successfully");
+        return convertedList;
     }
 
     /**

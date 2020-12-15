@@ -67,7 +67,7 @@ public class ActivityDto implements ObjectDto {
         return id < 0 || maintainerId < 0 || procedureId < 0 || week < 0 || estimatedTime < 0;
     }
 
-    public boolean isFielsNull(){
+    public boolean isFieldsNull(){
         return id == null || maintainerId == null || procedureId == null || week == null|| estimatedTime == null;
     }
 }

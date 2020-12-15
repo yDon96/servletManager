@@ -65,7 +65,7 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
             log.error("[ActivityToDtoMapper] all fields are null.");
             throw new NotValidTypeException("all fields are null.");
         }
-        if (activityDto.isFielsNull()){
+        if (activityDto.isFieldsNull()){
             if (activityDto.getId() != null){
                 if (activityDto.getId() < 0){
                     log.error("[ActivityToDtoMapper] Id negative.");
@@ -97,7 +97,7 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
                 }
             }
         }
-        if (!activityDto.isFielsNull()){
+        if (!activityDto.isFieldsNull()){
             if (activityDto.isAlLFieldsNegative()){
                 log.error("[ActivityToDtoMapper] there are negative fields.");
                 throw new NotValidTypeException("there are negative fields.");
