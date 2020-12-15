@@ -93,6 +93,22 @@ public class GetActivityControllerTest {
     }
 
     @Test
+    void shouldGetActivitiesByWeek() throws Exception {
+        this.mockMvc.perform(get("/activitiesWeek").param("week",String.valueOf(activityDaoList.get(0).getWeek())))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(0).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(0).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(0).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(0).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value(activityDaoList.get(0).getDescription()));
+    }
+
+    @Test
     void shouldGetActivities() throws Exception  {
         this.mockMvc.perform(get("/activities"))
                 .andDo(print())
