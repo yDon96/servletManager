@@ -109,6 +109,19 @@ public class CompetencyService implements ICompetencyService {
         return retrievedCompetencies;
     }
 
+    @Override
+    public Integer countUserOwnedCompetenciesRequiredFromProcedure(Integer userId, Integer procedureId) {
+        log.info("[SERVICE: Competency] Start counting required competencies of procedure " + procedureId + " owned by user " + userId);
+        if (userId == null || procedureId == null) {
+            String message = "userId and procedureId can't be null";
+            log.error("[SERVICE: Competency] " + message);
+            throw new NotValidTypeException(message);
+        }
+        Integer result = this.repository.countUserOwnedCompetenciesRequiredFromProcedure(userId, procedureId);
+        log.info("[SERVICE: Competency] Count completed successfully");
+        return result;
+    }
+
     /**
      * If a competency is present returns {@code true}, otherwise {@code false}.
      *

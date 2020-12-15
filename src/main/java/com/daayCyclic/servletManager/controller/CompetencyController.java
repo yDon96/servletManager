@@ -38,12 +38,22 @@ public class CompetencyController {
      */
     @GetMapping(path = "/competencies")
     public List<String> getCompetencies() {
+        log.info("[REST] Start retrieving all the competencies from the server");
         ArrayList<CompetencyDao> retrievedCompetencies = (ArrayList<CompetencyDao>) this.competencyService.getCompetencies();
         ArrayList<String> newList = new ArrayList<>();
         for (CompetencyDao competencyDao : retrievedCompetencies) {
             newList.add(competencyDao.getName());
         }
+        log.info("[REST] Competencies retrieved successfully");
         return newList;
+    }
+
+    @GetMapping(path = "/competencies/count") //TODO: Change path?
+    public int countUserOwnedCompetenciesRequiredFromProcedure(@RequestParam Integer userId, @RequestParam Integer procedureId) {
+        log.info("[REST] Starting request to count required competencies of procedure " + procedureId + " owned by user " + userId);
+        int result = this.competencyService.countUserOwnedCompetenciesRequiredFromProcedure(userId, procedureId);
+        log.info("[REST] Request completed successfully");
+        return result;
     }
 
 }

@@ -9,4 +9,5 @@ public interface ICompetencyService {
     void updateCompetency(CompetencyDao updatedCompetency);
     CompetencyDao getCompetency(String competency);
     List<CompetencyDao> getCompetencies();
+    Integer countUserOwnedCompetenciesRequiredFromProcedure(Integer userId, Integer procedureId);
 }
