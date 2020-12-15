@@ -68,6 +68,8 @@ public class GetActivityServiceTest {
             activityDao.setDescription("Work" + i);
             activityDao.setProcedure(procedure);
             activityDao.setMaintainer(maintainer);
+            activityDao.setStartingHour(i+5);
+            activityDao.setStartingDay(i);
             daoActivities.add(iActivityRepository.save(activityDao));
         }
     }
@@ -80,6 +82,21 @@ public class GetActivityServiceTest {
                         daoActivities.get(2).getEstimatedTime(),
                         daoActivities.get(2).isInterruptable(),
                         daoActivities.get(2).getWeek(),
+                        daoActivities.get(2).getProcedure(),
+                        daoActivities.get(2).getMaintainer()),
+                activityService.getActivity(daoActivities.get(2).getId()));
+    }
+
+    @Test
+    void getActivityWithHourAndDay() {
+        assertEquals(
+                new ActivityDao(daoActivities.get(2).getId(),
+                        daoActivities.get(2).getDescription(),
+                        daoActivities.get(2).getEstimatedTime(),
+                        daoActivities.get(2).isInterruptable(),
+                        daoActivities.get(2).getWeek(),
+                        daoActivities.get(2).getStartingDay(),
+                        daoActivities.get(2).getStartingHour(),
                         daoActivities.get(2).getProcedure(),
                         daoActivities.get(2).getMaintainer()),
                 activityService.getActivity(daoActivities.get(2).getId()));

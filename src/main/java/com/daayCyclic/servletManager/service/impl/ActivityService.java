@@ -34,18 +34,14 @@ public class ActivityService implements IActivityService {
 
     @Override
     public Integer generateActivity(ActivityDao activityDao) throws DuplicateFormatFlagsException {
+        log.info("[SERVICE: Activity] Starting generate activity into the database: " + activityDao);
         if (activityExist(activityDao.getId())){
-            log.error("[ActivityService] Id Activity exist");
+            log.info("[ActivityService] Id Activity exist");
             throw new DuplicateGenerationException("Id Activity exist");
         }
         ActivityDao savedActivity = iActivityRepository.save(activityDao);
+        log.info("[SERVICE: Activity] Generate activity completed successfully");
         return savedActivity.getId();
-    }
-
-    @Override
-    public ActivityDao getActivity(Integer activityId) {
-        val activityDao = iActivityRepository.findById(activityId);
-        return activityDao.orElseThrow(NotFoundException::new);
     }
 
     /**
@@ -74,7 +70,15 @@ public class ActivityService implements IActivityService {
     }
 
     @Override
+    public ActivityDao getActivity(Integer activityId) {
+        log.info("[SERVICE: Activity] Starting get activity with ID: " + activityId);
+        val activityDao = iActivityRepository.findById(activityId);
+        return activityDao.orElseThrow(NotFoundException::new);
+    }
+
+    @Override
     public List<ActivityDao> getActivities() {
+        log.info("[SERVICE: Activity] Starting getting all the activities");
         return iActivityRepository.findAll();
     }
 
@@ -91,6 +95,26 @@ public class ActivityService implements IActivityService {
             throw new NotValidTypeException("the week value not valid value");
         }
         return iActivityRepository.findByWeek(week);
+    }
+
+    /**
+     * Find all activities related to a specific user in a specific week and day.
+     *
+     * @param userId a {@literal Integer} value containing a user ID
+     * @param week a {@literal Integer} value containing a week
+     * @param day a {@literal Integer} value containing a day of a week
+     * @return a {@literal List} of {@literal ActivityDao} containing the correspondent activities
+     * @throws NotValidTypeException if one or more of the parameters is null
+     */
+    @Override
+    public List<ActivityDao> getUserActivitiesByWeekAndDay(Integer userId, Integer week, Integer day) {
+        log.info("[SERVICE: Activity] Starting get activities of user " + userId + " during week " + week + ", day " + day);
+        if (userId == null || week == null || day == null) {
+            throw new NotValidTypeException("Null parameters not allowed");
+        }
+        List<ActivityDao> retrievedActivities = this.iActivityRepository.findUserActivitiesByWeekAndDay(userId, week, day);
+        log.info("[SERVICE: Activity] " + retrievedActivities.size() + " activities retrieved successfully");
+        return retrievedActivities;
     }
 
     /**

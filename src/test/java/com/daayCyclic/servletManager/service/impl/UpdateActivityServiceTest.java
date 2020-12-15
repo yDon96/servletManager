@@ -66,6 +66,25 @@ public class UpdateActivityServiceTest {
         assertEquals(changedActivity, updatedActivity);
     }
 
+    @Test
+    void shouldUpdateActivitySettingHourAndDay() {
+        ActivityDao changedActivity = new ActivityDao(
+                1,
+                "DescriptionD",
+                56,
+                false,
+                7,
+                4,
+                21,
+                null,
+                null);
+        ActivityDao oldActivity = activityService.getActivity(1);
+        activityService.updateActivity(changedActivity);
+        ActivityDao updatedActivity = activityService.getActivity(1);
+        assertNotEquals(oldActivity, updatedActivity);
+        assertEquals(changedActivity, updatedActivity);
+    }
+
     /**
      * Add some Activities into the database
      */

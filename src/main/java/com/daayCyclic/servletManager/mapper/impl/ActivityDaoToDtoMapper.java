@@ -44,6 +44,8 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
                 activityDao.getMaintainer().getUser_id(),
                 activityDao.getProcedure().getId(),
                 activityDao.getWeek(),
+                activityDao.getStartingDay(),
+                activityDao.getStartingHour(),
                 activityDao.isInterruptable(),
                 activityDao.getEstimatedTime(),
                 activityDao.getDescription());
@@ -52,6 +54,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
     @Override
     @SuppressWarnings("unchecked")
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoActivities) throws NotValidTypeException {
+        //TODO: check null list, change this check below
         if(!(!daoActivities.isEmpty() && daoActivities.get(0) instanceof ActivityDao)){
             throw new NotValidTypeException("Not valid type. (convertToDtoList)");
         }
