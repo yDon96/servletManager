@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ActivityMapperDaoToDtoTest {
 
-
     @Autowired
     @Qualifier("ActivityToDtoMapper")
     private IDaoToDtoMapper iDaoToDtoMapper;
@@ -59,25 +58,25 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldConvertToDto() throws NotValidTypeException {
         setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, 50, "ddd"), iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), procedure.getId(), 5, true, 50, "ddd"), iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldConvertToDtoWithHourAndDay() throws NotValidTypeException {
         setActivityDao(1,maintainer,procedure,5,3,20,true,25,"s");
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, 3, 20, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), procedure.getId(), 5, 3, 20, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldConvertToDtoWithHourIsNull() throws NotValidTypeException {
         setActivityDao(1,maintainer,procedure,5,3,null,true,25,"s");
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, 3, null, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), procedure.getId(), 5, 3, null, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
     void shouldConvertToDtoWithDayIsNull() throws NotValidTypeException {
         setActivityDao(1,maintainer,procedure,5,null,18,true,25,"s");
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, null, 18, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), procedure.getId(), 5, null, 18, true, 25, "s"), iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
@@ -91,7 +90,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldConvertToDtoMissingDescription() throws NotValidTypeException {
         setActivityDao(1, maintainer, procedure, 5, true, 50, null);
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, 50, null),iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), procedure.getId(), 5, true, 50, null),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
@@ -119,7 +118,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldConvertToDtoMissingProcedure() throws NotValidTypeException {
         setActivityDao(1, maintainer, procedure, 5, true, 50, "ddd");
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), null, 5, true, 50, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), null, 5, true, 50, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test
@@ -133,7 +132,7 @@ public class ActivityMapperDaoToDtoTest {
     @Test
     void shouldConvertToDtoMissingEstimateTime() throws NotValidTypeException {
         setActivityDao(1, maintainer, procedure, 5, true, null, "ddd");
-        assertEquals(new ActivityDto(1, maintainer.getUser_id(), procedure.getId(), 5, true, null, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
+        assertEquals(new ActivityDto(1, maintainer.getUserId(), procedure.getId(), 5, true, null, "ddd"),iDaoToDtoMapper.convertToDto(activityDao));
     }
 
     @Test

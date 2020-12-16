@@ -2,6 +2,8 @@ package com.daayCyclic.servletManager.service.impl;
 
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
+import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
+import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
 import com.daayCyclic.servletManager.service.IUserService;
@@ -10,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
@@ -53,23 +53,25 @@ public class UserServiceGenerateTest {
     @Test
     void generateUserNullName(){
         UserDao newUser = createUser(1, null, "Rossi");
-        assertThrows(DataIntegrityViolationException.class, () -> userService.generateUser(newUser));
+        assertThrows(NotValidTypeException.class, () -> userService.generateUser(newUser));
     }
 
     @Test
     void generateUserAlreadyPresent(){
-        UserDao newUser = createUser(1, "Marii", "Rossi");
-        userService.generateUser(newUser);
-        newUser = createUser(1, "Mario", "Rossi");
-        userService.generateUser(newUser);
-        Optional<UserDao> foundUser = repository.findById(1);
-        assertTrue(foundUser.isPresent());
-        assertEquals(newUser, foundUser.get());
+        assertThrows(DuplicateGenerationException.class, () -> {
+            UserDao newUser = createUser(1, "Marii", "Rossi");
+            userService.generateUser(newUser);
+            newUser = createUser(1, "Mario", "Rossi");
+            userService.generateUser(newUser);
+            Optional<UserDao> foundUser = repository.findById(1);
+            assertTrue(foundUser.isPresent());
+            assertEquals(newUser, foundUser.get());
+        });
     }
 
     @Test
     void generateUserNullParameter(){
-        assertThrows(InvalidDataAccessApiUsageException.class, () -> userService.generateUser(null));
+        assertThrows(NotValidTypeException.class, () -> userService.generateUser(null));
     }
 
     // BEGIN Utilities methods
@@ -82,7 +84,7 @@ public class UserServiceGenerateTest {
 
     UserDao createUser(int id, String name, String surname) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.of(1968, 1, 1));

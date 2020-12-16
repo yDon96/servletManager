@@ -9,7 +9,6 @@ import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IRoleService;
 import com.daayCyclic.servletManager.service.IUserService;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,7 +53,6 @@ public class AssignCompetencyToUserServiceTest {
     }
 
     @Test
-    @Disabled(value = "Da implementare l'update dell'utente per farlo funzionare a dovere")
     @Transactional
     void assignCompetencyToUserUserNotPresent() {
         UserDao newUser = new UserDao(100, "NEW", "new", LocalDate.now(), this.createRole(6, "Maintainer"));
@@ -91,7 +89,7 @@ public class AssignCompetencyToUserServiceTest {
 
     private UserDao createUser(int id, String name, String surname, String role) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.now());
@@ -108,7 +106,7 @@ public class AssignCompetencyToUserServiceTest {
 
     private void createCompetenciesInDB() {
         for (int i = 1; i < 6; i++) {
-            this.competencyService.generateCompetency("competency" + i);
+            this.competencyService.generateCompetency(new CompetencyDao(i, "competency" + i));
         }
     }
 

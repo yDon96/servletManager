@@ -2,10 +2,12 @@ package com.daayCyclic.servletManager.controller;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.IActivityRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
+import com.daayCyclic.servletManager.service.IRoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,9 @@ public class GetActivityControllerTest {
     @Autowired
     private IActivityRepository iActivityRepository;
 
+    @Autowired
+    private IRoleService roleService;
+
     private List<ActivityDao> activityDaoList;
 
     private ProcedureDao procedure;
@@ -60,6 +65,10 @@ public class GetActivityControllerTest {
         userDao.setName("a");
         userDao.setSurname("s");
         userDao.setDateOfBirth(LocalDate.of(2000,1,1));
+        RoleDao role = new RoleDao();
+        role.setName("Maintainer");
+        userDao.setRole(role);
+        roleService.generateRole(role);
         procedure =  iProcedureRepository.save(procedureDao);
         maintainer = iUserRepository.save(userDao);
         activityDaoList = new ArrayList<>();
@@ -85,7 +94,7 @@ public class GetActivityControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(activityDaoList.get(2).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.interruptable").value(activityDaoList.get(2).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
@@ -100,7 +109,7 @@ public class GetActivityControllerTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(activityDaoList.get(2).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
@@ -111,19 +120,20 @@ public class GetActivityControllerTest {
 
     @Test
     void shouldGetActivitiesByWeekAndDay() throws Exception {
-        this.mockMvc.perform(get("/activities/week/" + activityDaoList.get(2).getWeek() + "/day/" + activityDaoList.get(2).getStartingDay()))
+        this.mockMvc.perform(get("/activities/week/" + activityDaoList.get(2).getWeek() + "/day/" + activityDaoList.get(2).getStartingDay())
+                .param("userId", activityDaoList.get(2).getMaintainer().getUserId().toString()))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(activityDaoList.get(2).getId().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.maintainerId").value(maintainer.getUser_id()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.week").value(activityDaoList.get(2).getWeek().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.interruptable").value(activityDaoList.get(2).isInterruptable()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$.description").value(activityDaoList.get(2).getDescription()));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(2).getId().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUserId()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(2).getWeek().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(2).isInterruptable()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value(activityDaoList.get(2).getDescription()));
     }
 
     @Test
@@ -135,7 +145,7 @@ public class GetActivityControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(1)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(0).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(0).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(0).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(0).getEstimatedTime().toString()))
@@ -151,28 +161,28 @@ public class GetActivityControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(0).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(0).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(0).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(0).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value(activityDaoList.get(0).getDescription()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(activityDaoList.get(1).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].week").value(activityDaoList.get(1).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].interruptable").value(activityDaoList.get(1).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].estimatedTime").value(activityDaoList.get(1).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].description").value(activityDaoList.get(1).getDescription()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].id").value(activityDaoList.get(2).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].week").value(activityDaoList.get(2).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].interruptable").value(activityDaoList.get(2).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].description").value(activityDaoList.get(2).getDescription()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].id").value(activityDaoList.get(3).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].week").value(activityDaoList.get(3).getWeek().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].interruptable").value(activityDaoList.get(3).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].estimatedTime").value(activityDaoList.get(3).getEstimatedTime().toString()))
@@ -188,37 +198,37 @@ public class GetActivityControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$", hasSize(4)))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(activityDaoList.get(0).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].week").value(activityDaoList.get(0).getWeek().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]startingDay").value(activityDaoList.get(0).getStartingDay().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[0]startingHour").value(activityDaoList.get(0).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].startingDay").value(activityDaoList.get(0).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].startingHour").value(activityDaoList.get(0).getStartingHour().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].interruptable").value(activityDaoList.get(0).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].estimatedTime").value(activityDaoList.get(0).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value(activityDaoList.get(0).getDescription()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(activityDaoList.get(1).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].week").value(activityDaoList.get(1).getWeek().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1]startingDay").value(activityDaoList.get(1).getStartingDay().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1]startingHour").value(activityDaoList.get(1).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].startingDay").value(activityDaoList.get(1).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].startingHour").value(activityDaoList.get(1).getStartingHour().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].interruptable").value(activityDaoList.get(1).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].estimatedTime").value(activityDaoList.get(1).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].description").value(activityDaoList.get(1).getDescription()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].id").value(activityDaoList.get(2).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].week").value(activityDaoList.get(2).getWeek().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2]startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[2]startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].startingDay").value(activityDaoList.get(2).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[2].startingHour").value(activityDaoList.get(2).getStartingHour().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].interruptable").value(activityDaoList.get(2).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].estimatedTime").value(activityDaoList.get(2).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[2].description").value(activityDaoList.get(2).getDescription()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].id").value(activityDaoList.get(3).getId().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].procedureId").value(procedure.getId()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUser_id()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].maintainerId").value(maintainer.getUserId()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].week").value(activityDaoList.get(3).getWeek().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[3]startingDay").value(activityDaoList.get(3).getStartingDay().toString()))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[3]startingHour").value(activityDaoList.get(3).getStartingHour().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].startingDay").value(activityDaoList.get(3).getStartingDay().toString()))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[3].startingHour").value(activityDaoList.get(3).getStartingHour().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].interruptable").value(activityDaoList.get(3).isInterruptable()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].estimatedTime").value(activityDaoList.get(3).getEstimatedTime().toString()))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[3].description").value(activityDaoList.get(3).getDescription()));

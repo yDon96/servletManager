@@ -57,7 +57,7 @@ public class PostActivityControllerTest {
     void shouldPostActivity() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "ddd", 50, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1, "ddd", 50, true, 5, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -66,7 +66,7 @@ public class PostActivityControllerTest {
     void shouldPostActivityWithDayAndHour() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 5, 7,21,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 5, 7,21,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -75,7 +75,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithDayNotCorrect() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 5, 9,17,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 5, 9,17,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -84,7 +84,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithHourNotCorrect() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 5, 2,29,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 5, 2,29,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -93,7 +93,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithWeekNotCorrect() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,11,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,11,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -102,7 +102,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithDayNegative() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 60, -4,11,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 60, -4,11,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -111,7 +111,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithHourNegative() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,-11,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,-11,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -120,7 +120,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithHourNull() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,null,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 60, 4,null,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -129,7 +129,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithDayNull() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 60, null,14,procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 60, null,14,procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -138,7 +138,7 @@ public class PostActivityControllerTest {
     void shouldPostActivityWithNegativeId() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(-225,"ddd", 50, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(-225,"ddd", 50, true, 5, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -147,7 +147,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithNegativeWeek() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, -1, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, -1, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -156,7 +156,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithNegativeProcedure() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 5, -procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 5, -procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -165,7 +165,7 @@ public class PostActivityControllerTest {
     void shouldRespondNotFoundPostActivityWithNegativeMaintainer() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1,"ddd", 50, true, 5, procedure.getId(), -maintainer.getUser_id())))
+                .content(getContentFormatted(1,"ddd", 50, true, 5, procedure.getId(), -maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -174,7 +174,7 @@ public class PostActivityControllerTest {
     void shouldPostActivityWithoutAnId() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(null,"ddd",50,true,5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(null,"ddd",50,true,5, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -183,7 +183,7 @@ public class PostActivityControllerTest {
     void shouldPostActivityWithoutADescription() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, null, 50, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1, null, 50, true, 5, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -192,7 +192,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithoutAWeek() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "ddd", 50, true, null, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1, "ddd", 50, true, null, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -201,7 +201,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithoutAEstimateTime() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "ddd", null, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1, "ddd", null, true, 5, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }
@@ -210,7 +210,7 @@ public class PostActivityControllerTest {
     void shouldPostActivityWithoutAProcedureId() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "ddd", 50, true, 5, null, maintainer.getUser_id())))
+                .content(getContentFormatted(1, "ddd", 50, true, 5, null, maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -228,7 +228,7 @@ public class PostActivityControllerTest {
     void shouldRespondBadRequestPostActivityWithNegativeEstimateTime() throws Exception {
         this.mockMvc.perform(post("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(1, "ddd", -1, true, 5, procedure.getId(), maintainer.getUser_id())))
+                .content(getContentFormatted(1, "ddd", -1, true, 5, procedure.getId(), maintainer.getUserId())))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

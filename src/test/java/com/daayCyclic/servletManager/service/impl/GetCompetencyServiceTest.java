@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.service.impl;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import org.junit.jupiter.api.Test;
@@ -28,7 +29,7 @@ public class GetCompetencyServiceTest {
 
     @Test
     void getCompetencyNotPresent() {
-        this.service.generateCompetency("ECDL");
+        this.service.generateCompetency(new CompetencyDao("ECDL"));
         assertThrows(NotFoundException.class, () -> this.service.getCompetency("competency"));
     }
 
@@ -45,8 +46,8 @@ public class GetCompetencyServiceTest {
     @Test
     void getCompetencyPresentLowerCase() {
         String chosenCompetency = "competency1";
-        this.service.generateCompetency("ECDL");
-        this.service.generateCompetency(chosenCompetency);
+        this.service.generateCompetency(new CompetencyDao("ECDL"));
+        this.service.generateCompetency(new CompetencyDao(chosenCompetency));
         chosenCompetency = chosenCompetency.toUpperCase();
         assertEquals(chosenCompetency, this.service.getCompetency(chosenCompetency).getName());
     }
@@ -54,7 +55,7 @@ public class GetCompetencyServiceTest {
     @Test
     void getCompetencyPresent() {
         String chosenActivity = "ECDL";
-        this.service.generateCompetency(chosenActivity);
+        this.service.generateCompetency(new CompetencyDao(chosenActivity));
         assertEquals(chosenActivity, this.service.getCompetency(chosenActivity).getName());
     }
 
@@ -66,7 +67,7 @@ public class GetCompetencyServiceTest {
     @Test
     void getCompetenciesPresents() {
         for (int i = 0; i < 5; i++) {
-            this.service.generateCompetency("competency" + i);
+            this.service.generateCompetency(new CompetencyDao("competency" + i));
         }
         assertEquals(5, this.service.getCompetencies().size());
     }

@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class GetCompetencyControllerTest {
 
     private void populateCompetencies(int n) {
         for (int i = 0; i < n; i++) {
-            this.service.generateCompetency("competency" + i);
+            this.service.generateCompetency(new CompetencyDao("competency" + i));
         }
     }
 

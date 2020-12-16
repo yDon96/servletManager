@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.service.ICompetencyService;
@@ -104,7 +105,7 @@ public class AssignCompetencyToUserControllerTest {
 
     private UserDao createUser(int id, String name, String surname, String role) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.now());
@@ -121,7 +122,7 @@ public class AssignCompetencyToUserControllerTest {
 
     private void createCompetenciesInDB() {
         for (int i = 1; i < 6; i++) {
-            this.competencyService.generateCompetency("competency" + i);
+            this.competencyService.generateCompetency(new CompetencyDao(i, "competency" + i));
         }
     }
 

@@ -4,8 +4,8 @@ import com.daayCyclic.servletManager.dao.*;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.dto.UserDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,13 +23,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UserDaoToDtoMapperTest {
-//TODO Add tests on competencies
-    private UserDaoToDtoMapper mapper;
 
-    @BeforeEach
-    void setUp() {
-        mapper = new UserDaoToDtoMapper();
-    }
+    @Autowired
+    private UserDaoToDtoMapper mapper;
 
     @Test
     void convertToDtoGoodObject() {
@@ -120,7 +116,7 @@ class UserDaoToDtoMapperTest {
 
     UserDao createDaoUser(int id, String name, String surname) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.of(1968, 1, 1));
@@ -138,7 +134,7 @@ class UserDaoToDtoMapperTest {
 
 
     void checkDtoDaoEquality(UserDto userDto, UserDao userDao) {
-        assertEquals(userDto.getUser_id(), userDao.getUser_id());
+        assertEquals(userDto.getUserId(), userDao.getUserId());
         assertEquals(userDto.getName(), userDao.getName());
         assertEquals(userDto.getSurname(), userDao.getSurname());
         assertEquals(userDto.getDateOfBirth(), userDao.getDateOfBirth());

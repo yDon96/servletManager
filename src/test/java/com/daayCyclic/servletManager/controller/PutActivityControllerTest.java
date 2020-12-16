@@ -58,7 +58,7 @@ public class PutActivityControllerTest {
     void shouldPutActivity() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(activityDao.getId(),maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(activityDao.getId(),maintainer.getUserId(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -67,7 +67,7 @@ public class PutActivityControllerTest {
     void shouldRespondNotFoundIdActivityNotPresent() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(85,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(85,maintainer.getUserId(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -76,7 +76,7 @@ public class PutActivityControllerTest {
     void shouldRespondNotFoundWithIdActivityNull() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(null,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(null,maintainer.getUserId(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
