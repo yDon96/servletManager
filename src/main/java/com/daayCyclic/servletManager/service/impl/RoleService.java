@@ -1,6 +1,5 @@
 package com.daayCyclic.servletManager.service.impl;
 
-
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
@@ -22,10 +21,22 @@ public class RoleService implements IRoleService {
     private IRoleRepository repository;
 
     @Override
+    public void generateRole(RoleDao role) {
+        log.debug("[RoleService] Generating role");
+        RoleDao newRole = this.validate(role);
+        val roleDao = this.repository.findByName(newRole.getName());
+        if(roleDao.isPresent()){
+            log.error("[RoleService] Trying to create a role that already exist with name: " + role.getName());
+            throw new DuplicateGenerationException();
+        }
+        repository.save(newRole);
+    }
+
+    @Override
     public RoleDao getRole(String roleName) {
         log.debug("[RoleService] Get role with name: " + roleName);
         val roleDao = repository.findByName(roleName);
-        return roleDao.orElseThrow(() -> new NotFoundException("Not Found."));
+        return roleDao.orElseThrow(() -> new NotFoundException("The given role is not present into the database."));
     }
 
     @Override
@@ -34,19 +45,21 @@ public class RoleService implements IRoleService {
         return repository.findAll();
     }
 
-    @Override
-    public void generateRole(RoleDao role) {
-        log.debug("[RoleService] Generating role");
-        if(role.getName() == null || role.getName() == ""){
-            log.error("[RoleService] String void");
-            throw new NotValidTypeException("String void");
-        }
-        val roleDao = repository.findByName(role.getName());
-        if(roleDao.isPresent()){
-            log.error("[RoleService] Trying to create a role that already exist with name: " + role.getName());
-            throw new DuplicateGenerationException();
-        }
-        repository.save(role);
+    private void checkIntegrity(RoleDao role) {
+        if (role == null) { throw new NotValidTypeException("The given role is null"); }
+        if (role.getName() == null || role.getName().equals("")) { throw new NotValidTypeException("The given role is empty"); }
+    }
+
+    /**
+     * Check data integrity of a given role and return it if is everything ok
+     *
+     * @param role the role to check
+     * @return the given role if everything is ok
+     */
+    private RoleDao validate(RoleDao role) {
+        this.checkIntegrity(role);
+        // For future developments
+        return role;
     }
 
 }
