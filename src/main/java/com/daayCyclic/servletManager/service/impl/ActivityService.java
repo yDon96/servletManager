@@ -50,7 +50,6 @@ public class ActivityService implements IActivityService {
      * @throws NotValidTypeException if the given activity is null
      * @throws NotFoundException if the given activity is not present into the database
      */
-    //TODO: decidere se tenere questo o fare l'update con la generate
     @Override
     public void updateActivity(ActivityDao activityDao) {
         log.info("[SERVICE: Activity] Starting update of the given activity: " + activityDao);
@@ -136,13 +135,13 @@ public class ActivityService implements IActivityService {
             log.info("[SERVICE: Activity] " + message);
             throw new NotValidTypeException(message);
         }
-        if (!(userRepository.existsById(userDao.getUser_id()))) { //If the user is not into the DB
+        if (!(userRepository.existsById(userDao.getUserId()))) { //If the user is not into the DB
             String message = "The given user is not present into the database";
             log.info("[SERVICE: Activity] " + message);
             throw new NotFoundException(message);
         }
         activityDao.setMaintainer(userDao);
-        this.updateActivity(activityDao); //this.generateActivity(activityDao); //se cambiamo
+        this.updateActivity(activityDao);
         log.info("[SERVICE: Activity] Assignation of the maintainer completed successfully");
     }
 
@@ -172,7 +171,7 @@ public class ActivityService implements IActivityService {
             throw new NotFoundException(message);
         }
         activityDao.setProcedure(procedureDao);
-        this.updateActivity(activityDao); //this.generateActivity(activityDao); //se cambiamo
+        this.updateActivity(activityDao);
         log.info("[SERVICE: Activity] Assignation of the procedure completed successfully");
     }
 
