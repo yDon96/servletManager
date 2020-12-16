@@ -74,6 +74,14 @@ public class ProcedureController {
         log.info("[REST] assign competency finish");
     }
 
+    @PutMapping(path = "/procedure/{procedureId}/assign-competencies")
+    public void assignMultipleCompetencyToProcedure(@PathVariable("procedureId") Integer procedureId,@RequestParam List<String> competencies) {
+        log.info("[REST] Starting assign multiple competency: " + competencies + " to procedure: " + procedureId);
+        competencies.forEach(competency -> {
+            assignCompetencyToProcedure(procedureId,competency);
+        });
+    }
+
     @PutMapping (path = "/procedure/{procedureId}/assign-competency")
     public void assignCompetencyToProcedure(@PathVariable("procedureId") Integer procedureId, @RequestParam String competency) {
         log.info("[REST] Start assign competency to procedure");
