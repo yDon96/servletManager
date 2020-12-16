@@ -150,11 +150,9 @@ public class ActivityMapperDtoToDaoTest {
     }
 
     @Test()
-    void shouldThrowExceptionConvertToDaoADtoIfIdIsNegative() {
+    void shouldConvertToDaoADtoIfIdIsNegative() {
         setActivityDto(-1, userDao.getUser_id(), procedureDao.getId(), 5, true, 50, "ddd");
-        assertThrows(NotValidTypeException.class, () -> {
-            iDtoToDaoMapper.convertToDao(activityDto);
-        });
+        assertDoesNotThrow(() -> iDtoToDaoMapper.convertToDao(activityDto));
     }
 
     @Test()

@@ -1,9 +1,6 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
-import com.daayCyclic.servletManager.dao.ObjectDao;
-import com.daayCyclic.servletManager.dao.ProcedureDao;
-import com.daayCyclic.servletManager.dao.RoleDao;
-import com.daayCyclic.servletManager.dao.UserDao;
+import com.daayCyclic.servletManager.dao.*;
 import com.daayCyclic.servletManager.dto.ObjectDto;
 import com.daayCyclic.servletManager.dto.UserDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
@@ -16,6 +13,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +34,21 @@ class UserDaoToDtoMapperTest {
     @Test
     void convertToDtoGoodObject() {
         UserDao userDao = createDaoUser(1, "Giacomo", "Nanni");
+        assertDoesNotThrow(() -> {
+            UserDto userDto = (UserDto) mapper.convertToDto(userDao);
+            checkDtoDaoEquality(userDto, userDao);
+        });
+    }
+
+    @Test
+    void shouldConvertToDtoWithCompetency() {
+        UserDao userDao = createDaoUser(1, "Giacomo", "Nanni");
+        userDao.setCompetencies(new LinkedHashSet<>());
+        CompetencyDao competencyDao = new CompetencyDao();
+        competencyDao.setName("competency");
+        competencyDao.setUsers(new LinkedHashSet<>());
+        competencyDao.getUsers().add(userDao);
+        userDao.getCompetencies().add(competencyDao);
         assertDoesNotThrow(() -> {
             UserDto userDto = (UserDto) mapper.convertToDto(userDao);
             checkDtoDaoEquality(userDto, userDao);
