@@ -1,0 +1,341 @@
+FORMAT: 1A
+
+# Servlet Menagment
+
+Api for app Servlet Menagment
+
+# Group Role
+Group of all API call for Role Info.
+
+## Create Role [/role]
+Endpoint to create a role.
+
+### Create a Role [POST]
+
++ Request (application/json)
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when the Required field "name" is missing, or if it already exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Retrive Competencies [/roles]
+Call to get all role value.
+
+### Retrieve a list Roles [GET]
+
+Request JSON list Role
+
++ Response 200 (application/json)
+
+   + Body
+
+    [
+      "firstRole",
+      "secondRole",
+      "thirdRole"
+    ]
+
+# Group Competencies
+Group of all API call for Competency Info.
+
+## Create Competency [/competency]
+Endpoint to create a Competency.
+
++ Parameters
+    + competency: "Custom competency" (string, required) - Competency value.
+
+### Create a Competency [POST]
+
++ Request (application/json)
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when "competency" is null or empty string, or if it already exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+
+## Retrive Competencies [/competencies]
+Call to get all competencies value.
+
+### Retrieve a list competencies [GET]
+
+Request JSON list Role
+
++ Response 200 (application/json)
+
+   + Body
+
+    [
+      "firstCompetency",
+      "secondCompetency",
+      "thirdCompetency"
+    ]
+
+
+# Group Procedure
+
+## Create Procedure [/procedure]
+Call to create a Procedure.
+
+### Create a Procedure [POST]
+
++ Request Create a Procedure (application/json)
+  + Body
+  {
+    "title":"myTitle2",
+    "description":"myDescription2",
+    "competencies":[]
+  }
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when "id" value is not valid, all field are null or if the procedure already exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Retrive Procedure [/procedure/{id}]
+Call to retrive a Procedure already created.
+
++ Parameters
+    + id: `1001` (number, required) - Id of a Procedure.
+
+### Retrive a Procedure [GET]
+
+Request Procedure
+
++ Response 200 (application/json)
+    + Body
+    {
+      "id":2,
+      "title":"myTitle2",
+      "description":"myDescription2",
+      "competencies":[]
+    }
+
++ Response 400 (application/json)
+
+    This response is returned when procedure not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Retrive Procedures [/procedures]
+Call to retrive a all procedure already created.
+
+### Retrive a Procedures [GET]
+
+Request list Procedure
+
++ Response 200 (application/json)
+    + Body
+    [
+      {
+        "id":2,
+        "title":"myTitle2",
+        "description":"myDescription2",
+        "competencies":[]
+      },
+      {
+        "id":3,
+        "title":"myTitle3",
+        "description":"myDescription3",
+        "competencies":[]
+      }
+    ]
+
+## Modify Procedure [/procedure/{procedureId}?description={description}]
+Call to modify the field of an already created procedure.
+
++ Parameters
+    + procedureId: `1001` (number, required) - Id of a Procedure.
+    + description: "Custom Descritpion" (string, required) - New Descritpion to the related procedure.
+
+### Modify Procedure's Descritpion [PUT]
+
+Request Procedure
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when procedure not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Assign Competency [/procedure/{procedureId}/assign-competency?competency={competency}]
+Call to assign a competency to an already created procedure.
+
++ Parameters
+    + procedureId: `1001` (number, required) - Id of a Procedure.
+    + competency: "Custom competency" (string, required) - Competency to assign.
+
+### Assign Competency to Procedure [PUT]
+
+Assign Competency Procedure
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when procedure or competency not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+# Group User
+
+## Create User [/user]
+Endpoint  to Create (or Update if already present) into the server the user passed.
+
+### Create a User [POST]
+
++ Request Create a User (application/json)
+  + Body
+  {
+    "title":"myTitle2",
+    "description":"myDescription2",
+    "competencies":[]
+  }
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when "id" value is not valid, all field are null or if the procedure already exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+
+## Retrive User [/user/{userId}]
+Endpoint to get from the server the user
+
++ Parameters
+    + id: `1001` (number, required) - Id of a user.
+
+### Retrive a User [GET]
+
++ Response 200 (application/json)
+    + Body
+    {
+        "user_id": 1,
+        "name": "Mario",
+        "surname": "Rossi",
+        "dateOfBirth": "1996-11-16",
+        "role": "thirdRole",
+        "competencies": []
+    }
+
++ Response 400 (application/json)
+
+    This response is returned when procedure not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Retrive All Users [/users?roles={roles}]
+Get users from the server according to their roles, if no role is given, get all users (if some of the roles in the list does not exist, will be skipped).
+
++ Parameters
+    + roles: `["firstRole","SecondRole"]` (List<string>, optional) - list of roles.
+### Retrive All Users [GET]
+
++ Response 200 (application/json)
+    + Body
+    [
+      {
+          "user_id": 1,
+          "name": "Mario",
+          "surname": "Rossi",
+          "dateOfBirth": "1996-11-16",
+          "role": "SecondRole",
+          "competencies": []
+      },
+      {
+          "user_id": 2,
+          "name": "Paolo",
+          "surname": "Rossi",
+          "dateOfBirth": "1996-11-17",
+          "role": "firstRole",
+          "competencies": []
+      }
+
+    ]
+
++ Response 400 (application/json)
+
+    This response is returned when role not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Create User [/user/{id}/assign-role?role={role}]
+Call to assign a role to an already created user.
+
++ Parameters
+    + userId: `1001` (number, required) - Id of a user.
+    + role: "firstRole" (string, required) - Role to assign.
+
+### Create a User [PUT]
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when user or role not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
+
+## Assign Competency [/user/{userId}/assign-competency?competency={competency}]
+Call to assign a competency to an already created user.
+
++ Parameters
+    + userId: `1001` (number, required) - Id of a user.
+    + competency: "Custom competency" (string, required) - Competency to assign.
+
+### Assign Competency to a user [PUT]
+
++ Response 200
+
++ Response 400 (application/json)
+
+    This response is returned when user or competency not exist.
+
+    + Body
+    {
+      "message" : "Invalid request"
+    }
