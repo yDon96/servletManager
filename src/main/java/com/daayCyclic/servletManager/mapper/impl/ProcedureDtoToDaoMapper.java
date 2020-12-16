@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
+import com.daayCyclic.servletManager.converter.CompetencyConverter;
 import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dto.ObjectDto;
@@ -21,7 +22,9 @@ import java.util.Set;
 public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
 
     @Autowired
-    ICompetencyService iCompetencyService;
+    private ICompetencyService iCompetencyService;
+
+    private final CompetencyConverter competencyConverter = new CompetencyConverter();
 
     @Override
     public ProcedureDao convertToDao(ObjectDto objectDto) throws NotValidTypeException {
@@ -39,7 +42,7 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
         return new ProcedureDao(procedureDto.getId(),
                 procedureDto.getTitle(),
                 procedureDto.getDescription(),
-                this.convertCompetencyDtoToDao(procedureDto));
+                (Set<CompetencyDao>) this.competencyConverter.createFromDtos(procedureDto.getCompetencies()));
 
     }
 
@@ -64,16 +67,4 @@ public class ProcedureDtoToDaoMapper implements IDtoToDaoMapper {
         }
     }
 
-    private Set<CompetencyDao> convertCompetencyDtoToDao(ProcedureDto procedureDto){
-        Set<CompetencyDao> competencyDaoSet = new LinkedHashSet<>();
-        for (String name : procedureDto.getCompetencies()){
-            try {
-                competencyDaoSet.add(iCompetencyService.getCompetency(name));
-            } catch (NotFoundException e){
-                log.error("[MapperProcedureDtoToDao] element null. (procedureDto.getCompetencies() -> " + iCompetencyService.getCompetency(name) + ")");
-                throw new NotFoundException("element null. (procedureDto.getCompetencies() -> " + iCompetencyService.getCompetency(name) + ")");
-            }
-        }
-        return competencyDaoSet;
-    }
 }

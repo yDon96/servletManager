@@ -1,6 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
-import com.daayCyclic.servletManager.dao.CompetencyDao;
+import com.daayCyclic.servletManager.converter.CompetencyConverter;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,9 @@ import java.util.List;
 public class CompetencyController {
 
     @Autowired
-    ICompetencyService competencyService;
+    private ICompetencyService competencyService;
+
+    private final CompetencyConverter converter = new CompetencyConverter();
 
     /**
      * Put a new competency into the server.
@@ -27,7 +29,7 @@ public class CompetencyController {
     @PostMapping(path = "/competency")
     public void postCompetency(@RequestParam String competency) {
         log.info("[REST] Start posting competency: " + competency);
-        this.competencyService.generateCompetency(competency);
+        this.competencyService.generateCompetency(this.converter.convertFromDto(competency));
         log.info("[REST] Posting competency completed successfully");
     }
 
@@ -39,16 +41,12 @@ public class CompetencyController {
     @GetMapping(path = "/competencies")
     public List<String> getCompetencies() {
         log.info("[REST] Start retrieving all the competencies from the server");
-        ArrayList<CompetencyDao> retrievedCompetencies = (ArrayList<CompetencyDao>) this.competencyService.getCompetencies();
-        ArrayList<String> newList = new ArrayList<>();
-        for (CompetencyDao competencyDao : retrievedCompetencies) {
-            newList.add(competencyDao.getName());
-        }
+        ArrayList<String> retrievedCompetencies = new ArrayList<>(this.converter.createFromEntities(this.competencyService.getCompetencies()));
         log.info("[REST] Competencies retrieved successfully");
-        return newList;
+        return retrievedCompetencies;
     }
 
-    @GetMapping(path = "/competencies/count") //TODO: Change path?
+    @GetMapping(path = "/competencies/count")
     public int countUserOwnedCompetenciesRequiredFromProcedure(@RequestParam Integer userId, @RequestParam Integer procedureId) {
         log.info("[REST] Starting request to count required competencies of procedure " + procedureId + " owned by user " + userId);
         int result = this.competencyService.countUserOwnedCompetenciesRequiredFromProcedure(userId, procedureId);

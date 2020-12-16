@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
+import com.daayCyclic.servletManager.converter.CompetencyConverter;
 import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ObjectDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
@@ -19,6 +20,7 @@ import java.util.Set;
 @Component(value = "ProcedureMapper")
 public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
 
+    private final CompetencyConverter competencyConverter = new CompetencyConverter();
 
     @Override
     public ProcedureDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
@@ -42,11 +44,11 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
         return new ProcedureDto(procedureDao.getId(),
                 procedureDao.getTitle(),
                 procedureDao.getDescription(),
-                this.convertCompetencyToDto(procedureDao));
+                (Set<String>) this.competencyConverter.createFromEntities(procedureDao.getCompetencies()));
     }
 
     @Override
-    @SuppressWarnings( "unchecked" )
+    @SuppressWarnings("unchecked")
     public List<ProcedureDto> convertDaoListToDtoList(List<? extends ObjectDao> daoProcedures) throws NotValidTypeException {
         log.debug("[ProcedureToDtoMapper] Convert list of procedureDao to list of dto object");
         if (daoProcedures == null){
@@ -61,12 +63,4 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
         return  procedureDtoList;
     }
 
-    private Set<String> convertCompetencyToDto(ProcedureDao procedureDao){
-
-        Set<String> nameCompetency = new LinkedHashSet<>();
-        for (CompetencyDao name : procedureDao.getCompetencies()){
-            nameCompetency.add(name.getName());
-        }
-        return nameCompetency;
-    }
 }

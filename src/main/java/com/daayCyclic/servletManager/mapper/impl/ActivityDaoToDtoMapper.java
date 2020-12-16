@@ -34,7 +34,7 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
                 log.error("[Activity MapperToDto] The user is not a maintainer");
                 throw new NotValidTypeException("The user is not a maintainer");
             }
-            userId = userDao.getUser_id();
+            userId = userDao.getUserId();
         }
 
         ProcedureDao procedureDao = activityDao.getProcedure();
