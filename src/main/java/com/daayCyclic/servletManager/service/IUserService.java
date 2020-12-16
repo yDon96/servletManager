@@ -9,6 +9,7 @@ import java.util.List;
 public interface IUserService {
 
     void generateUser(UserDao user);
+    void updateUser(UserDao user);
     UserDao getUser(int id);
     List<UserDao> getUsers(List<RoleDao> rolesList);
     void assignRoleToUser(UserDao user, RoleDao role);

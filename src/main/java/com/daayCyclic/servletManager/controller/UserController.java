@@ -39,7 +39,7 @@ public class UserController {
     private IDtoToDaoMapper userDtoToDaoMapper;
 
     /**
-     * Insert (or Update if already present) into the server the {@literal UserDto} passed.
+     * Insert into the server the {@literal UserDto} passed.
      *
      * @param user the {@literal UserDto} to insert
      */
@@ -47,9 +47,23 @@ public class UserController {
     public void postUser(@RequestBody UserDto user) {
         log.info("[REST] Starting a postUser request");
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
-        log.info("[REST] Start insert/update of a new user into the database: " + user);
+        log.info("[REST] Start insert of a new user into the database: " + user);
         userService.generateUser(userDao);
-        log.info("[REST] Insert/update completed successfully");
+        log.info("[REST] Insert completed successfully");
+    }
+
+    /**
+     * Update into the server the {@literal UserDto} passed.
+     *
+     * @param user the {@literal UserDto} to update
+     */
+    @PutMapping(path = "/user")
+    public void putUser(@RequestBody UserDto user) {
+        log.info("[REST] Starting a putUser request");
+        UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
+        log.info("[REST] Start update of a user into the database: " + user);
+        userService.updateUser(userDao);
+        log.info("[REST] Update completed successfully");
     }
 
     /**

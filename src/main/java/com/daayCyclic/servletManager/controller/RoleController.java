@@ -26,7 +26,7 @@ public class RoleController {
     @PostMapping(path = "/role")
     public void postRole(@RequestParam String role) throws NotValidTypeException {
         /**
-         * Insert (or Update if already present) into the server the role.
+         * Insert into the server the role.
          */
         log.info("[REST] Starting post of role: " + role);
         iRoleService.generateRole(converter.convertFromDto(role));

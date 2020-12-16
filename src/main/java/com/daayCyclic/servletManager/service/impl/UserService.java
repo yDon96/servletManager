@@ -33,7 +33,7 @@ public class UserService implements IUserService{
      * Save the given user into the database. If a user with the same ID of the one passed is already present, updates it.
      *
      * @param user the user to save/update
-     * @throws org.springframework.dao.DataIntegrityViolationException if some of parameters of the given user doesn't respect database constraints
+     * @throws NotValidTypeException if some of parameters of the given user doesn't respect database constraints
      */
     @Override
     public void generateUser(UserDao user) {
@@ -46,6 +46,7 @@ public class UserService implements IUserService{
         log.info("[SERVICE: User] Saving completed successfully");
     }
 
+    @Override
     public void updateUser(UserDao user) {
         log.info("[SERVICE: User] Starting update of the given user: " + user + " into the database");
         UserDao validatedUser = this.validate(user);
@@ -101,7 +102,7 @@ public class UserService implements IUserService{
     @Override
     public void assignRoleToUser(UserDao user, RoleDao role) {
         user.setRole(role);
-        this.updateUser(user);
+        this.updateUser(this.validate(user));
     }
 
     /**
@@ -114,12 +115,13 @@ public class UserService implements IUserService{
     @Override
     public void assignCompetencyToUser(CompetencyDao competency, UserDao user) {
         log.info("[SERVICE: User] Starting to assign " + competency + " to user: " + user);
-        if (user == null || competency == null) {
-            String message = "Competency and user can't be null";
+        UserDao validatedUser = this.validate(user);
+        if (competency == null) {
+            String message = "Competency can't be null";
             log.info("[SERVICE: User] " + message);
             throw new NotValidTypeException(message);
         }
-        if (!(user.isMaintainer())) {
+        if (!(validatedUser.isMaintainer())) {
             String message = "The given user is not a maintainer";
             log.info("[SERVICE: User] " + message);
             throw new NotValidTypeException(message);
@@ -128,15 +130,15 @@ public class UserService implements IUserService{
         if (competency.getUsers() == null) {
             competency.setUsers(new HashSet<>());
         }
-        competency.getUsers().add(user);
+        competency.getUsers().add(validatedUser);
 
-        if (user.getCompetencies() == null) {
-            user.setCompetencies(new HashSet<>());
+        if (validatedUser.getCompetencies() == null) {
+            validatedUser.setCompetencies(new HashSet<>());
         }
-        user.getCompetencies().add(competency);
+        validatedUser.getCompetencies().add(competency);
 
         // Update user and competency into the db
-        this.updateUser(user);
+        this.updateUser(this.validate(validatedUser));
         this.competencyService.updateCompetency(competency);
         log.info("[SERVICE: User] Assign of competency to user completed successfully");
     }
