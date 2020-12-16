@@ -2,7 +2,6 @@ package com.daayCyclic.servletManager.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.util.Objects;

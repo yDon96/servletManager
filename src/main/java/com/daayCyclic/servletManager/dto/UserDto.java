@@ -6,23 +6,23 @@ import java.util.Set;
 
 public class UserDto implements ObjectDto {
 
-    private final Integer user_id;
+    private final Integer userId;
     private String name;
     private String surname;
     private LocalDate dateOfBirth;
     private String role;
     private Set<String> competencies;
 
-    public UserDto(Integer user_id, String name, String surname, LocalDate dateOfBirth, String role) {
-        this.user_id = user_id;
+    public UserDto(Integer userId, String name, String surname, LocalDate dateOfBirth, String role) {
+        this.userId = userId;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
         this.role = role;
     }
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
     public String getName() {
@@ -70,7 +70,7 @@ public class UserDto implements ObjectDto {
         if (this == o) return true;
         if (!(o instanceof UserDto)) return false;
         UserDto userDto = (UserDto) o;
-        return Objects.equals(user_id, userDto.user_id) &&
+        return Objects.equals(userId, userDto.userId) &&
                 Objects.equals(name, userDto.name) &&
                 Objects.equals(surname, userDto.surname) &&
                 Objects.equals(dateOfBirth, userDto.dateOfBirth) &&
@@ -80,13 +80,13 @@ public class UserDto implements ObjectDto {
 
     @Override
     public int hashCode() {
-        return Objects.hash(user_id, name, surname, dateOfBirth, role, competencies);
+        return Objects.hash(userId, name, surname, dateOfBirth, role, competencies);
     }
 
     @Override
     public String toString() {
         return "UserDto{" +
-                "user_id=" + user_id +
+                "user_id=" + userId +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
