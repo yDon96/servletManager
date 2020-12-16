@@ -29,21 +29,21 @@ public class CompetencyService implements ICompetencyService {
      * @throws DuplicateGenerationException if the Competency is already present
      */
     @Override
-    public void generateCompetency(String competency) {
+    public void generateCompetency(CompetencyDao competency) {
         log.info("[SERVICE: Competency] Start inserting into the database the competency: " + competency);
-        if (competency == null || competency.equalsIgnoreCase("")) {
+        if (competency == null || competency.getName() == null || competency.getName().equals("")) {
             String message = "The given competency is null or empty";
             log.info("[SERVICE: Competency] " + message);
             throw new NotValidTypeException(message);
         }
-        competency = competency.toUpperCase();  // Make every string inserted into the DB upper case (to avoid inconsistency)
-        if (this.competencyExist(competency)) {
+        String competencyString = competency.getName().toUpperCase(); // Make every string inserted into the DB upper case (to avoid inconsistency)
+        if (this.competencyExist(competencyString)) {
             String message = "The given competency already exist into the database";
             log.info("[SERVICE: Competency] " + message);
             throw new DuplicateGenerationException(message);
         }
-        CompetencyDao newCompetency = new CompetencyDao(0, competency);
-        repository.save(newCompetency);
+        competency.setName(competencyString);
+        repository.save(competency);
         log.info("[SERVICE: Competency] Insert of the new competency completed successfully");
     }
 
