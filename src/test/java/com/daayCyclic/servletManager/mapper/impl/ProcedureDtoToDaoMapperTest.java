@@ -60,30 +60,6 @@ class ProcedureDtoToDaoMapperTest {
         });
     }
 
-    @Test
-    void shouldThrowExceptionConvertToDaoIfIdTitleNull() {
-        setProcedureDto(2,null,"myDescription");
-        assertThrows(NotValidTypeException.class, () -> {
-            iDtoToDaoMapper.convertToDao(procedureDto);
-        });
-    }
-
-    @Test()
-    void shouldThrowExceptionConvertToDaoADtoWithEmptyField() {
-        setProcedureDto(null,null,null);
-        assertThrows(NotValidTypeException.class, () -> {
-            iDtoToDaoMapper.convertToDao(procedureDto);
-        });
-    }
-
-    @Test()
-    void shouldThrowExceptionConvertToDaoADtoIfIdIsNegative() {
-        setProcedureDto(-222,null,null);
-        assertThrows(NotValidTypeException.class, () -> {
-            iDtoToDaoMapper.convertToDao(procedureDto);
-        });
-    }
-
     private void setProcedureDto(Integer id,String title,String description) {
         procedureDto.setId(id);
         procedureDto.setTitle(title);

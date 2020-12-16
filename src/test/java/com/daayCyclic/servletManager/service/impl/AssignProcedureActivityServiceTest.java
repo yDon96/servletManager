@@ -45,6 +45,8 @@ public class AssignProcedureActivityServiceTest {
         assertThrows(NotFoundException.class, () -> {
             ActivityDao activity = new ActivityDao();
             activity.setId(100);
+            activity.setEstimatedTime(15);
+            activity.setWeek(1);
             activityService.assignProcedure(procedureService.getProcedure(6), activity);
         });
     }
@@ -85,7 +87,7 @@ public class AssignProcedureActivityServiceTest {
                     "description" + i,
                     10 + i,
                     true,
-                    i * 2,
+                    i,
                     null,
                     null);
             activityService.generateActivity(newActivity);

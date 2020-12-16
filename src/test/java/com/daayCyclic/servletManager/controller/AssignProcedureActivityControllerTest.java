@@ -78,7 +78,7 @@ public class AssignProcedureActivityControllerTest {
                     "description" + i,
                     10 + i,
                     true,
-                    i * 2,
+                    i,
                     null,
                     null);
             activityService.generateActivity(newActivity);

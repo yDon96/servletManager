@@ -60,6 +60,7 @@ public class AssignCompetencyToUserServiceTest {
     }
 
     @Test
+    @Transactional
     void assignCompetencyToUserCompetencyNull() {
         assertThrows(NotValidTypeException.class, () -> this.userService.assignCompetencyToUser(null, this.userService.getUser(6)));
     }
@@ -70,6 +71,7 @@ public class AssignCompetencyToUserServiceTest {
     }
 
     @Test
+    @Transactional
     void assignCompetencyToUserUserNotAMaintainer() {
         assertThrows(NotValidTypeException.class, () -> this.userService.assignCompetencyToUser(this.competencyService.getCompetency("competency1"), this.userService.getUser(2)));
     }

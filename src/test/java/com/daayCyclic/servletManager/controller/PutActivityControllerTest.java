@@ -2,10 +2,12 @@ package com.daayCyclic.servletManager.controller;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.IActivityRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
+import com.daayCyclic.servletManager.service.IRoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +44,9 @@ public class PutActivityControllerTest {
 
     @Autowired
     private IUserRepository iUserRepository;
+
+    @Autowired
+    private IRoleService roleService;
 
     private ProcedureDao procedure;
 
@@ -102,7 +107,11 @@ public class PutActivityControllerTest {
 
     @Transactional
     private UserDao createMaintainerDB(){
-        UserDao userDao = new UserDao(78,"n 78", "s 78", LocalDate.of(1999, 11, 11), null);
+        RoleDao newRole = new RoleDao();
+        newRole.setId(1);
+        newRole.setName("Maintainer");
+        this.roleService.generateRole(newRole);
+        UserDao userDao = new UserDao(78,"n 78", "s 78", LocalDate.of(1999, 11, 11), newRole);
         maintainer = iUserRepository.save(userDao);
         return maintainer;
     }

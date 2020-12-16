@@ -2,6 +2,7 @@ package com.daayCyclic.servletManager.service.impl;
 
 import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.exception.NotFoundException;
+import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,12 +36,12 @@ public class GetCompetencyServiceTest {
 
     @Test
     void getCompetencyNull() {
-        assertThrows(NotFoundException.class, () -> this.service.getCompetency(null));
+        assertThrows(NotValidTypeException.class, () -> this.service.getCompetency(null));
     }
 
     @Test
     void getCompetencyEmpty() {
-        assertThrows(NotFoundException.class, () -> this.service.getCompetency(""));
+        assertThrows(NotValidTypeException.class, () -> this.service.getCompetency(""));
     }
 
     @Test

@@ -54,6 +54,8 @@ public class AssignMaintainerActivityServiceTest {
         assertThrows(NotFoundException.class, () -> {
             ActivityDao activity = new ActivityDao();
             activity.setId(100);
+            activity.setEstimatedTime(12);
+            activity.setWeek(25);
             activityService.assignMaintainer(userService.getUser(2), activity);
         });
     }
@@ -97,7 +99,7 @@ public class AssignMaintainerActivityServiceTest {
                     "description" + i,
                     10 + i,
                     true,
-                    i * 2,
+                    i,
                     null,
                     null);
             activityService.generateActivity(newActivity);
