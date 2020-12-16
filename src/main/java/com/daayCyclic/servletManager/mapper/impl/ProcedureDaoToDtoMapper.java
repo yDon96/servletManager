@@ -1,7 +1,6 @@
 package com.daayCyclic.servletManager.mapper.impl;
 
 import com.daayCyclic.servletManager.converter.CompetencyConverter;
-import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.ObjectDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.dto.ProcedureDto;

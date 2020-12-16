@@ -50,15 +50,4 @@ public class ProcedureDto implements ObjectDto {
         return Objects.hash(id, title, description, competencies);
     }
 
-    public boolean isAllNull() {
-        return id == null && title == null && description == null && competencies == null;
-    }
-
-    public boolean containsAllRequiredValue() {
-        return title != null;
-    }
-
-    public boolean isIdValid() {
-        return id == null || id >= 0;
-    }
 }

@@ -34,7 +34,6 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
         val activityDto = (ActivityDto) objectDto;
         ProcedureDao procedure = null;
         UserDao maintainer = null;
-        checkConsistentActivityDto(activityDto);
 
         if (activityDto.getMaintainerId() != null){
             maintainer = iUserService.getUser(activityDto.getMaintainerId());
@@ -54,33 +53,4 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
                 maintainer);
     }
 
-    private void checkConsistentActivityDto(ActivityDto activityDto){
-        if (activityDto.getEstimatedTime() == null || activityDto.getEstimatedTime() < 0){
-            log.error("[ActivityToDtoMapper] EstimatedTime is not valid value.");
-            throw new NotValidTypeException("EstimatedTime is not valid value.");
-        }
-
-        if (activityDto.getWeek() == null || activityDto.getWeek() < 0){
-            log.error("[ActivityToDtoMapper] week is not valid value.");
-            throw new NotValidTypeException("week is not valid value.");
-        }
-
-        if (activityDto.getMaintainerId() != null && activityDto.getMaintainerId() < 0){
-            log.error("[ActivityToDtoMapper] MaintainerId negative.");
-            throw new NotValidTypeException("MaintainerId negative.");
-        }
-
-        if (activityDto.getProcedureId() != null && activityDto.getProcedureId() < 0){
-            log.error("[ActivityToDtoMapper] ProcedureId negative.");
-            throw new NotValidTypeException("ProcedureId negative.");
-        }
-
-        if (activityDto.getMaintainerId() != null){
-            UserDao user = iUserService.getUser(activityDto.getMaintainerId());
-            if (user.getRole() != null && !user.isMaintainer()){
-                log.error("[Activity MapperToDao] the role is not correct");
-                throw new NotValidTypeException("the role is not correct.");
-            }
-        }
-    }
 }

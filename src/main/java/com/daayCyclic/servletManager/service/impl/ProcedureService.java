@@ -5,7 +5,6 @@ import com.daayCyclic.servletManager.dao.ProcedureDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
-import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import com.daayCyclic.servletManager.service.IProcedureService;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -23,9 +23,6 @@ public class ProcedureService implements IProcedureService {
 
     @Autowired
     private IProcedureRepository iProcedureRepository;
-
-    @Autowired
-    private ICompetencyRepository iCompetencyRepository;
 
     @Autowired
     private ICompetencyService iCompetencyService;
@@ -37,7 +34,19 @@ public class ProcedureService implements IProcedureService {
             log.error("[ProcedureService] Trying to create a procedure that already exist with id: " + procedureDao.getId().toString());
             throw new DuplicateGenerationException();
         }
-        iProcedureRepository.save(procedureDao);
+        iProcedureRepository.save(this.validate(procedureDao));
+    }
+
+    public void updateProcedure(ProcedureDao procedureDao){
+        log.info("[SERVICE: Procedure] Starting update of the given procedure: " + procedureDao);
+        ProcedureDao validatedProcedure = this.validate(procedureDao);
+        if (!(procedureExist(validatedProcedure.getId()))){
+            String message = "The given procedure is not present into the database";
+            log.info("[SERVICE: Procedure] " + message);
+            throw new NotFoundException(message);
+        }
+        iProcedureRepository.save(validatedProcedure);
+        log.info("[SERVICE: Procedure] Update of the procedure completed successfully");
     }
 
     @Override
@@ -53,55 +62,31 @@ public class ProcedureService implements IProcedureService {
         return iProcedureRepository.findAll();
     }
 
-    public void updateProcedure(ProcedureDao procedureDao){
-        log.info("[SERVICE: Procedure] Starting update of the given procedure: " + procedureDao);
-        if (procedureDao == null) {
-            String message = "The given procedure is null";
-            log.info("[SERVICE: Procedure] " + message);
-            throw new NotValidTypeException(message);
-        }
-        if (!(procedureExist(procedureDao.getId()))){
-            String message = "The given procedure is not present into the database";
-            log.info("[SERVICE: Procedure] " + message);
-            throw new NotFoundException(message);
-        }
-        iProcedureRepository.save(procedureDao);
-        log.info("[SERVICE: Procedure] Update of the procedure completed successfully");
-    }
-
     @Override
     public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) throws NullPointerException {
         /**
          * Assign the given competency to the given procedure
          */
-        log.info("[SERVICE procedure] start assign competency to procedure");
-        if (procedure == null) {
-            log.error("[SERVICE procedure] procedure is null");
-            throw new NotValidTypeException("procedure is null");
-        }
-
+        log.info("[SERVICE procedure] Starting assign of competency " + competency + " to procedure " + procedure);
+        ProcedureDao validatedProcedure = this.validate(procedure);
         if (competency == null) {
-            log.error("[SERVICE procedure] competency is null");
+            log.error("[SERVICE procedure] Competency can't be null");
             throw new NotValidTypeException("competency is null");
         }
 
-        if (!(iCompetencyRepository.existsById(competency.getCompetencyId()))){
-            log.error("[SERVICE procedure] competency is no present into Database");
-            throw new NotFoundException("competency is no present into Database");
-        }
         if (competency.getProcedures() == null){
             competency.setProcedures(new LinkedHashSet<>());
         }
-        competency.getProcedures().add(procedure);
+        competency.getProcedures().add(validatedProcedure);
 
-        if (procedure.getCompetencies() == null){
-            procedure.setCompetencies(new LinkedHashSet<>());
+        if (validatedProcedure.getCompetencies() == null){
+            validatedProcedure.setCompetencies(new LinkedHashSet<>());
         }
-        procedure.getCompetencies().add(competency);
+        validatedProcedure.getCompetencies().add(competency);
 
-        this.updateProcedure(procedure);
+        this.updateProcedure(this.validate(validatedProcedure));
         this.iCompetencyService.updateCompetency(competency);
-        log.info("[SERVICE procedure] assignment successfully");
+        log.info("[SERVICE procedure] Assigning procedure completed successfully");
     }
 
     protected boolean procedureExist(Integer procedureId){
@@ -111,4 +96,24 @@ public class ProcedureService implements IProcedureService {
         val optionalProcedure = iProcedureRepository.findById(procedureId);
         return optionalProcedure.isPresent();
     }
+
+    private void checkIntegrity(ProcedureDao procedure) {
+        if (procedure == null) { throw new NotValidTypeException("The ProcedureDao can't be null"); }
+        if (procedure.getTitle() == null || procedure.getTitle().equals("")) { throw new NotValidTypeException("The ProcedureDao title can't be null or empty"); }
+    }
+
+    private ProcedureDao validate(ProcedureDao procedure) {
+        this.checkIntegrity(procedure);
+        Set<CompetencyDao> savedCompetencies = procedure.getCompetencies();
+        if (savedCompetencies != null) {
+            Set<CompetencyDao> checkedCompetencies = new LinkedHashSet<>();
+            for (CompetencyDao competency : savedCompetencies) {
+                if (competency.getName() != null)
+                    checkedCompetencies.add(this.iCompetencyService.getCompetency(competency.getName()));
+            }
+            procedure.setCompetencies(checkedCompetencies);
+        }
+        return procedure;
+    }
+
 }

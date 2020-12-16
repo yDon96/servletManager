@@ -50,12 +50,6 @@ public class RoleService implements IRoleService {
         if (role.getName() == null || role.getName().equals("")) { throw new NotValidTypeException("The given role is empty"); }
     }
 
-    /**
-     * Check data integrity of a given role and return it if is everything ok
-     *
-     * @param role the role to check
-     * @return the given role if everything is ok
-     */
     private RoleDao validate(RoleDao role) {
         this.checkIntegrity(role);
         // For future developments
