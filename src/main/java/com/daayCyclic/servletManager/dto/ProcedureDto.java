@@ -1,6 +1,6 @@
 package com.daayCyclic.servletManager.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +12,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ProcedureDto implements ObjectDto {
 
     private Integer id;
@@ -50,6 +49,7 @@ public class ProcedureDto implements ObjectDto {
         return Objects.hash(id, title, description, competencies);
     }
 
+    @JsonIgnore
     public boolean isAllNull() {
         return id == null && title == null && description == null && competencies == null;
     }
@@ -58,6 +58,7 @@ public class ProcedureDto implements ObjectDto {
         return title != null;
     }
 
+    @JsonIgnore
     public boolean isIdValid() {
         return id == null || id >= 0;
     }

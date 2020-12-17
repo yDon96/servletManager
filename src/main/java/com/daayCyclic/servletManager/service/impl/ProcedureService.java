@@ -53,6 +53,14 @@ public class ProcedureService implements IProcedureService {
         return iProcedureRepository.findAll();
     }
 
+    @Override
+    public void editProcedure(Integer procedureId,String description) {
+        log.debug("[ProcedureService] Edit procedure with id: " + procedureId);
+        val procedureDao = getProcedure(procedureId);
+        procedureDao.setDescription(description);
+        iProcedureRepository.save(procedureDao);
+    }
+
     public void updateProcedure(ProcedureDao procedureDao){
         log.info("[SERVICE: Procedure] Starting update of the given procedure: " + procedureDao);
         if (procedureDao == null) {

@@ -111,6 +111,15 @@ public class UserController {
         }
     }
 
+    @PutMapping(path = "/user/{userId}/assign-competencies")
+    public void assignMultipleCompetencyToUser(@PathVariable("userId") Integer userId,@RequestParam List<String> competencies) {
+        log.info("[REST] Starting assign competency: " + competencies + " to user: " + userId);
+        competencies.forEach(competency -> {
+            assignCompetencyToUser(userId,competency);
+        });
+        log.info("[REST] Competency assigned successfully");
+    }
+
     @PutMapping(path = "/user/{userId}/assign-competency")
     public void assignCompetencyToUser(@PathVariable("userId") Integer userId,@RequestParam String competency) {
         log.info("[REST] Starting assign competency: " + competency + " to user: " + userId);
