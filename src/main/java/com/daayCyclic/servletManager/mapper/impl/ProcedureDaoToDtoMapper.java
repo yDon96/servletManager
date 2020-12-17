@@ -52,7 +52,6 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
                 (Set<String>) this.competencyConverter.createFromEntities(procedureDao.getCompetencies()));
     }
 
-    //TODO : lista vuota lancia eccezione. (controllare se ci sono test inerenti)
     /**
      * Convert a list of {@literal ProcedureDao} to a list of {@literal ProcedureDto}.
      * (empty or null list will be converted in the equivalent empty or null list).
@@ -66,17 +65,15 @@ public class ProcedureDaoToDtoMapper implements IDaoToDtoMapper {
     @SuppressWarnings("unchecked")
     public List<ProcedureDto> convertDaoListToDtoList(List<? extends ObjectDao> daoProcedures) throws NotValidTypeException {
         log.debug("[ProcedureToDtoMapper] Convert list of procedureDao to list of dto object.");
-        if (daoProcedures == null){
-            log.error("[ProcedureToDtoMapper] List type is not a ProcedureDao.");
-            throw new NotValidTypeException();
-        }
-
-        var procedureDtoList = new ArrayList<ProcedureDto>();
-        for (ProcedureDao value : (List<ProcedureDao>) daoProcedures) {
-            procedureDtoList.add(this.convertToDto(value));
+        List<ProcedureDto> procedureDtoList = null;
+        if (daoProcedures != null) {
+            procedureDtoList = new ArrayList<>();
+            for (ProcedureDao value : (List<ProcedureDao>) daoProcedures) {
+                procedureDtoList.add(this.convertToDto(value));
+            }
         }
         log.info("[ProcedureToDtoMapper] List conversion successfully.");
-        return  procedureDtoList;
+        return procedureDtoList;
     }
 
 }

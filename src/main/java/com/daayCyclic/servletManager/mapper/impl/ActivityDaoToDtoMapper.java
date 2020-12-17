@@ -68,25 +68,23 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
                 activityDao.getEstimatedTime(),
                 activityDao.getDescription());
     }
-    //TODO : lista vuota lancia eccezione. (controllare se ci sono test inerenti)
+
     /**
      * converts a activity list of {@literal ActivityDao} to Dto.
      *
      * @param daoActivities activity list {@literal ActivityDao}.
      * @return a {@literal List} of {@literal ActivityDto}.
-     * @throws NotValidTypeException if activity list is null.
      */
     @Override
     @SuppressWarnings("unchecked")
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoActivities) throws NotValidTypeException {
         log.info("[ActivityMapperToDto] Initialization to convert activity list to Dto.");
-        if(daoActivities == null){
-            log.error("[ActivityMapperToDto] Not valid type. (convertToDtoList)");
-            throw new NotValidTypeException("Not valid type. (convertToDtoList)");
-        }
-        var activityDtoList = new ArrayList<ActivityDto>();
-        for (ActivityDao activityDao :(List<ActivityDao>) daoActivities){
-            activityDtoList.add(this.convertToDto(activityDao));
+        List<ActivityDto> activityDtoList = null;
+        if(daoActivities != null){
+            activityDtoList = new ArrayList<>();
+            for (ActivityDao activityDao :(List<ActivityDao>) daoActivities){
+                activityDtoList.add(this.convertToDto(activityDao));
+            }
         }
         log.info("[ActivityMapperToDto] List conversion successfully.");
         return activityDtoList;
