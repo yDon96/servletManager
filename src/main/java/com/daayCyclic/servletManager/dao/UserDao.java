@@ -12,6 +12,13 @@ import java.util.Set;
 @Entity(name = "users")
 public class UserDao implements ObjectDao {
 
+    //TODO: TECHNICAL DEBT - The implementation of a maintainer like a normal user is formally right,
+    // but technically incorrect. This because we should relay on a "if" on a String to know if a User is either
+    // a Maintainer or not. A possible correct way to do this, is extend the UserDao/Dto class for example, and
+    // check, in the methods that need it, if a User is a Maintainer with an "instanceof". This will probably
+    // change also the Architecture of the other component (for example, another Mapper should be implemented
+    // along with another specific Service, maybe implemented with a Chain of Responsibility to avoid too much changing)
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
