@@ -30,25 +30,31 @@ public class ActivityService implements IActivityService {
     @Autowired
     private IUserService userService;
 
+    /**
+     * Create a new activity into the database.
+     *
+     * @param activityDao the {@literal ActivityDao} to save into the database.
+     * @return the id of the activity saved in the database.
+     * @throws DuplicateGenerationException  if a activity already exists is generated.
+     */
     @Override
     public Integer generateActivity(ActivityDao activityDao) {
         log.info("[SERVICE: Activity] Starting generate activity into the database: " + activityDao);
         ActivityDao validatedActivity = this.validate(activityDao);
         if (activityExist(validatedActivity.getId())){
             log.info("[ActivityService] Id Activity exist");
-            throw new DuplicateGenerationException("Id Activity exist");
+            throw new DuplicateGenerationException("Id Activity exist.");
         }
         ActivityDao savedActivity = iActivityRepository.save(validatedActivity);
-        log.info("[SERVICE: Activity] Generate activity completed successfully");
+        log.info("[SERVICE: Activity] Generate activity completed successfully.");
         return savedActivity.getId();
     }
 
     /**
      * Update an existing activity if it exist.
      *
-     * @param activityDao the {@literal ActivityDao} to update
-     * @throws NotValidTypeException if the given activity is null
-     * @throws NotFoundException if the given activity is not present into the database
+     * @param activityDao the {@literal ActivityDao} to update.
+     * @throws NotFoundException if the given activity is not present into the database.
      */
     @Override
     public void updateActivity(ActivityDao activityDao) {
@@ -60,30 +66,43 @@ public class ActivityService implements IActivityService {
             throw new NotFoundException(message);
         }
         iActivityRepository.save(validatedActivity);
-        log.info("[SERVICE: Activity] Update of the activity completed successfully");
+        log.info("[SERVICE: Activity] Update of the activity completed successfully.");
     }
 
+    /**
+     * Retrieve a {@literal ActivityDao} from the database, correspondent to the given {@literal Integer}.
+     *
+     * @param activityId a {@literal Integer} representing the id of the activity.
+     * @return a {@literal ActivityDao} representing the found activity.
+     * @throws NotValidTypeException if the id is negative.
+     * @throws NotFoundException if the activity is not present.
+     */
     @Override
     public ActivityDao getActivity(Integer activityId) {
         log.info("[SERVICE: Activity] Starting get activity with ID: " + activityId);
         if (activityId == null) {
-            throw new NotValidTypeException("activityId must not be null");
+            throw new NotValidTypeException("activityId must not be null.");
         }
         val activityDao = iActivityRepository.findById(activityId);
         return activityDao.orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * Retrieve from the database all the {@literal ActivityDao}.
+     *
+     * @return a {@literal List} of {@literal ActivityDao} containing all the activities in the database.
+     */
     @Override
     public List<ActivityDao> getActivities() {
-        log.info("[SERVICE: Activity] Starting getting all the activities");
+        log.info("[SERVICE: Activity] Starting getting all the activities.");
         return iActivityRepository.findAll();
     }
 
     /**
      * Returns a list of activities based on the requested week.
      *
-     * @param week the {@literal week} filter the list
-     * @throws NotValidTypeException if the week value is negative or null
+     * @param week the {@literal week} filter the list.
+     * @throws NotValidTypeException if the week value is negative or null.
      */
     @Override
     public List<ActivityDao> getActivitiesByWeek(Integer week){
@@ -97,11 +116,11 @@ public class ActivityService implements IActivityService {
     /**
      * Find all activities related to a specific user in a specific week and day.
      *
-     * @param userId a {@literal Integer} value containing a user ID
-     * @param week a {@literal Integer} value containing a week
-     * @param day a {@literal Integer} value containing a day of a week
-     * @return a {@literal List} of {@literal ActivityDao} containing the correspondent activities
-     * @throws NotValidTypeException if one or more of the parameters is null
+     * @param userId a {@literal Integer} value containing a user ID.
+     * @param week a {@literal Integer} value containing a week.
+     * @param day a {@literal Integer} value containing a day of a week.
+     * @return a {@literal List} of {@literal ActivityDao} containing the correspondent activities.
+     * @throws NotValidTypeException if one or more of the parameters is null.
      */
     @Override
     public List<ActivityDao> getUserActivitiesByWeekAndDay(Integer userId, Integer week, Integer day) {
@@ -117,9 +136,9 @@ public class ActivityService implements IActivityService {
     /**
      * Assign the given user to the given activity (if they aren't null and the given user is a Maintainer).
      *
-     * @param userDao the {@literal UserDao} to assign
-     * @param activityDao the {@literal ActivityDao} to assign the user to
-     * @throws NotValidTypeException if the given user is either null or not a maintainer, or if the given activity is null
+     * @param userDao the {@literal UserDao} to assign.
+     * @param activityDao the {@literal ActivityDao} to assign the user to.
+     * @throws NotValidTypeException if the given user is either null or not a maintainer, or if the given activity is null.
      */
     @Override
     public void assignMaintainer(UserDao userDao, ActivityDao activityDao) {
@@ -132,15 +151,15 @@ public class ActivityService implements IActivityService {
         }
         validatedActivity.setMaintainer(userDao);
         this.updateActivity(validatedActivity);
-        log.info("[SERVICE: Activity] Assignation of the maintainer completed successfully");
+        log.info("[SERVICE: Activity] Assignation of the maintainer completed successfully.");
     }
 
     /**
-     * Assign the given procedure to the given activity (if they aren't null)
+     * Assign the given procedure to the given activity (if they aren't null).
      *
-     * @param procedureDao the {@literal ProcedureDao} to assign
-     * @param activityDao the {@literal ActivityDao} to assign the procedure to
-     * @throws NotValidTypeException if either the given procedure or activity is null
+     * @param procedureDao the {@literal ProcedureDao} to assign.
+     * @param activityDao the {@literal ActivityDao} to assign the procedure to.
+     * @throws NotValidTypeException if either the given procedure or activity is null.
      */
     @Override
     public void assignProcedure(ProcedureDao procedureDao, ActivityDao activityDao) {
@@ -153,7 +172,7 @@ public class ActivityService implements IActivityService {
         }
         validatedActivity.setProcedure(procedureDao);
         this.updateActivity(validatedActivity);
-        log.info("[SERVICE: Activity] Assignation of the procedure completed successfully");
+        log.info("[SERVICE: Activity] Assignation of the procedure completed successfully.");
     }
 
     protected boolean activityExist(Integer activityId){

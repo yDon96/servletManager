@@ -27,9 +27,15 @@ public class ProcedureService implements IProcedureService {
     @Autowired
     private ICompetencyService iCompetencyService;
 
+    /**
+     * Create a new procedure into the database.
+     *
+     * @param procedureDao the {@literal ProcedureDao} to save into the database.
+     * @throws DuplicateGenerationException if a procedure already exists is generated.
+     */
     @Override
     public void generateProcedure(ProcedureDao procedureDao) throws DuplicateGenerationException {
-        log.debug("[ProcedureService] Generating procedure");
+        log.debug("[ProcedureService] Generating procedure.");
         if (procedureExist(procedureDao.getId())){
             log.error("[ProcedureService] Trying to create a procedure that already exist with id: " + procedureDao.getId().toString());
             throw new DuplicateGenerationException();
@@ -37,6 +43,12 @@ public class ProcedureService implements IProcedureService {
         iProcedureRepository.save(this.validate(procedureDao));
     }
 
+    /**
+     * Update an existing procedure if it exist.
+     *
+     * @param procedureDao the {@literal ProcedureDao} to update.
+     * @throws NotFoundException if the given procedure is not present into the database.
+     */
     public void updateProcedure(ProcedureDao procedureDao){
         log.info("[SERVICE: Procedure] Starting update of the given procedure: " + procedureDao);
         ProcedureDao validatedProcedure = this.validate(procedureDao);
@@ -46,9 +58,16 @@ public class ProcedureService implements IProcedureService {
             throw new NotFoundException(message);
         }
         iProcedureRepository.save(validatedProcedure);
-        log.info("[SERVICE: Procedure] Update of the procedure completed successfully");
+        log.info("[SERVICE: Procedure] Update of the procedure completed successfully.");
     }
 
+    /**
+     * Retrieve a {@literal ProcedureDao} from the database, correspondent to the given {@literal Integer}.
+     *
+     * @param procedureId a {@literal Integer} representing the id of the procedure.
+     * @return a {@literal ProcedureDao} representing the found procedure.
+     * @throws NotFoundException if the procedure is not present.
+     */
     @Override
     public ProcedureDao getProcedure(Integer procedureId) {
         log.debug("[ProcedureService] Get procedure with id: " + procedureId.toString());
@@ -56,17 +75,27 @@ public class ProcedureService implements IProcedureService {
         return procedureDao.orElseThrow(NotFoundException::new);
     }
 
+    /**
+     * Retrieve from the database all the {@literal ProcedureDao}.
+     *
+     * @return a {@literal List} of {@literal ProcedureDao} containing all the procedures in the database.
+     */
     @Override
     public List<ProcedureDao> getProcedures() {
-        log.debug("[ProcedureService] Get all procedures");
+        log.debug("[ProcedureService] Get all procedures.");
         return iProcedureRepository.findAll();
     }
 
+    /**
+     * Assign the given competency to the given procedure.
+     *
+     * @param competency {@literal CompetencyDao} to assign.
+     * @param procedure {@literal ProcedureDao} receives the assigned competence.
+     * @throws NullPointerException if one or more fields is null.
+     * @throws NotValidTypeException if competency {@literal CompetencyDao} is null.
+     */
     @Override
     public void assignCompetencyToProcedure(CompetencyDao competency, ProcedureDao procedure) throws NullPointerException {
-        /**
-         * Assign the given competency to the given procedure
-         */
         log.info("[SERVICE procedure] Starting assign of competency " + competency + " to procedure " + procedure);
         ProcedureDao validatedProcedure = this.validate(procedure);
         if (competency == null) {
@@ -86,7 +115,7 @@ public class ProcedureService implements IProcedureService {
 
         this.updateProcedure(this.validate(validatedProcedure));
         this.iCompetencyService.updateCompetency(competency);
-        log.info("[SERVICE procedure] Assigning procedure completed successfully");
+        log.info("[SERVICE procedure] Assigning procedure completed successfully.");
     }
 
     protected boolean procedureExist(Integer procedureId){
@@ -98,8 +127,8 @@ public class ProcedureService implements IProcedureService {
     }
 
     private void checkIntegrity(ProcedureDao procedure) {
-        if (procedure == null) { throw new NotValidTypeException("The ProcedureDao can't be null"); }
-        if (procedure.getTitle() == null || procedure.getTitle().equals("")) { throw new NotValidTypeException("The ProcedureDao title can't be null or empty"); }
+        if (procedure == null) { throw new NotValidTypeException("The ProcedureDao can't be null."); }
+        if (procedure.getTitle() == null || procedure.getTitle().equals("")) { throw new NotValidTypeException("The ProcedureDao title can't be null or empty."); }
     }
 
     private ProcedureDao validate(ProcedureDao procedure) {

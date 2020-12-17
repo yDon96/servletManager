@@ -24,10 +24,18 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
     @Autowired
     private IUserService iUserService;
 
+    /**
+     * Convert a {@literal ActivityDto} to a {@literal ActivityDao}.
+     *
+     * @param objectDto the {@literal ObjectDto} object to convert.
+     * @return a {@literal ObjectDao} that is a conversion of the given object.
+     * @throws NotValidTypeException if the object is not a {@literal ActivityDto}.
+     */
     @Override
     public ActivityDao convertToDao(ObjectDto objectDto) throws NotValidTypeException {
-
+        log.info("[ActivityMapperToDao] Initialization conversion to Dao.");
         if (!(objectDto instanceof ActivityDto)){
+            log.error("[ActivityMapperToDao] Not valid type.");
             throw new NotValidTypeException("Not valid type. (ActivityToDaoMapper)");
         }
 
@@ -41,7 +49,7 @@ public class ActivityDtoToDaoMapper implements IDtoToDaoMapper {
         if (activityDto.getProcedureId() != null){
             procedure = iProcedureService.getProcedure(activityDto.getProcedureId());
         }
-
+        log.info("[ActivityMapperToDao] Conversion successfully.");
         return new ActivityDao(activityDto.getId(),
                 activityDto.getDescription(),
                 activityDto.getEstimatedTime(),

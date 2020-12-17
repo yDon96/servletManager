@@ -23,17 +23,17 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
     private final CompetencyConverter competenciesConverter = new CompetencyConverter();
 
     /**
-     * Convert a {@literal UserDao} to a {@literal UserDto}
+     * Convert a {@literal UserDao} to a {@literal UserDto}.
      *
-     * @param objectDao the {@literal ObjectDao} object to convert
-     * @return a {@literal ObjectDto} that is a conversion of the given object
-     * @throws NotValidTypeException if the given {@literal ObjectDao} is not a {@literal UserDao}
+     * @param objectDao the {@literal ObjectDao} object to convert.
+     * @return a {@literal ObjectDto} that is a conversion of the given object.
+     * @throws NotValidTypeException if the given {@literal ObjectDao} is not a {@literal UserDao}.
      */
     @Override
     public ObjectDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
-        log.info("[MAPPER: UserDaoToDto] Start conversion from UserDao to UserDto");
+        log.info("[MAPPER: UserDaoToDto] Start conversion from UserDao to UserDto.");
         if (!(objectDao instanceof UserDao)) {
-            log.info("[MAPPER: UserDaoToDto] The given object is not an instance of UserDao");
+            log.info("[MAPPER: UserDaoToDto] The given object is not an instance of UserDao.");
             throw new NotValidTypeException("The given object is not an UserDao instance.");
         }
         UserDao userDao = (UserDao) objectDao;
@@ -43,21 +43,21 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
                                 userDao.getDateOfBirth(),
                                 roleConverter.convertFromEntity(userDao.getRole()));
         userDto.setCompetencies((Set<String>) competenciesConverter.createFromEntities(userDao.getCompetencies()));
-        log.info("[MAPPER: UserDaoToDto] " + userDao + " successfully converted to UserDto");
+        log.info("[MAPPER: UserDaoToDto] " + userDao + " successfully converted to UserDto.");
         return userDto;
     }
 
     /**
-     * Convert a list of {@literal UserDao} to a list of {@literal UserDto}
-     * (empty or null list will be converted in the equivalent empty or null list)
+     * Convert a list of {@literal UserDao} to a list of {@literal UserDto}.
+     * (empty or null list will be converted in the equivalent empty or null list).
      *
-     * @param daoObjects a list of {@literal ObjectDao} to convert
-     * @return a list of {@literal ObjectDto} that are conversions of the given ones
-     * @throws NotValidTypeException if one of the given {@literal ObjectDao} in the list is not a {@literal UserDao}
+     * @param daoObjects a list of {@literal ObjectDao} to convert.
+     * @return a list of {@literal ObjectDto} that are conversions of the given ones.
+     * @throws NotValidTypeException if one of the given {@literal ObjectDao} in the list is not a {@literal UserDao}.
      */
     @Override
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoObjects) throws NotValidTypeException {
-        log.info("[MAPPER: UserDaoToDto] Start batch UserDao to UserDto conversion");
+        log.info("[MAPPER: UserDaoToDto] Start batch UserDao to UserDto conversion.");
         ArrayList<UserDto> userList = null;
         if (daoObjects != null) {
             userList = new ArrayList<>();
@@ -66,7 +66,7 @@ public class UserDaoToDtoMapper implements IDaoToDtoMapper {
                 userList.add(convertedUser);
             }
         }
-        log.info("[MAPPER: UserDaoToDto] Batch conversion completed successfully");
+        log.info("[MAPPER: UserDaoToDto] Batch conversion completed successfully.");
         return userList;
     }
 

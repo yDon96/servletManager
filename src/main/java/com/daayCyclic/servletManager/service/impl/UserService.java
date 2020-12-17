@@ -46,6 +46,12 @@ public class UserService implements IUserService{
         log.info("[SERVICE: User] Saving completed successfully");
     }
 
+    /**
+     * Update an existing user if it exist.
+     *
+     * @param user the {@literal UserDao} to update.
+     * @throws NotFoundException if the given user is not present into the database.
+     */
     @Override
     public void updateUser(UserDao user) {
         log.info("[SERVICE: User] Starting update of the given user: " + user + " into the database");
@@ -79,15 +85,16 @@ public class UserService implements IUserService{
     /**
      * Find a list of user of the given roles (all users if the list is empty).
      *
-     * @param rolesList a list containing the roles of the user needed
-     * @return a {@literal List<UserDao>} containing all users if {@literal rolesList} is empty, or users of that list otherwise
+     * @param rolesList a list containing the roles of the user needed.
+     * @return a {@literal List<UserDao>} containing all users if {@literal rolesList} is empty,
+     * or users of that list otherwise.
      */
     @Override
     public List<UserDao> getUsers(List<RoleDao> rolesList) {
-        log.info("[SERVICE: User] Starting a getUsers with the given roles");
+        log.info("[SERVICE: User] Starting a getUsers with the given roles.");
         ArrayList<UserDao> list = new ArrayList<>();
         if (rolesList == null || rolesList.isEmpty()) {
-            log.info("[SERVICE: User] No role specified, retrieve all users");
+            log.info("[SERVICE: User] No role specified, retrieve all users.");
             list.addAll(repository.findAll());
         } else {
             log.info("[SERVICE: User] Roles to find: " + rolesList);
@@ -95,10 +102,16 @@ public class UserService implements IUserService{
                 list.addAll(repository.findByRole(role));
             }
         }
-        log.info("[SERVICE: User] getUsers completed successfully");
+        log.info("[SERVICE: User] getUsers completed successfully.");
         return list;
     }
 
+    /**
+     * Assign a role to a user.
+     *
+     * @param user the {@literal UserDao} to assign the role to.
+     * @param role a {@literal RoleDao} to assign.
+     */
     @Override
     public void assignRoleToUser(UserDao user, RoleDao role) {
         user.setRole(role);
@@ -108,9 +121,9 @@ public class UserService implements IUserService{
     /**
      * Assign a competency to a maintainer.
      *
-     * @param competency a {@literal CompetencyDao} to assign
-     * @param user a {@literal UserDao} to assign
-     * @throws NotValidTypeException if competency or user are null, or the user is not a maintainer
+     * @param competency a {@literal CompetencyDao} to assign.
+     * @param user a {@literal UserDao} to assign.
+     * @throws NotValidTypeException if competency or user are null, or the user is not a maintainer.
      */
     @Override
     public void assignCompetencyToUser(CompetencyDao competency, UserDao user) {
@@ -140,7 +153,7 @@ public class UserService implements IUserService{
         // Update user and competency into the db
         this.updateUser(this.validate(validatedUser));
         this.competencyService.updateCompetency(competency);
-        log.info("[SERVICE: User] Assign of competency to user completed successfully");
+        log.info("[SERVICE: User] Assign of competency to user completed successfully.");
     }
 
     public boolean isPresent(UserDao user) {
@@ -151,10 +164,10 @@ public class UserService implements IUserService{
     }
 
     private void checkIntegrity(UserDao user) {
-        if (user == null) { throw new NotValidTypeException("The UserDao can't be null"); }
-        if (user.getName() == null || user.getName().equals("")) { throw new NotValidTypeException("The UserDao name can't be null or empty"); }
-        if (user.getSurname() == null || user.getSurname().equals("")) { throw new NotValidTypeException("The UserDao surname can't be null or empty"); }
-        if (user.getDateOfBirth() == null) { throw new NotValidTypeException("The UserDao date of birth can't be null"); }
+        if (user == null) { throw new NotValidTypeException("The UserDao can't be null."); }
+        if (user.getName() == null || user.getName().equals("")) { throw new NotValidTypeException("The UserDao name can't be null or empty."); }
+        if (user.getSurname() == null || user.getSurname().equals("")) { throw new NotValidTypeException("The UserDao surname can't be null or empty."); }
+        if (user.getDateOfBirth() == null) { throw new NotValidTypeException("The UserDao date of birth can't be null."); }
     }
 
     private UserDao validate(UserDao user) {

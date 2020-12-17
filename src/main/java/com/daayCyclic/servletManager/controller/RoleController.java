@@ -23,25 +23,30 @@ public class RoleController {
 
     private final RoleConverter converter = new RoleConverter();
 
+    /**
+     * Put a new role into the server.
+     *
+     * @param role the {@literal String} representing the new role to post.
+     */
     @PostMapping(path = "/role")
     public void postRole(@RequestParam String role) throws NotValidTypeException {
-        /**
-         * Insert into the server the role.
-         */
         log.info("[REST] Starting post of role: " + role);
         iRoleService.generateRole(converter.convertFromDto(role));
-        log.debug("[REST] Posting role completed successfully");
+        log.debug("[REST] Posting role completed successfully.");
     }
 
+    /**
+     * Retrieve from the server all the roles.
+     *
+     * @return a {@literal List} of {@literal ActivityDto} containing all the activities in the server.
+     * @throws NotValidTypeException if the role ID or name is null
+     */
     @GetMapping(path = "/roles")
     public List<String> getRoles() throws NotValidTypeException {
-        /**
-         * get all the roles that are in the database.
-         */
-        log.info("[REST] Starting retrieving all roles from server");
+        log.info("[REST] Starting retrieving all roles from server.");
         val rolesDao = iRoleService.getRoles();
         List<String> roles = new ArrayList<>(converter.createFromEntities(rolesDao));
-        log.debug("[REST] Roles retrieved successfully");
+        log.debug("[REST] Roles retrieved successfully.");
         return roles;
     }
 

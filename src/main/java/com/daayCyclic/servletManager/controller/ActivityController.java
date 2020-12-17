@@ -39,6 +39,11 @@ public class ActivityController {
     @Qualifier("ActivityToDaoMapper")
     private IDtoToDaoMapper iDtoToDaoMapper;
 
+    /**
+     * Put a new activity into the server.
+     *
+     * @param activityDto the {@literal ActivityDto} representing the Activity to post.
+     */
     @PostMapping(path = "/activity")
     public void postActivity(@RequestBody ActivityDto activityDto) throws NotValidTypeException {
         log.info("[REST] Post Activity");
@@ -47,6 +52,11 @@ public class ActivityController {
         log.debug("[REST] End Post activity");
     }
 
+    /**
+     * Update into the server the {@literal ActivityDto} passed.
+     *
+     * @param activityDto the {@literal ActivityDto} to update.
+     */
     @PutMapping(path = "/activity")
     public void putActivity(@RequestBody ActivityDto activityDto){
         log.info("[REST] Put Activity");
@@ -55,6 +65,12 @@ public class ActivityController {
         log.debug("[REST] End Put activity");
     }
 
+    /**
+     * Retrieve into the server the activity passed through {@literal Integer} ID.
+     *
+     * @param activityId the {@literal Integer} to retrieve.
+     * @throws NotValidTypeException if {@literal Integer} is negative.
+     */
     @GetMapping(path = "/activity/{activityId}")
     public ActivityDto getActivity(@PathVariable("activityId") Integer activityId) throws NotValidTypeException {
         log.info("[REST] Get Activity");
@@ -65,36 +81,49 @@ public class ActivityController {
         }
 
         val activityDao = iActivityService.getActivity(activityId);
-        log.debug("[REST] End Get activity");
+        log.debug("[REST] End Get activity.");
         return (ActivityDto) iDaoToDtoMapper.convertToDto(activityDao);
     }
 
+    /**
+     * Retrieve from the server all the activities.
+     *
+     * @return a {@literal List} of {@literal ActivityDto} containing all the activities in the server.
+     * @throws NotValidTypeException if one or more of the parameters is null.
+     */
     @GetMapping(path = "/activities")
     @SuppressWarnings("unchecked")
     public List<ActivityDto> getActivities() throws NotValidTypeException {
         log.info("[REST] Get Activities");
         val activityDao = iActivityService.getActivities();
-        log.debug("[REST] End Get activities");
+        log.debug("[REST] End Get activities.");
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
     }
 
+    /**
+     * Find all the activities related to the specific week.
+     *
+     * @param week the {@literal Integer} specific.
+     * @return a {@literal List} of {@literal ActivityDto} containing all the activities related to the specific week.
+     * @throws NotValidTypeException if one or more of the parameters is null.
+     */
     @GetMapping(path = "/activities/week/{week}")
     @SuppressWarnings("unchecked")
     public List<ActivityDto> getActivitiesByWeek(@PathVariable("week") Integer week) throws NotValidTypeException {
         log.info("[REST] Get a list of activities for given week");
         val activityDao = iActivityService.getActivitiesByWeek(week);
-        log.debug("[REST] Activities retrieved successfully");
+        log.debug("[REST] Activities retrieved successfully.");
         return (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(activityDao);
     }
 
     /**
      * Find all activities related to a specific user in a specific week and day.
      *
-     * @param userId a {@literal Integer} value containing a user ID
-     * @param week a {@literal Integer} value containing a week
-     * @param day a {@literal Integer} value containing a day of a week
-     * @return a {@literal List} of {@literal ActivityDto} containing the correspondent activities
-     * @throws NotValidTypeException if one or more of the parameters is null
+     * @param userId a {@literal Integer} value containing a user ID.
+     * @param week a {@literal Integer} value containing a week.
+     * @param day a {@literal Integer} value containing a day of a week.
+     * @return a {@literal List} of {@literal ActivityDto} containing the correspondent activities.
+     * @throws NotValidTypeException if one or more of the parameters is null.
      */
     @GetMapping(path = "/activities/week/{week}/day/{day}")
     @SuppressWarnings("unchecked")
@@ -102,15 +131,15 @@ public class ActivityController {
         log.info("[REST] Starting get activities of user " + userId + " during week " + week + ", day " + day);
         List<ActivityDao> retrievedActivities = this.iActivityService.getUserActivitiesByWeekAndDay(userId, week, day);
         List<ActivityDto> convertedList = (List<ActivityDto>) iDaoToDtoMapper.convertDaoListToDtoList(retrievedActivities);
-        log.info("[REST] Activities retrieved successfully");
+        log.info("[REST] Activities retrieved successfully.");
         return convertedList;
     }
 
     /**
-     * Assign the procedure corresponding to the given procedureID to the activity corresponding to the given activityID
+     * Assign the procedure corresponding to the given procedureID to the activity corresponding to the given activityID.
      *
-     * @param procedureID a {@literal int} ID which identifies a procedure
-     * @param activityID a {@literal int} ID which identifies an activity
+     * @param procedureID a {@literal int} ID which identifies a procedure.
+     * @param activityID a {@literal int} ID which identifies an activity.
      */
     @PutMapping(path = "/activity/{activityId}/assign-procedure")
     public void assignProcedure(@RequestParam int procedureID, @PathVariable("activityId") int activityID){
@@ -118,14 +147,14 @@ public class ActivityController {
         ActivityDao activity = iActivityService.getActivity(activityID);
         ProcedureDao procedure = procedureService.getProcedure(procedureID);
         iActivityService.assignProcedure(procedure, activity);
-        log.info("[REST] Procedure assigned successfully to the activity");
+        log.info("[REST] Procedure assigned successfully to the activity.");
     }
 
     /**
-     * Assign the maintainer corresponding to the given userID to the activity corresponding to the given activityID
+     * Assign the maintainer corresponding to the given userID to the activity corresponding to the given activityID.
      *
-     * @param userID a {@literal int} ID which identifies a user
-     * @param activityID a {@literal int} ID which identifies an activity
+     * @param userID a {@literal int} ID which identifies a user.
+     * @param activityID a {@literal int} ID which identifies an activity.
      */
     @PutMapping(path = "/activity/{activityId}/assign-maintainer")
     public void assignMaintainer(@RequestParam int userID,@PathVariable("activityId") int activityID){
@@ -133,7 +162,7 @@ public class ActivityController {
         ActivityDao activity = iActivityService.getActivity(activityID);
         UserDao user = userService.getUser(userID);
         iActivityService.assignMaintainer(user, activity);
-        log.info("[REST] Maintainer assigned successfully to the activity");
+        log.info("[REST] Maintainer assigned successfully to the activity.");
     }
 
 }

@@ -24,9 +24,9 @@ public class CompetencyService implements ICompetencyService {
     /**
      * Create a new competency into the database.
      *
-     * @param competency the {@literal CompetencyDao} to save into the database
-     * @throws NotValidTypeException if the {@literal CompetencyDao} is not valid (null or empty)
-     * @throws DuplicateGenerationException if the Competency is already present
+     * @param competency the {@literal CompetencyDao} to save into the database.
+     * @throws NotValidTypeException if the {@literal CompetencyDao} is not valid (null or empty).
+     * @throws DuplicateGenerationException if the Competency is already present.
      */
     @Override
     public void generateCompetency(CompetencyDao competency) {
@@ -38,15 +38,15 @@ public class CompetencyService implements ICompetencyService {
             throw new DuplicateGenerationException(message);
         }
         repository.save(validatedCompetency);
-        log.info("[SERVICE: Competency] Insert of the new competency completed successfully");
+        log.info("[SERVICE: Competency] Insert of the new competency completed successfully.");
     }
 
     /**
      * Update a competency into the database with a given one.
      *
-     * @param updatedCompetency a {@literal CompetencyDao} containing the new, updated, competency
-     * @throws NotFoundException if the given competency is not present into the database
-     * @throws NotValidTypeException if the {@literal CompetencyDao} is not valid (null or empty)
+     * @param updatedCompetency a {@literal CompetencyDao} containing the new, updated, competency.
+     * @throws NotFoundException if the given competency is not present into the database.
+     * @throws NotValidTypeException if the {@literal CompetencyDao} is not valid (null or empty).
      */
     @Override
     public void updateCompetency(CompetencyDao updatedCompetency) {
@@ -61,8 +61,8 @@ public class CompetencyService implements ICompetencyService {
     /**
      * Retrieve a {@literal CompetencyDao} from the database, correspondent to the given {@literal String}.
      *
-     * @param competency a {@literal String} representing the competency to find
-     * @return a {@literal CompetencyDao} representing the found competency
+     * @param competency a {@literal String} representing the competency to find.
+     * @return a {@literal CompetencyDao} representing the found competency.
      */
     @Override
     public CompetencyDao getCompetency(String competency) {
@@ -76,16 +76,23 @@ public class CompetencyService implements ICompetencyService {
     /**
      * Retrieve from the database all the {@literal CompetencyDao}.
      *
-     * @return a {@literal List} of {@literal CompetencyDao} containing all the competencies in the database
+     * @return a {@literal List} of {@literal CompetencyDao} containing all the competencies in the database.
      */
     @Override
     public List<CompetencyDao> getCompetencies() {
         log.info("[SERVICE: Competency] Start retrieving all the competencies from the database");
         ArrayList<CompetencyDao> retrievedCompetencies = (ArrayList<CompetencyDao>) this.repository.findAll();
-        log.info("[SERVICE: Competency] Competencies retrieved successfully (" + retrievedCompetencies.size() + " elements found)");
+        log.info("[SERVICE: Competency] Competencies retrieved successfully (" + retrievedCompetencies.size() + " elements found).");
         return retrievedCompetencies;
     }
 
+    /**
+     * Counts the number of competencies needed for the procedure with {@literal Integer} procedureId, in the database.
+     *
+     * @param userId a {@literal Integer} ID which identifies a user.
+     * @param procedureId a {@literal Integer} ID which identifies a procedure.
+     * @return a {@literal Integer} which represents the number of competencies required.
+     */
     @Override
     public Integer countUserOwnedCompetenciesRequiredFromProcedure(Integer userId, Integer procedureId) {
         log.info("[SERVICE: Competency] Start counting required competencies of procedure " + procedureId + " owned by user " + userId);
@@ -95,15 +102,15 @@ public class CompetencyService implements ICompetencyService {
             throw new NotValidTypeException(message);
         }
         Integer result = this.repository.countUserOwnedCompetenciesRequiredFromProcedure(userId, procedureId);
-        log.info("[SERVICE: Competency] Count completed successfully");
+        log.info("[SERVICE: Competency] Count completed successfully.");
         return result;
     }
 
     /**
      * If a competency is present returns {@code true}, otherwise {@code false}.
      *
-     * @param competency a {@literal String} representing the competency to find
-     * @return a boolean indicating if the competency exist
+     * @param competency a {@literal String} representing the competency to find.
+     * @return a boolean indicating if the competency exist.
      */
     private boolean competencyExist(String competency) {
         if (competency == null) {
@@ -123,8 +130,8 @@ public class CompetencyService implements ICompetencyService {
     }
 
     private void checkConsistency(CompetencyDao competency) {
-        if (competency == null) {throw new NotValidTypeException("The CompetencyDao can't be null");}
-        if (competency.getName() == null || competency.getName().equals("")) {throw new NotValidTypeException("The CompetencyDao name can't be null or empty");}
+        if (competency == null) {throw new NotValidTypeException("The CompetencyDao can't be null.");}
+        if (competency.getName() == null || competency.getName().equals("")) {throw new NotValidTypeException("The CompetencyDao name can't be null or empty.");}
     }
 
     private CompetencyDao validate(CompetencyDao competency) {
