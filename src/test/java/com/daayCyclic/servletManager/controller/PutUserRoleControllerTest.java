@@ -49,7 +49,7 @@ class PutUserRoleControllerTest {
     @BeforeEach
     private void init() {
         UserDao userDao1 = new UserDao();
-        userDao1.setUser_id(1);
+        userDao1.setUserId(1);
         userDao1.setName("nome");
         userDao1.setSurname("cognome");
         userDao1.setDateOfBirth(LocalDate.of(2000,1,1));

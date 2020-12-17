@@ -2,10 +2,12 @@ package com.daayCyclic.servletManager.controller;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.repository.IActivityRepository;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
+import com.daayCyclic.servletManager.service.IRoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +45,9 @@ public class PutActivityControllerTest {
     @Autowired
     private IUserRepository iUserRepository;
 
+    @Autowired
+    private IRoleService roleService;
+
     private ProcedureDao procedure;
 
     private UserDao maintainer;
@@ -58,7 +63,7 @@ public class PutActivityControllerTest {
     void shouldPutActivity() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(activityDao.getId(),maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(activityDao.getId(),maintainer.getUserId(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
@@ -67,7 +72,7 @@ public class PutActivityControllerTest {
     void shouldRespondNotFoundIdActivityNotPresent() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(85,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(85,maintainer.getUserId(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -76,7 +81,7 @@ public class PutActivityControllerTest {
     void shouldRespondNotFoundWithIdActivityNull() throws Exception {
         this.mockMvc.perform(put("/activity")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(null,maintainer.getUser_id(),procedure.getId(),5,true,50,"d 47")))
+                .content(getContentFormatted(null,maintainer.getUserId(),procedure.getId(),5,true,50,"d 47")))
                 .andDo(print())
                 .andExpect(status().isNotFound());
     }
@@ -102,7 +107,11 @@ public class PutActivityControllerTest {
 
     @Transactional
     private UserDao createMaintainerDB(){
-        UserDao userDao = new UserDao(78,"n 78", "s 78", LocalDate.of(1999, 11, 11), null);
+        RoleDao newRole = new RoleDao();
+        newRole.setId(1);
+        newRole.setName("Maintainer");
+        this.roleService.generateRole(newRole);
+        UserDao userDao = new UserDao(78,"n 78", "s 78", LocalDate.of(1999, 11, 11), newRole);
         maintainer = iUserRepository.save(userDao);
         return maintainer;
     }

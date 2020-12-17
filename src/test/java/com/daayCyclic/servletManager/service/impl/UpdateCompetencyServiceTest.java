@@ -103,7 +103,7 @@ public class UpdateCompetencyServiceTest {
 
     private UserDao createUser(int id, String name, String surname, String role) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.now());
@@ -120,7 +120,7 @@ public class UpdateCompetencyServiceTest {
 
     private void createCompetenciesInDB() {
         for (int i = 1; i < 6; i++) {
-            this.competencyService.generateCompetency("competency" + i);
+            this.competencyService.generateCompetency(new CompetencyDao("competency" + i));
         }
     }
 

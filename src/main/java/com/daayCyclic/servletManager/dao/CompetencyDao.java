@@ -21,6 +21,10 @@ public class CompetencyDao implements ObjectDao{
 
     public CompetencyDao() {}
 
+    public CompetencyDao(String name) {
+        this.name = name;
+    }
+
     public CompetencyDao(Integer competencyId, String name) {
         this.competencyId = competencyId;
         this.name = name;

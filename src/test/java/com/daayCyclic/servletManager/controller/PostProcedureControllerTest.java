@@ -68,16 +68,7 @@ class PostProcedureControllerTest {
     }
 
     @Test
-    void shouldRespondBadRequestPostProcedureWithNegativeId() throws Exception {
-        this.mockMvc.perform(post("/procedure")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(getContentFormatted(-222,"title","description")))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void shouldRespondeBadRequestIfPostProcedureWithWrongBody() throws Exception {
+    void shouldRespondBadRequestIfPostProcedureWithWrongBody() throws Exception {
         this.mockMvc.perform(post("/procedure")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"p_id\":\"1\"}"))

@@ -39,24 +39,38 @@ public class UserController {
     private IDtoToDaoMapper userDtoToDaoMapper;
 
     /**
-     * Insert (or Update if already present) into the server the {@literal UserDto} passed.
+     * Insert into the server the {@literal UserDto} passed.
      *
-     * @param user the {@literal UserDto} to insert
+     * @param user the {@literal UserDto} to insert.
      */
     @PostMapping(path = "/user")
     public void postUser(@RequestBody UserDto user) {
-        log.info("[REST] Starting a postUser request");
+        log.info("[REST] Starting a postUser request.");
         UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
-        log.info("[REST] Start insert/update of a new user into the database: " + user);
+        log.info("[REST] Start insert of a new user into the database: " + user);
         userService.generateUser(userDao);
-        log.info("[REST] Insert/update completed successfully");
+        log.info("[REST] Insert completed successfully.");
     }
 
     /**
-     * Get from the server the user correspondent to {@literal userId}
+     * Update into the server the {@literal UserDto} passed.
      *
-     * @param userId the id into the server of the user
-     * @return a {@literal UserDto} represents the desired user
+     * @param user the {@literal UserDto} to update.
+     */
+    @PutMapping(path = "/user")
+    public void putUser(@RequestBody UserDto user) {
+        log.info("[REST] Starting a putUser request.");
+        UserDao userDao = (UserDao) userDtoToDaoMapper.convertToDao(user);
+        log.info("[REST] Start update of a user into the database: " + user);
+        userService.updateUser(userDao);
+        log.info("[REST] Update completed successfully.");
+    }
+
+    /**
+     * Get from the server the user correspondent to {@literal userId}.
+     *
+     * @param userId the id into the server of the user.
+     * @return a {@literal UserDto} represents the desired user.
      */
     @GetMapping(path = "/user/{userId}")
     public UserDto getUser(@PathVariable("userId") int userId) {
@@ -67,16 +81,16 @@ public class UserController {
     }
 
     /**
-     * Get users from the server according to their roles, if no role is given, get all users
+     * Get users from the server according to their roles, if no role is given, get all users.
      * (if some of the roles in the list does not exist, will be skipped)
      *
-     * @param roles a {@literal List<String>} of the desired roles
-     * @return a {@literal List<UserDto>} containing the desired users
+     * @param roles a {@literal List<String>} of the desired roles.
+     * @return a {@literal List<UserDto>} containing the desired users.
      */
     @GetMapping(path = "/users")
     @SuppressWarnings("unchecked")
     public List<UserDto> getUsers(@RequestParam(required = false) List<String> roles) {
-        log.info("[REST] Starting a getUsers with the given roles");
+        log.info("[REST] Starting a getUsers with the given roles.");
         ArrayList<RoleDao> rolesDao = null;
         if (roles != null) {
             rolesDao = new ArrayList<>();
@@ -85,16 +99,23 @@ public class UserController {
                     RoleDao foundRole = roleService.getRole(role);
                     rolesDao.add(foundRole);
                 } catch (NotFoundException e) {
-                    log.info("[REST] The role '" + role + "' does not exist inside the server, will be skipped");
+                    log.info("[REST] The role '" + role + "' does not exist inside the server, will be skipped.");
                 }
             }
         }
         log.info("[REST] Start a research with the given roles as filter: " + roles);
         List<UserDao> foundUsers = userService.getUsers(rolesDao);
-        log.info("[REST] Found a total of " + foundUsers.size() + " users");
+        log.info("[REST] Found a total of " + foundUsers.size() + " users.");
         return (List<UserDto>) userDaoToDtoMapper.convertDaoListToDtoList(foundUsers);
     }
 
+    /**
+     * Assign the role corresponding to the given {@literal String} role
+     * to the user corresponding to the given id.
+     *
+     * @param id a {@literal Integer} ID which identifies a user.
+     * @param role a {@literal String} which identifies an role.
+     */
     @PutMapping(path = "/user/{id}/assign-role")
     public void assignRoleToUser(@PathVariable("id") Integer id, @RequestParam String role) {
         log.info("[REST] Get role " + role + "to user with id: " + id);
@@ -108,6 +129,7 @@ public class UserController {
             RoleDao roleDao = roleService.getRole(role);
             UserDao userDao = userService.getUser(id);
             userService.assignRoleToUser(userDao, roleDao);
+            log.info("[REST] User role assignment was successful.");
         }
     }
 
@@ -120,13 +142,20 @@ public class UserController {
         log.info("[REST] Competency assigned successfully");
     }
 
+    /**
+     * Assign the competency corresponding to the given {@literal String} competency
+     * to the user corresponding to the given userId.
+     *
+     * @param userId a {@literal Integer} ID which identifies a user.
+     * @param competency a {@literal String} which identifies an competency.
+     */
     @PutMapping(path = "/user/{userId}/assign-competency")
-    public void assignCompetencyToUser(@PathVariable("userId") Integer userId,@RequestParam String competency) {
+    public void assignCompetencyToUser(@PathVariable("userId") Integer userId, @RequestParam String competency) {
         log.info("[REST] Starting assign competency: " + competency + " to user: " + userId);
         UserDao userDao = userService.getUser(userId);
         CompetencyDao competencyDao = competencyService.getCompetency(competency);
         userService.assignCompetencyToUser(competencyDao, userDao);
-        log.info("[REST] Competency assigned successfully");
+        log.info("[REST] Competency assigned successfully.");
     }
 
 }

@@ -1,6 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
-import com.daayCyclic.servletManager.dao.RoleDao;
+import com.daayCyclic.servletManager.converter.RoleConverter;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.service.IRoleService;
 import lombok.extern.slf4j.Slf4j;
@@ -19,32 +19,34 @@ import java.util.List;
 public class RoleController {
 
     @Autowired
-    IRoleService iRoleService;
+    private IRoleService iRoleService;
 
+    private final RoleConverter converter = new RoleConverter();
+
+    /**
+     * Put a new role into the server.
+     *
+     * @param role the {@literal String} representing the new role to post.
+     */
     @PostMapping(path = "/role")
     public void postRole(@RequestParam String role) throws NotValidTypeException {
-        /**
-         * Insert (or Update if already present) into the server the the role.
-         */
-        log.info("[REST] Post Role");
-        RoleDao roleDao = new RoleDao();
-        roleDao.setName(role);
-        iRoleService.generateRole(roleDao);
-        log.debug("[REST] End Post role");
+        log.info("[REST] Starting post of role: " + role);
+        iRoleService.generateRole(converter.convertFromDto(role));
+        log.debug("[REST] Posting role completed successfully.");
     }
 
+    /**
+     * Retrieve from the server all the roles.
+     *
+     * @return a {@literal List} of {@literal ActivityDto} containing all the activities in the server.
+     * @throws NotValidTypeException if the role ID or name is null
+     */
     @GetMapping(path = "/roles")
     public List<String> getRoles() throws NotValidTypeException {
-        /**
-         * get all the roles that are in the database.
-         */
-        log.info("[REST] Get Roles");
-        val roleDao = iRoleService.getRoles();
-        List<String> roles = new ArrayList<>();
-        for (int i = 0; i < roleDao.size(); i++){
-            roles.add(roleDao.get(i).getName());
-        }
-        log.debug("[REST] End Get roles");
+        log.info("[REST] Starting retrieving all roles from server.");
+        val rolesDao = iRoleService.getRoles();
+        List<String> roles = new ArrayList<>(converter.createFromEntities(rolesDao));
+        log.debug("[REST] Roles retrieved successfully.");
         return roles;
     }
 

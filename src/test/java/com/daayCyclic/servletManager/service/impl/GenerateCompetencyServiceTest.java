@@ -41,23 +41,23 @@ public class GenerateCompetencyServiceTest {
 
     @Test
     void generateCompetencyEmptyString() {
-        assertThrows(NotValidTypeException.class, () -> service.generateCompetency(""));
+        assertThrows(NotValidTypeException.class, () -> service.generateCompetency(new CompetencyDao("")));
     }
 
     @Test
     void generateCompetencyAlreadyPresent() {
-        assertThrows(DuplicateGenerationException.class, () -> service.generateCompetency("ECDL"));
+        assertThrows(DuplicateGenerationException.class, () -> service.generateCompetency(new CompetencyDao("ECDL")));
     }
 
     @Test
     void generateCompetencyAlreadyPresentLowerCase() {
-        assertThrows(DuplicateGenerationException.class, () -> service.generateCompetency("ecdl"));
+        assertThrows(DuplicateGenerationException.class, () -> service.generateCompetency(new CompetencyDao("ecdl")));
     }
 
     @Test
     void generateCompetencyEverythingGood() {
         String newCompetency = "iOS Academy";
-        service.generateCompetency(newCompetency);
+        service.generateCompetency(new CompetencyDao(newCompetency));
         String searchedCompetency = newCompetency.toUpperCase();
         assertEquals(searchedCompetency, repository.findByName(searchedCompetency).get().getName());
     }

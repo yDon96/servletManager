@@ -19,10 +19,19 @@ import java.util.List;
 @Component("ActivityToDtoMapper")
 public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
+    /**
+     * Convert a {@literal ActivityDao} to a {@literal ActivityDto}
+     *
+     * @param objectDao the {@literal ObjectDao} object to convert.
+     * @return a {@literal ObjectDto} that is a conversion of the given object.
+     * @throws NotValidTypeException if ID is negative or the user is not a maintainer.
+     */
     @Override
     public ActivityDto convertToDto(ObjectDao objectDao) throws NotValidTypeException {
+        log.info("[ActivityMapperToDto] Initialization of activity conversion in Dto.");
         if (!(objectDao instanceof ActivityDao)){
-            throw new NotValidTypeException("[Activity MapperToDto] The given ObjectDao is not an instance of ActivityDao");
+            log.error("[ActivityMapperToDto] The given ObjectDao is not an instance of ActivityDao.");
+            throw new NotValidTypeException("[ActivityMapperToDto] The given ObjectDao is not an instance of ActivityDao.");
         }
 
         val activityDao = (ActivityDao) objectDao;
@@ -31,10 +40,10 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
         Integer userId = null;
         if (userDao != null) {
             if (!userDao.isMaintainer()) {
-                log.error("[Activity MapperToDto] The user is not a maintainer");
-                throw new NotValidTypeException("The user is not a maintainer");
+                log.error("[ActivityMapperToDto] The user is not a maintainer.");
+                throw new NotValidTypeException("The user is not a maintainer.");
             }
-            userId = userDao.getUser_id();
+            userId = userDao.getUserId();
         }
 
         ProcedureDao procedureDao = activityDao.getProcedure();
@@ -45,9 +54,10 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
 
         if (activityDao.getId() == null || activityDao.getId() <= 0) {
             log.error("[ActivityToDtoMapper] invalid id.");
-            throw new NotValidTypeException();
+            throw new NotValidTypeException("invalid id.");
         }
 
+        log.info("[ActivityMapperToDto] Finished activity conversion into Dto.");
         return new ActivityDto(activityDao.getId(),
                 userId,
                 procedureId,
@@ -58,17 +68,27 @@ public class ActivityDaoToDtoMapper implements IDaoToDtoMapper {
                 activityDao.getEstimatedTime(),
                 activityDao.getDescription());
     }
-
+    //TODO : lista vuota lancia eccezione. (controllare se ci sono test inerenti)
+    /**
+     * converts a activity list of {@literal ActivityDao} to Dto.
+     *
+     * @param daoActivities activity list {@literal ActivityDao}.
+     * @return a {@literal List} of {@literal ActivityDto}.
+     * @throws NotValidTypeException if activity list is null.
+     */
     @Override
     @SuppressWarnings("unchecked")
     public List<? extends ObjectDto> convertDaoListToDtoList(List<? extends ObjectDao> daoActivities) throws NotValidTypeException {
+        log.info("[ActivityMapperToDto] Initialization to convert activity list to Dto.");
         if(daoActivities == null){
+            log.error("[ActivityMapperToDto] Not valid type. (convertToDtoList)");
             throw new NotValidTypeException("Not valid type. (convertToDtoList)");
         }
         var activityDtoList = new ArrayList<ActivityDto>();
         for (ActivityDao activityDao :(List<ActivityDao>) daoActivities){
             activityDtoList.add(this.convertToDto(activityDao));
         }
+        log.info("[ActivityMapperToDto] List conversion successfully.");
         return activityDtoList;
     }
 

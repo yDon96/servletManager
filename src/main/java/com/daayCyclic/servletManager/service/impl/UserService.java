@@ -3,20 +3,18 @@ package com.daayCyclic.servletManager.service.impl;
 import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
+import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotFoundException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IUserRepository;
 import com.daayCyclic.servletManager.service.ICompetencyService;
+import com.daayCyclic.servletManager.service.IRoleService;
 import com.daayCyclic.servletManager.service.IUserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service(value = "UserService")
@@ -28,18 +26,41 @@ public class UserService implements IUserService{
     @Autowired
     private ICompetencyService competencyService;
 
+    @Autowired
+    private IRoleService roleService;
+
     /**
      * Save the given user into the database. If a user with the same ID of the one passed is already present, updates it.
      *
      * @param user the user to save/update
-     * @throws org.springframework.dao.DataIntegrityViolationException if some of parameters of the given user doesn't respect database constraints
-     * @throws InvalidDataAccessApiUsageException if the given user is {@literal null}
+     * @throws NotValidTypeException if some of parameters of the given user doesn't respect database constraints
      */
     @Override
     public void generateUser(UserDao user) {
         log.info("[SERVICE: User] Saving into the database the given UserDao: " + user);
-        repository.save(user);
+        if (this.isPresent(user)) {
+            throw new DuplicateGenerationException("The given user already exist into the database");
+        }
+        UserDao validatedUser = this.validate(user);
+        repository.save(validatedUser);
         log.info("[SERVICE: User] Saving completed successfully");
+    }
+
+    /**
+     * Update an existing user if it exist.
+     *
+     * @param user the {@literal UserDao} to update.
+     * @throws NotFoundException if the given user is not present into the database.
+     */
+    @Override
+    public void updateUser(UserDao user) {
+        log.info("[SERVICE: User] Starting update of the given user: " + user + " into the database");
+        UserDao validatedUser = this.validate(user);
+        if (!this.isPresent(validatedUser)) {
+            throw new NotFoundException("The given user is not present into the database");
+        }
+        repository.save(validatedUser);
+        log.info("[SERVICE: User] Update completed successfully");
     }
 
     /**
@@ -64,15 +85,16 @@ public class UserService implements IUserService{
     /**
      * Find a list of user of the given roles (all users if the list is empty).
      *
-     * @param rolesList a list containing the roles of the user needed
-     * @return a {@literal List<UserDao>} containing all users if {@literal rolesList} is empty, or users of that list otherwise
+     * @param rolesList a list containing the roles of the user needed.
+     * @return a {@literal List<UserDao>} containing all users if {@literal rolesList} is empty,
+     * or users of that list otherwise.
      */
     @Override
     public List<UserDao> getUsers(List<RoleDao> rolesList) {
-        log.info("[SERVICE: User] Starting a getUsers with the given roles");
+        log.info("[SERVICE: User] Starting a getUsers with the given roles.");
         ArrayList<UserDao> list = new ArrayList<>();
         if (rolesList == null || rolesList.isEmpty()) {
-            log.info("[SERVICE: User] No role specified, retrieve all users");
+            log.info("[SERVICE: User] No role specified, retrieve all users.");
             list.addAll(repository.findAll());
         } else {
             log.info("[SERVICE: User] Roles to find: " + rolesList);
@@ -80,32 +102,39 @@ public class UserService implements IUserService{
                 list.addAll(repository.findByRole(role));
             }
         }
-        log.info("[SERVICE: User] getUsers completed successfully");
+        log.info("[SERVICE: User] getUsers completed successfully.");
         return list;
     }
 
+    /**
+     * Assign a role to a user.
+     *
+     * @param user the {@literal UserDao} to assign the role to.
+     * @param role a {@literal RoleDao} to assign.
+     */
     @Override
     public void assignRoleToUser(UserDao user, RoleDao role) {
         user.setRole(role);
-        repository.save(user);
+        this.updateUser(this.validate(user));
     }
 
     /**
      * Assign a competency to a maintainer.
      *
-     * @param competency a {@literal CompetencyDao} to assign
-     * @param user a {@literal UserDao} to assign
-     * @throws NotValidTypeException if competency or user are null, or the user is not a maintainer
+     * @param competency a {@literal CompetencyDao} to assign.
+     * @param user a {@literal UserDao} to assign.
+     * @throws NotValidTypeException if competency or user are null, or the user is not a maintainer.
      */
     @Override
     public void assignCompetencyToUser(CompetencyDao competency, UserDao user) {
         log.info("[SERVICE: User] Starting to assign " + competency + " to user: " + user);
-        if (user == null || competency == null) {
-            String message = "Competency and user can't be null";
+        UserDao validatedUser = this.validate(user);
+        if (competency == null) {
+            String message = "Competency can't be null";
             log.info("[SERVICE: User] " + message);
             throw new NotValidTypeException(message);
         }
-        if (!(user.isMaintainer())) {
+        if (!(validatedUser.isMaintainer())) {
             String message = "The given user is not a maintainer";
             log.info("[SERVICE: User] " + message);
             throw new NotValidTypeException(message);
@@ -114,17 +143,48 @@ public class UserService implements IUserService{
         if (competency.getUsers() == null) {
             competency.setUsers(new HashSet<>());
         }
-        competency.getUsers().add(user);
+        competency.getUsers().add(validatedUser);
 
-        if (user.getCompetencies() == null) {
-            user.setCompetencies(new HashSet<>());
+        if (validatedUser.getCompetencies() == null) {
+            validatedUser.setCompetencies(new HashSet<>());
         }
-        user.getCompetencies().add(competency);
+        validatedUser.getCompetencies().add(competency);
 
         // Update user and competency into the db
-        this.generateUser(user);  //TODO: Change the update method
+        this.updateUser(this.validate(validatedUser));
         this.competencyService.updateCompetency(competency);
-        log.info("[SERVICE: User] Assign of competency to user completed successfully");
+        log.info("[SERVICE: User] Assign of competency to user completed successfully.");
+    }
+
+    public boolean isPresent(UserDao user) {
+        if (user != null && user.getUserId() != null) {
+            return this.repository.existsById(user.getUserId());
+        }
+        return false;
+    }
+
+    private void checkIntegrity(UserDao user) {
+        if (user == null) { throw new NotValidTypeException("The UserDao can't be null."); }
+        if (user.getName() == null || user.getName().equals("")) { throw new NotValidTypeException("The UserDao name can't be null or empty."); }
+        if (user.getSurname() == null || user.getSurname().equals("")) { throw new NotValidTypeException("The UserDao surname can't be null or empty."); }
+        if (user.getDateOfBirth() == null) { throw new NotValidTypeException("The UserDao date of birth can't be null."); }
+    }
+
+    private UserDao validate(UserDao user) {
+        this.checkIntegrity(user);
+        if (user.getRole() != null && user.getRole().getName() != null) {
+            user.setRole(this.roleService.getRole(user.getRole().getName()));
+        }
+        Set<CompetencyDao> savedCompetencies = user.getCompetencies();
+        if (savedCompetencies != null) {
+            Set<CompetencyDao> checkedCompetencies = new LinkedHashSet<>();
+            for (CompetencyDao competency : savedCompetencies) {
+                if (competency.getName() != null)
+                checkedCompetencies.add(this.competencyService.getCompetency(competency.getName()));
+            }
+            user.setCompetencies(checkedCompetencies);
+        }
+        return user;
     }
 
 }

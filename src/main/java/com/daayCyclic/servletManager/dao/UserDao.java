@@ -13,7 +13,7 @@ import java.util.Set;
 public class UserDao implements ObjectDao {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer user_id;
+    private Integer userId;
 
     @Column(nullable = false) private String name;
     @Column(nullable = false) private String surname;
@@ -34,8 +34,8 @@ public class UserDao implements ObjectDao {
     // Constructors
     public UserDao() {}
 
-    public UserDao(Integer user_id, String name, String surname, LocalDate dateOfBirth, RoleDao role) {
-        this.user_id = user_id;
+    public UserDao(Integer userId, String name, String surname, LocalDate dateOfBirth, RoleDao role) {
+        this.userId = userId;
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
@@ -43,12 +43,12 @@ public class UserDao implements ObjectDao {
     }
     // End constructors
 
-    public Integer getUser_id() {
-        return user_id;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -102,7 +102,7 @@ public class UserDao implements ObjectDao {
     @Override
     public String toString() {
         return "UserDao{" +
-                "user_id=" + user_id +
+                "user_id=" + userId +
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
@@ -115,7 +115,7 @@ public class UserDao implements ObjectDao {
         if (this == o) return true;
         if (!(o instanceof UserDao)) return false;
         UserDao userDao = (UserDao) o;
-        return user_id.equals(userDao.user_id) &&
+        return userId.equals(userDao.userId) &&
                 Objects.equals(name, userDao.name) &&
                 Objects.equals(surname, userDao.surname) &&
                 Objects.equals(dateOfBirth, userDao.dateOfBirth) &&
@@ -124,7 +124,7 @@ public class UserDao implements ObjectDao {
 
     @Override
     public int hashCode() {
-        return Objects.hash(user_id, name, surname, dateOfBirth, role);
+        return Objects.hash(userId, name, surname, dateOfBirth, role);
     }
 
     public boolean isMaintainer() {

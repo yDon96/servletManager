@@ -96,7 +96,7 @@ class UserServiceGetTest {
 
     UserDao createUser(int id, String name, String surname) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.of(1968, 1, 1));

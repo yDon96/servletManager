@@ -8,9 +8,6 @@ import com.daayCyclic.servletManager.dto.UserDto;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.ICompetencyRepository;
 import com.daayCyclic.servletManager.repository.IRoleRepository;
-import com.daayCyclic.servletManager.service.ICompetencyService;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,21 +26,15 @@ import static org.junit.jupiter.api.Assertions.*;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class UserDtoToDaoMapperTest {
 
+    @Autowired
     private UserDtoToDaoMapper mapper;
 
     @Autowired
-    IRoleRepository roleRepository;
+    private IRoleRepository roleRepository;
 
     @Autowired
-    ICompetencyRepository iCompetencyRepository;
+    private ICompetencyRepository iCompetencyRepository;
 
-    @BeforeEach
-    void setUp() {
-        mapper = new UserDtoToDaoMapper();
-    }
-
-//    @Disabled("Bisogna capire perché non va prima, penso che il problema sia legato in qualche modo a Spring. " +
-//            "Da quanto si legge nel log, non inizializza un RoleService quando avvio i test")
     @Test
     void convertToDaoGoodObject() {
         roleRepository.save(createRole(1, "Planner"));
@@ -86,11 +77,11 @@ class UserDtoToDaoMapperTest {
     @Test
     void convertToDaoBadObjectParameters() {
         UserDto user = new UserDto(5, "Mario", null, LocalDate.of(1900, 10, 5), "Prova");
-        assertThrows(NotValidTypeException.class, () -> mapper.convertToDao(user));
+        assertDoesNotThrow(() -> mapper.convertToDao(user));
     }
 
     void checkDtoDaoEquality(UserDto userDto, UserDao userDao) {
-        assertEquals(userDto.getUser_id(), userDao.getUser_id());
+        assertEquals(userDto.getUserId(), userDao.getUserId());
         assertEquals(userDto.getName(), userDao.getName());
         assertEquals(userDto.getSurname(), userDao.getSurname());
         assertEquals(userDto.getDateOfBirth(), userDao.getDateOfBirth());

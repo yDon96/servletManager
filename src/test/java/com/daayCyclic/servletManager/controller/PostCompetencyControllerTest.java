@@ -1,5 +1,6 @@
 package com.daayCyclic.servletManager.controller;
 
+import com.daayCyclic.servletManager.dao.CompetencyDao;
 import com.daayCyclic.servletManager.service.ICompetencyService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,9 @@ public class PostCompetencyControllerTest {
 
     @BeforeEach
     void setUp() {
-        service.generateCompetency("ECDL");
+        CompetencyDao newCompetency = new CompetencyDao();
+        newCompetency.setName("ECDL");
+        service.generateCompetency(newCompetency);
     }
 
     @Test

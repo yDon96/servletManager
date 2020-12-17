@@ -72,7 +72,7 @@ public class PostUserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(getContentFormatted(1, "Domenico", "Barra", "1996-10-07", "System Administrator")))
                     .andDo(print())
-                    .andExpect(status().isOk());
+                    .andExpect(status().isBadRequest());
         });
     }
 
@@ -87,7 +87,7 @@ public class PostUserControllerTest {
     }
 
     private String getContentFormatted(int id, String name, String surname, String dateOfBirth, String role){
-        return "{\"user_id\":\"" + id
+        return "{\"userId\":\"" + id
                 + "\",\"name\":\"" + name
                 + "\",\"surname\":\"" + surname
                 + "\",\"dateOfBirth\":\"" + dateOfBirth
@@ -98,7 +98,7 @@ public class PostUserControllerTest {
     //Utility Methods
     UserDao createUser(int id, String name, String surname) {
         UserDao user = new UserDao();
-        user.setUser_id(id);
+        user.setUserId(id);
         user.setName(name);
         user.setSurname(surname);
         user.setDateOfBirth(LocalDate.of(1968, 1, 1));

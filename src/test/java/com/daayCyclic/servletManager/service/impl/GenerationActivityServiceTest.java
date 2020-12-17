@@ -2,11 +2,13 @@ package com.daayCyclic.servletManager.service.impl;
 
 import com.daayCyclic.servletManager.dao.ActivityDao;
 import com.daayCyclic.servletManager.dao.ProcedureDao;
+import com.daayCyclic.servletManager.dao.RoleDao;
 import com.daayCyclic.servletManager.dao.UserDao;
 import com.daayCyclic.servletManager.exception.DuplicateGenerationException;
 import com.daayCyclic.servletManager.exception.NotValidTypeException;
 import com.daayCyclic.servletManager.repository.IProcedureRepository;
 import com.daayCyclic.servletManager.repository.IUserRepository;
+import com.daayCyclic.servletManager.service.IRoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +38,9 @@ public class GenerationActivityServiceTest {
     @Autowired
     private IProcedureRepository iProcedureRepository;
 
+    @Autowired
+    private IRoleService roleService;
+
     private ProcedureDao procedure;
 
     private UserDao maintainer;
@@ -46,9 +51,16 @@ public class GenerationActivityServiceTest {
         ProcedureDao procedureDao = new ProcedureDao();
         UserDao userDao = new UserDao();
         procedureDao.setTitle("t");
+
+        RoleDao newRole = new RoleDao();
+        newRole.setId(1);
+        newRole.setName("Maintainer");
+        this.roleService.generateRole(newRole);
+
         userDao.setName("a");
         userDao.setSurname("s");
         userDao.setDateOfBirth(LocalDate.of(2000,1,1));
+        userDao.setRole(newRole);
         procedure =  iProcedureRepository.save(procedureDao);
         maintainer = iUserRepository.save(userDao);
     }
