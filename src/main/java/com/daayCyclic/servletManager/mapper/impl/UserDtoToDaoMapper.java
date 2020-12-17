@@ -66,8 +66,7 @@ public class UserDtoToDaoMapper implements IDtoToDaoMapper {
      * @return {@literal true} if user respects all constraints, {@literal false} otherwise
      */
     private boolean checkDataIntegrityDto(UserDto user) {
-        return !(user.getUser_id() == null ||
-                user.getName() == null ||
+        return !(user.getName() == null ||
                 user.getSurname() == null ||
                 user.getDateOfBirth() == null);
     }
