@@ -86,6 +86,14 @@ public class ProcedureService implements IProcedureService {
         return iProcedureRepository.findAll();
     }
 
+    @Override
+    public void editProcedure(Integer procedureId,String description) {
+        log.debug("[ProcedureService] Edit procedure with id: " + procedureId);
+        val procedureDao = getProcedure(procedureId);
+        procedureDao.setDescription(description);
+        iProcedureRepository.save(procedureDao);
+    }
+
     /**
      * Assign the given competency to the given procedure.
      *
